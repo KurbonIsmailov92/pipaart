@@ -1,0 +1,72 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f8f9fa; /* Светло-серый фон */
+    color: #333;
+}
+
+header {
+    background-color: #0056b3; /* Тёмно-синий */
+    color: white;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #0056b3;
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #003d82;
+}
+
+.jumbotron {
+    background-color: #e9ecef; /* Светлый серый для выделения */
+    border-radius: 5px;
+    padding: 2rem;
+}
+
+h1, h3 {
+    color: #0056b3;
+}
+
+.carousel-item img {
+    width: 100%; /* Растянуть изображение на всю ширину контейнера */
+    height: 400px; /* Фиксированная высота */
+    object-fit: cover; /* Обрезать изображение, сохраняя пропорции */
+    object-position: top ; /* Отображать верхнюю часть изображения */
+}
+
+header {
+    position: relative;
+    z-index: 1050; /* Поверх карусели */
+}
+
+.carousel {
+    position: relative;
+    z-index: 1; /* Под хедером */
+}
+
+.x-dropdown-menu {
+    position: absolute;
+    z-index: 1060; /* Поверх карусели */
+}
+
+textarea:focus {
+    background-color: white !important;
+}
+
+input:focus {
+    background-color: white !important;
+}
+
+
