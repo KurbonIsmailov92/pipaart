@@ -44,6 +44,12 @@ class CoursesController extends Controller
         return redirect()->route('courses.list')->with('success', 'Курс успешно добавлен!');
     }
 
+    public function edit($id)
+    {
+        $course = Course::findOrFail($id);
+        return view('courses.edit', compact('course'));
+    }
+
     public function destroy($id): RedirectResponse
     {
         $resource = Course::findOrFail($id);
