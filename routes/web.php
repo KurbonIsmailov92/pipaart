@@ -7,6 +7,7 @@ use App\Http\Controllers\GarpController;
 use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', PageController::class)->name('home');
@@ -75,5 +76,7 @@ Route::prefix('news')->group(function () {
     Route::put('/{id}', [NewsPostController::class, 'update'])->name('news.update');
     Route::delete('/{id}', [NewsPostController::class, 'destroy'])->name('news.delete');
 });
+
+Route::get('/search', SearchController::class);
 
 

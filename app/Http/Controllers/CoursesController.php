@@ -44,6 +44,14 @@ class CoursesController extends Controller
         return redirect()->route('courses.list')->with('success', 'Курс успешно добавлен!');
     }
 
+    public function destroy($id): RedirectResponse
+    {
+        $resource = Course::findOrFail($id);
+        $resource->delete();
+
+        return redirect()->route('courses.list')->with('success', 'Курс удален успешно.');
+    }
+
 
 
     public function schedule(): View|Factory|Application {
