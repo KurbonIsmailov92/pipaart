@@ -50,6 +50,19 @@ class CoursesController extends Controller
         return view('courses.edit', compact('course'));
     }
 
+    public function update(Request $request, $id): RedirectResponse {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'hours' => 'required|integer|min:1',
+        ]);
+        $resource = Course::findOrFail($id);
+        $resource->update($validated);
+
+        return redirect()->route('courses.list')->with('success', 'Курс обновлён.');
+
+    }
+
     public function destroy($id): RedirectResponse
     {
         $resource = Course::findOrFail($id);
