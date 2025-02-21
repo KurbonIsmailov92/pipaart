@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->string('title')->nullable(true);
             $table->text('description')->nullable(true);
             $table->integer('hours')->nullable(true);
-            $table->string('img_link')->nullable(true);
+            $table->string('image')->nullable(true);
             $table->timestamps();
         });
     }
