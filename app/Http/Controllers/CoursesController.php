@@ -45,14 +45,18 @@ class CoursesController extends Controller
             'hours' => 'required|integer|min:1',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
+
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('images/courses'), $imageName);
+            $request->image->storeAs('courses', $imageName, 'public');
             $validated['image'] = $imageName;
         }
+
         Course::create($validated);
+
         return redirect()->route('courses.list')->with('success', 'Курс успешно добавлен!');
     }
+
 
     public function edit($id)
     {

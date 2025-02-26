@@ -39,8 +39,8 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => public_path('images/courses'),
-            'url' => env('APP_URL') . '/images/courses',
+            'root' => public_path('storage'),
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
         ],
 
