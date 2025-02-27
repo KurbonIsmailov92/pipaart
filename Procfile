@@ -1,1 +1,2 @@
-web: vendor/bin/heroku-php-apache2 public/
+web: sh render-build.sh && php artisan serve --host 0.0.0.0 --port $PORT
+
