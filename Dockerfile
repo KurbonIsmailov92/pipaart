@@ -42,8 +42,8 @@ RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /e
 # Активируем модуль переписывания URL
 RUN a2enmod rewrite
 
-# Перезапускаем Apache
-RUN service apache2 restart
+# Перезапускаем Apache с использованием apachectl
+RUN apachectl -k graceful
 
 # Открываем порт
 EXPOSE 80
