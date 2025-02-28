@@ -1,5 +1,5 @@
-# Указываем базовый образ с PHP и необходимыми расширениями
-FROM php:8.2-apache AS base
+# Указываем базовый образ с PHP и Apache
+FROM php:8.2-apache
 
 # Обновляем пакеты и устанавливаем необходимые расширения PHP
 RUN apt-get update && apt-get install -y \
@@ -23,15 +23,18 @@ WORKDIR /var/www/html
 # Копируем все файлы в контейнер
 COPY . .
 
+# Создаём файл .env
+RUN cp .env.example .env
+
 # Устанавливаем зависимости Laravel
 RUN composer install --no-dev --optimize-autoloader
+
+# Генерация ключа приложения
+RUN php artisan key:generate
 
 # Настройка прав для storage и bootstrap/cache
 RUN chown -R www-data:www-data storage bootstrap/cache && \
     chmod -R 775 storage bootstrap/cache
-
-# Генерация ключа приложения
-RUN cp .env.example .env && php artisan key:generate
 
 # Открываем порт
 EXPOSE 80
