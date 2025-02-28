@@ -1,2 +1,3 @@
-web: sh render-build.sh && php artisan serve --host 0.0.0.0 --port $PORT
+web: docker build -t my-laravel-app . && docker run -p 80:80 my-laravel-app
+
 
