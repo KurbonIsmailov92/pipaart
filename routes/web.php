@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutPipaaController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CipaController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\GarpController;
@@ -78,5 +79,12 @@ Route::prefix('news')->group(function () {
 });
 
 Route::get('/search', SearchController::class);
+
+Route::prefix('auth')->group(function () {
+    Route::get('/login', [AuthController::class, 'index'])->name('auth.login');
+    Route::post('/login', [AuthController::class, 'signUp'])->name('auth.sign-in');
+});
+
+
 
 
