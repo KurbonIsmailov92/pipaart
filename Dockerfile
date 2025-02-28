@@ -32,6 +32,17 @@ RUN composer install --no-dev --optimize-autoloader
 # Генерация ключа приложения
 RUN php artisan key:generate
 
+# Устанавливаем расширения для PostgreSQL
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+&& docker-php-ext-install pdo pdo_pgsql
+
+RUN echo "Running migrations..." && \
+    php artisan migrate --verbose && \
+    echo "Running seeders..." && \
+    php artisan db:seed --verbose
+
+
 # Настройка прав для storage и bootstrap/cache
 RUN chown -R www-data:www-data storage bootstrap/cache && \
     chmod -R 775 storage bootstrap/cache
@@ -44,9 +55,6 @@ RUN a2enmod rewrite
 
 # Открываем порт
 EXPOSE 80
-
-RUN php artisan migrate -e && \
-    php artisan db:seed -e
 
 # Старт Apache в контейнере
 CMD ["apache2-foreground"]
