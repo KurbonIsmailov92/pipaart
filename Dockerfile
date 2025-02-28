@@ -42,6 +42,10 @@ RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /e
 # Активируем модуль переписывания URL
 RUN a2enmod rewrite
 
+RUN php artisan migrate && \
+    php artisan db:seed
+
+
 # Открываем порт
 EXPOSE 80
 
