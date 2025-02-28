@@ -8,7 +8,20 @@ WORKDIR /app
 COPY . .
 
 # Устанавливаем зависимости Laravel
-RUN composer install --no-dev --optimize-autoloader
+# Устанавливаем зависимости Laravel
+RUN composer install --no-dev --optimize-autoloader && \
+    php artisan config:clear && \
+    php artisan cache:clear && \
+    php artisan key:generate &&\
+    apt-get update && apt-get install -y \
+        libpng-dev \
+        libjpeg-dev \
+        libfreetype6-dev \
+        libzip-dev \
+        zip \
+        unzip \
+        && docker-php-ext-configure gd --with-freetype --with-jpeg \
+        && docker-php-ext-install gd pdo pdo_mysql zip
 
 # Сборка окончательного образа
 FROM php:8.2-apache
@@ -28,12 +41,5 @@ EXPOSE 80
 # Старт приложения
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=80"]
 
-RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    libzip-dev \
-    zip \
-    unzip \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_mysql zip
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache && \
+    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
