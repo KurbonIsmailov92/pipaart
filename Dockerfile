@@ -36,5 +36,14 @@ RUN php artisan key:generate
 RUN chown -R www-data:www-data storage bootstrap/cache && \
     chmod -R 775 storage bootstrap/cache
 
+# Обновляем корневую директорию Apache на public
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
+
+# Активируем модуль переписывания URL
+RUN a2enmod rewrite
+
+# Перезапускаем Apache
+RUN service apache2 restart
+
 # Открываем порт
 EXPOSE 80
