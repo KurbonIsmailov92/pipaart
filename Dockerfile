@@ -1,5 +1,5 @@
 # Указываем базовый образ с PHP и Composer
-FROM composer:2 AS builder
+FROM composer:2.6 AS builder
 
 # Устанавливаем рабочую директорию
 WORKDIR /app
@@ -11,7 +11,7 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader
 
 # Сборка окончательного образа
-FROM php:8.1-apache
+FROM php:8.2-apache
 
 # Копируем файлы из предыдущего контейнера
 COPY --from=builder /app /var/www/html
@@ -27,3 +27,13 @@ EXPOSE 80
 
 # Старт приложения
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=80"]
+
+RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd pdo pdo_mysql zip
