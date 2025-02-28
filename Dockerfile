@@ -37,12 +37,6 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
 && docker-php-ext-install pdo pdo_pgsql
 
-RUN echo "Running migrations..." && \
-    php artisan migrate --verbose && \
-    echo "Running seeders..." && \
-    php artisan db:seed --verbose
-
-
 # Настройка прав для storage и bootstrap/cache
 RUN chown -R www-data:www-data storage bootstrap/cache && \
     chmod -R 775 storage bootstrap/cache
