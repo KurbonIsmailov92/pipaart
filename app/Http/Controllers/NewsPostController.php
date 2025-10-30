@@ -10,10 +10,13 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class NewsPostController extends Controller {
-    public function index(): View|Factory|Application {
-        $newsPosts = NewsPost::query()
-            ->orderByDesc('id')
-            ->get();
+    public function index(Request $request): View|Factory|Application {
+        $query = NewsPost::query();
+        if ($search = $request->input('search')) {
+            $query->where('title', 'like', "%{$search}%")
+                ->orWhere('text', 'like', "%{$search}%");
+        }
+        $newsPosts = $query->orderByDesc('id')->paginate(10);
         return view('news-post.news', compact('newsPosts'));
     }
 
@@ -27,7 +30,7 @@ class NewsPostController extends Controller {
             'text' => 'required|string',
         ]);
         NewsPost::create($validated);
-        return redirect()->route('news.list')->with('success', 'Новость успешно добавлена!');
+        return redirect()->route('news.list')->with('success', __('Новость успешно добавлена!'));
     }
 
     public function show($id): View|Factory|Application {
@@ -48,7 +51,7 @@ class NewsPostController extends Controller {
         $resource = NewsPost::findOrFail($id);
         $resource->update($validated);
 
-        return redirect()->route('news.list')->with('success', 'Новость обновлена.');
+        return redirect()->route('news.list')->with('success', __('Новость обновлена.'));
 
     }
 
@@ -56,6 +59,6 @@ class NewsPostController extends Controller {
         $resource = NewsPost::findOrFail($id);
         $resource->delete();
 
-        return redirect()->route('news.list')->with('success', 'Новость удалена.');
+        return redirect()->route('news.list')->with('success', __('Новость удалена.'));
     }
 }

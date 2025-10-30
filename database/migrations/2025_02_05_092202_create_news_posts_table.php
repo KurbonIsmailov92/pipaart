@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('news_posts', function (Blueprint $table) {
-            $table->id()->autoIncrement();
-            $table->string('title')->nullable(false);
+            $table->id()->autoIncrement()->index();
+            $table->string('title')->nullable(false)->index();
             $table->text('text')->nullable(false);
             $table->string('image')->nullable(true);
             $table->timestamps();

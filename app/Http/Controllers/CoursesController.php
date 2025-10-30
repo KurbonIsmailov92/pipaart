@@ -16,9 +16,15 @@ class CoursesController extends Controller
         return view('courses.index');
     }
 
-    public function list(): View|Factory|Application
+    public function list(Request $request): View|Factory|Application
     {
-        $courses = Course::query()->get()->sortBy('id');
+        $query = Course::query();
+
+        if ($search = $request->input('search')) {
+            $query->where('title', 'like', "%{$search}%");
+        }
+        // Если потребуется подгружать связи: ->with('instructor')
+        $courses = $query->orderBy('id')->paginate(10);
         return view('courses.list', ['courses' => $courses]);
     }
 
@@ -54,7 +60,7 @@ class CoursesController extends Controller
 
         Course::create($validated);
 
-        return redirect()->route('courses.list')->with('success', 'Курс успешно добавлен!');
+        return redirect()->route('courses.list')->with('success', __('Курс успешно добавлен!'));
     }
 
 
@@ -75,7 +81,7 @@ class CoursesController extends Controller
         $resource = Course::findOrFail($id);
         $resource->update($validated);
 
-        return redirect()->route('courses.list')->with('success', 'Курс обновлён.');
+        return redirect()->route('courses.list')->with('success', __('Курс обновлён.'));
 
     }
 
@@ -84,9 +90,8 @@ class CoursesController extends Controller
         $resource = Course::findOrFail($id);
         $resource->delete();
 
-        return redirect()->route('courses.list')->with('success', 'Курс удален успешно.');
+        return redirect()->route('courses.list')->with('success', __('Курс удален успешно.'));
     }
-
 
     public function schedule(): View|Factory|Application
     {

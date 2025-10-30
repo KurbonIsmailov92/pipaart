@@ -11,8 +11,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', PageController::class)->name('home');
-Route::get('/', [PageController::class, 'index'])->name('index');
+Route::get('/', [PageController::class, 'index'])->name('home');
 
 Route::prefix('oipba')->group(function () {
     Route::get('/', [AboutPipaaController::class, 'index'])->name('oipba.index');
