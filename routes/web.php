@@ -105,6 +105,7 @@ Route::prefix('auth')->group(function () {
         Route::get('/reset-password/{token}', [AuthController::class, 'reset'])->name('password.reset');
         Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
     });
+}
 
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('auth.logout');
 });
