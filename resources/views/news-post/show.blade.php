@@ -16,20 +16,21 @@
                     <a href="{{ route('news.list') }}">← Вернуться к новостям</a>
                 </x-form.button>
             </div>
-
-            <div class="space-x-4 flex">
-                <a href="{{ route('news.edit', $newsPost->id) }}"
-                   class="font-bold transition-colors duration-200 hover:text-blue-500 mr-2">
-                    Редактировать
-                </a>
-                <form action="{{ route('news.delete', $newsPost->id) }}" method="POST" onsubmit="return confirm('Вы уверены, что хотите удалить эту новость?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="font-bold text-red-800 transition-colors duration-200 hover:text-red-500">
-                        Удалить
-                    </button>
-                </form>
-            </div>
+            @if(auth()->check() && auth()->user()->isAdmin())
+                <div class="space-x-4 flex">
+                    <a href="{{ route('news.edit', $newsPost->id) }}"
+                       class="font-bold transition-colors duration-200 hover:text-blue-500 mr-2">
+                        Редактировать
+                    </a>
+                    <form action="{{ route('news.delete', $newsPost->id) }}" method="POST" onsubmit="return confirm('Вы уверены, что хотите удалить эту новость?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="font-bold text-red-800 transition-colors duration-200 hover:text-red-500">
+                            Удалить
+                        </button>
+                    </form>
+                </div>
+            @endif
         </div>
 
     </div>

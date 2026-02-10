@@ -36,6 +36,7 @@ class CoursesController extends Controller
 
     public function create(): View|Factory|Application
     {
+        $this->authorize('create', Course::class);
         return view('courses.create');
     }
 
@@ -45,6 +46,7 @@ class CoursesController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $this->authorize('create', Course::class);
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -64,31 +66,31 @@ class CoursesController extends Controller
     }
 
 
-    public function edit($id)
+    public function edit(Course $course)
     {
-        $course = Course::findOrFail($id);
+        $this->authorize('update', $course);
         return view('courses.edit', compact('course'));
     }
 
-    public function update(Request $request, $id): RedirectResponse
+    public function update(Request $request, Course $course): RedirectResponse
     {
+        $this->authorize('update', $course);
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'hours' => 'required|integer|min:1',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
-        $resource = Course::findOrFail($id);
-        $resource->update($validated);
+        $course->update($validated);
 
         return redirect()->route('courses.list')->with('success', __('Курс обновлён.'));
 
     }
 
-    public function destroy($id): RedirectResponse
+    public function destroy(Course $course): RedirectResponse
     {
-        $resource = Course::findOrFail($id);
-        $resource->delete();
+        $this->authorize('delete', $course);
+        $course->delete();
 
         return redirect()->route('courses.list')->with('success', __('Курс удален успешно.'));
     }

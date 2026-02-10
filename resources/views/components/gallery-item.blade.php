@@ -1,6 +1,6 @@
 <x-panel>
-    <img src="https://picsum.photos/500/400"
-         alt="Фото"
+    <img src="{{ asset('storage/gallery/'.$photo->image) }}"
+         alt="{{$photo->title}}"
          class="rounded-xl border cursor-pointer"
          onclick="showImageModal(this.src)">
     <div class="py-4">

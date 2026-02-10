@@ -26,5 +26,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Gate::policy(Course::class, CoursePolicy::class);
         Gate::policy(NewsPost::class, NewsPostPolicy::class);
+        Gate::define('adminOnly', function($user) {
+            return $user->isAdmin();
+        });
     }
 }

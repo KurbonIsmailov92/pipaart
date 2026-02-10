@@ -10,6 +10,7 @@ use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GalleryController;
 
 Route::get('/', [PageController::class, 'index'])->name('home');
 
@@ -77,11 +78,20 @@ Route::prefix('news')->group(function () {
     Route::delete('/{id}', [NewsPostController::class, 'destroy'])->name('news.delete');
 });
 
+Route::resource('/gallery', GalleryController::class);
+
 Route::get('/search', SearchController::class);
 
-Route::prefix('auth')->group(function () {
-    Route::get('/login', [AuthController::class, 'index'])->name('auth.login');
-    Route::post('/login', [AuthController::class, 'signUp'])->name('auth.sign-in');
+Route::middleware('guest')->prefix('auth')->name('auth.')->group(function () {
+    Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
+
+    Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+});
+
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
 
