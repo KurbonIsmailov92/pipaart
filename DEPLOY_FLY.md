@@ -69,3 +69,27 @@ Fly will show the required DNS records. Add them at the registrar:
 ```bash
 fly status
 ```
+codex/optimize-frontend-for-mobile-devices-nnxhok
+
+
+## 9) Configure SMTP for password reset emails
+Password reset links are sent by email, so set mail secrets before using the
+"Forgot password" flow:
+
+```bash
+fly secrets set \
+  MAIL_MAILER=smtp \
+  MAIL_HOST=smtp.gmail.com \
+  MAIL_PORT=587 \
+  MAIL_USERNAME=your@email.com \
+  MAIL_PASSWORD=your-app-password \
+  MAIL_ENCRYPTION=tls \
+  MAIL_FROM_ADDRESS=no-reply@pipaa.tj \
+  MAIL_FROM_NAME="PIPAA"
+```
+
+Then redeploy:
+```bash
+fly deploy
+```
+ master

@@ -2,7 +2,7 @@
 @section('title', 'Регистрация')
 @section('content')
 
-    <x-form.auth-forms title="Регистрация" action="{{route('sign-up')}}" method="POST">
+    <x-form.auth-forms title="Регистрация" action="{{ route('auth.sign-up.store') }}" method="POST">
         @csrf
 
         <x-form.auth-input type="text"
@@ -52,7 +52,7 @@
         <x-form.button>
             <div class="space-y-3 mt-5">
                 <div class="text-xxs md:text-xs">
-                    <a href="{{route('sign-in')}}" class="text-white hover:text-white/70 font-bold">Войти в аккаунт</a>
+                    <a href="{{route('auth.login')}}" class="text-white hover:text-white/70 font-bold">Войти в аккаунт</a>
                 </div>
             </div>
         </x-form.button>
