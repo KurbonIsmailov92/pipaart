@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Factory;
-use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -108,7 +107,7 @@ class AuthController extends Controller
         );
 
         return $status === Password::PASSWORD_RESET
-            ? redirect()->route('login')->with('message', __($status))
+            ? redirect()->route('auth.login')->with('message', __($status))
             : back()->withErrors(['email' => [__($status)]]);
     }
 
