@@ -69,7 +69,9 @@ Fly will show the required DNS records. Add them at the registrar:
 ```bash
 fly status
 ```
+
 codex/optimize-frontend-for-mobile-devices-nnxhok
+
 
 
 ## 9) Configure SMTP for password reset emails
@@ -92,4 +94,4 @@ Then redeploy:
 ```bash
 fly deploy
 ```
- master
+
