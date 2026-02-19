@@ -92,6 +92,7 @@ Route::resource('/gallery', GalleryController::class);
 
 Route::get('/search', SearchController::class);
 
+Route::prefix('auth')->name('auth.')->group(function () {
 Route::middleware('guest')->prefix('auth')->name('auth.')->group(function () {
     Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
@@ -100,13 +101,18 @@ Route::middleware('guest')->prefix('auth')->name('auth.')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 });
 
-Route::prefix('auth')->group(function () {
-    Route::middleware('guest')->group(function () {
-        Route::get('/login', [AuthController::class, 'index'])->name('auth.login');
-        Route::post('/login', [AuthController::class, 'signIn'])->name('auth.sign-in');
 
-        Route::get('/register', [AuthController::class, 'signUp'])->name('auth.sign-up');
-        Route::post('/register', [AuthController::class, 'store'])->name('auth.sign-up.store');
+    Route::middleware('guest')->group(function () {
+        Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
+        Route::post('/register', [AuthController::class, 'register'])->name('register.store');
+
+        Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
+        Route::post('/login', [AuthController::class, 'login'])->name('login.store');
+        Route::post('/sign-in', [AuthController::class, 'signIn'])->name('sign-in');
+
+        // Backward-compatible aliases for newer auth UI naming.
+        Route::get('/sign-up', [AuthController::class, 'signUp'])->name('sign-up');
+        Route::post('/sign-up', [AuthController::class, 'store'])->name('sign-up.store');
 
         Route::get('/forgot-password', [AuthController::class, 'forgot'])->name('password.request');
         Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('password.email');
@@ -114,5 +120,7 @@ Route::prefix('auth')->group(function () {
         Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
     });
 
-    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('auth.logout');
+    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 });
+
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
