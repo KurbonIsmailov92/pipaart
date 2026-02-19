@@ -9,9 +9,18 @@ class Course extends Model
 {
     use HasFactory;
 
-    protected $table = 'courses';
-    protected $guarded = [];
+    protected $fillable = [
+        'title',
+        'description',
+        'hours',
+        'image',
+    ];
 
-
+    protected function casts(): array
+    {
+        return [
+            'hours' => 'integer',
+        ];
+    }
 
 }
