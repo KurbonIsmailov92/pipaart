@@ -8,6 +8,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CoursesController extends Controller
 {
@@ -28,9 +29,8 @@ class CoursesController extends Controller
         return view('courses.list', ['courses' => $courses]);
     }
 
-    public function show($id)
+    public function show(Course $course): View|Factory|Application
     {
-        $course = Course::findOrFail($id);
         return view('courses.show', compact('course'));
     }
 
@@ -55,7 +55,7 @@ class CoursesController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $imageName = time() . '.' . $request->image->extension();
+            $imageName = uniqid('course_', true) . '.' . $request->image->extension();
             $request->image->storeAs('courses', $imageName, 'public');
             $validated['image'] = $imageName;
         }
@@ -66,7 +66,7 @@ class CoursesController extends Controller
     }
 
 
-    public function edit(Course $course)
+    public function edit(Course $course): View|Factory|Application
     {
         $this->authorize('update', $course);
         return view('courses.edit', compact('course'));
@@ -81,6 +81,16 @@ class CoursesController extends Controller
             'hours' => 'required|integer|min:1',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
+        if ($request->hasFile('image')) {
+            if ($course->image && Storage::disk('public')->exists('courses/' . $course->image)) {
+                Storage::disk('public')->delete('courses/' . $course->image);
+            }
+
+            $imageName = uniqid('course_', true) . '.' . $request->image->extension();
+            $request->image->storeAs('courses', $imageName, 'public');
+            $validated['image'] = $imageName;
+        }
+
         $course->update($validated);
 
         return redirect()->route('courses.list')->with('success', __('Курс обновлён.'));
@@ -90,6 +100,11 @@ class CoursesController extends Controller
     public function destroy(Course $course): RedirectResponse
     {
         $this->authorize('delete', $course);
+
+        if ($course->image && Storage::disk('public')->exists('courses/' . $course->image)) {
+            Storage::disk('public')->delete('courses/' . $course->image);
+        }
+
         $course->delete();
 
         return redirect()->route('courses.list')->with('success', __('Курс удален успешно.'));

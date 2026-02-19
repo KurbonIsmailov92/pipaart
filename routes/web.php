@@ -3,10 +3,12 @@
 use App\Http\Controllers\AboutPipaaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CipaController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\GarpController;
 use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\NewsPostController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
@@ -27,18 +29,18 @@ Route::prefix('oipba')->group(function () {
 Route::prefix('courses')->group(function () {
     Route::get('/', [CoursesController::class, 'index'])->name('courses.index');
     Route::get('/list', [CoursesController::class, 'list'])->name('courses.list');
-    Route::get('/create', [CoursesController::class, 'create'])->name('courses.create');
-    Route::post('/list', [CoursesController::class, 'store'])->name('courses.store');
-
-    Route::get('/{id}', [CoursesController::class, 'show'])->name('courses.show');
-    Route::get('/{id}/edit', [CoursesController::class, 'edit'])->name('courses.edit');
-    Route::put('/{id}', [CoursesController::class, 'update'])->name('courses.update');
-    Route::delete('/{id}', [CoursesController::class, 'destroy'])->name('courses.delete');
-
     Route::get('/schedule', [CoursesController::class, 'schedule'])->name('courses.schedule');
     Route::get('/reviews', [CoursesController::class, 'reviews'])->name('courses.reviews');
     Route::get('/registration', [CoursesController::class, 'registration'])->name('courses.registration');
     Route::get('/training-centers', [CoursesController::class, 'trainingСenters'])->name('courses.training-centers');
+
+    Route::get('/create', [CoursesController::class, 'create'])->name('courses.create');
+    Route::post('/list', [CoursesController::class, 'store'])->name('courses.store');
+
+    Route::get('/{course}', [CoursesController::class, 'show'])->name('courses.show');
+    Route::get('/{course}/edit', [CoursesController::class, 'edit'])->name('courses.edit');
+    Route::put('/{course}', [CoursesController::class, 'update'])->name('courses.update');
+    Route::delete('/{course}', [CoursesController::class, 'destroy'])->name('courses.delete');
 });
 
 Route::prefix('cipa')->group(function () {
@@ -68,44 +70,48 @@ Route::prefix('library')->group(function () {
     Route::get('/links', [LibraryController::class, 'links'])->name('library.links');
 });
 
+
+Route::prefix('contacts')->name('contacts.')->group(function () {
+    Route::get('/', [ContactController::class, 'index'])->name('index');
+    Route::get('/info', [ContactController::class, 'info'])->name('info');
+    Route::get('/message', [MessageController::class, 'create'])->name('message');
+    Route::post('/message', [MessageController::class, 'store'])->name('message.store');
+});
+
 Route::prefix('news')->group(function () {
     Route::get('/list', [NewsPostController::class, 'index'])->name('news.list');
     Route::get('/create', [NewsPostController::class, 'create'])->name('news.create');
     Route::post('/list', [NewsPostController::class, 'store'])->name('news.store');
-    Route::get('/{id}', [NewsPostController::class, 'show'])->name('news.show');
-    Route::get('/{id}/edit', [NewsPostController::class, 'edit'])->name('news.edit');
-    Route::put('/{id}', [NewsPostController::class, 'update'])->name('news.update');
-    Route::delete('/{id}', [NewsPostController::class, 'destroy'])->name('news.delete');
+    Route::get('/{newsPost}', [NewsPostController::class, 'show'])->name('news.show');
+    Route::get('/{newsPost}/edit', [NewsPostController::class, 'edit'])->name('news.edit');
+    Route::put('/{newsPost}', [NewsPostController::class, 'update'])->name('news.update');
+    Route::delete('/{newsPost}', [NewsPostController::class, 'destroy'])->name('news.delete');
 });
 
 Route::resource('/gallery', GalleryController::class);
 
 Route::get('/search', SearchController::class);
 
-Route::middleware('guest')->prefix('auth')->name('auth.')->group(function () {
-    Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
-    Route::post('/register', [AuthController::class, 'register']);
-
-    Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
-    Route::post('/login', [AuthController::class, 'login']);
-});
-
-Route::middleware('auth')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-Route::prefix('auth')->group(function () {
+Route::prefix('auth')->name('auth.')->group(function () {
     Route::middleware('guest')->group(function () {
-        Route::get('/login', [AuthController::class, 'index'])->name('auth.login');
-        Route::post('/login', [AuthController::class, 'signIn'])->name('auth.sign-in');
+        Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
+        Route::post('/register', [AuthController::class, 'register'])->name('register.store');
 
-        Route::get('/register', [AuthController::class, 'signUp'])->name('auth.sign-up');
-        Route::post('/register', [AuthController::class, 'store'])->name('auth.sign-up.store');
+        Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
+        Route::post('/login', [AuthController::class, 'login'])->name('login.store');
+        Route::post('/sign-in', [AuthController::class, 'signIn'])->name('sign-in');
+
+        // Backward-compatible aliases for newer auth UI naming.
+        Route::get('/sign-up', [AuthController::class, 'signUp'])->name('sign-up');
+        Route::post('/sign-up', [AuthController::class, 'store'])->name('sign-up.store');
 
         Route::get('/forgot-password', [AuthController::class, 'forgot'])->name('password.request');
         Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('password.email');
         Route::get('/reset-password/{token}', [AuthController::class, 'reset'])->name('password.reset');
         Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
     });
-}
 
-    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('auth.logout');
+    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 });
+
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
