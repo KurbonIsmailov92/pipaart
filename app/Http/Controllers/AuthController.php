@@ -2,56 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ForgotPasswordRequest;
-use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\SignInRequest;
 use App\Http\Requests\SignUpRequest;
 use App\Models\User;
-use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Factory;
-use Laravel\Socialite\Facades\Socialite;
+
 
 class AuthController extends Controller
 {
-    public function index(): View
+    public function registerForm(): View
     {
-        return view('auth.index');
+        return view('auth.register');
     }
 
-    public function signUp(): View
-    {
-        return view('auth.sign-up');
-    }
-
-    public function signIn(SignInRequest $request): RedirectResponse
-    {
-        if (!auth()->attempt($request->validated())) {
-            return back()->withErrors([
-                'email' => 'The provided credentials do not match our records.',
-            ])->onlyInput('email');
-        }
-
-        $request->session()->regenerate();
-
-        return redirect()->intended(route('home'));
-    }
-
-    public function store(SignUpRequest $request): RedirectResponse
+    public function register(SignUpRequest $request): RedirectResponse
     {
         $user = User::query()->create([
             'name' => $request->get('name'),
             'email' => $request->get('email'),
-            'password' => bcrypt($request->get('password'))
+            'password' => Hash::make($request->get('password')),
         ]);
 
         event(new Registered($user));
         auth()->login($user);
 
+        return redirect()->intended(route('home'));
+    }
+
+    public function loginForm(): View
+    {
+        return view('auth.login');
+    }
+
+    public function login(SignInRequest $request): RedirectResponse
+    {
+        if (!auth()->attempt($request->validated())) {
+            return back()->withErrors([
+                'email' => __('auth.failed'),
+            ])->onlyInput('email');
+        }
+
+        $request->session()->regenerate();
         return redirect()->intended(route('home'));
     }
 
@@ -62,7 +60,6 @@ class AuthController extends Controller
         request()->session()->regenerateToken();
 
         return redirect()->route('home');
-
     }
 
     public function forgot(): View|Factory|Application|RedirectResponse
@@ -108,7 +105,7 @@ class AuthController extends Controller
         );
 
         return $status === Password::PASSWORD_RESET
-            ? redirect()->route('login')->with('message', __($status))
+            ? redirect()->route('auth.login')->with('message', __($status))
             : back()->withErrors(['email' => [__($status)]]);
     }
 

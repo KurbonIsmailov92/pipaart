@@ -10,8 +10,8 @@ return new class extends Migration {
      */
     public function up(): void {
         Schema::create('courses', function (Blueprint $table) {
-            $table->id()->autoIncrement()->nullable(false)->unique();
-            $table->string('title')->nullable(true);
+            $table->id()->autoIncrement()->nullable(false)->unique()->index();
+            $table->string('title')->nullable(true)->index();
             $table->text('description')->nullable(true);
             $table->integer('hours')->nullable(true);
             $table->string('image')->nullable(true);

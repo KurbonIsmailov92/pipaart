@@ -5,7 +5,9 @@
 @section('content')
     <div class="flex items-center justify-between w-full mb-8">
         <h1 class="mt-6 text-primary text-2xl sm:text-4xl text-center">Перечень курсов</h1>
-        <x-form.button class="ml-4"> <a href="/courses/create">Добавить</a></x-form.button>
+        @if(auth()->check() && auth()->user()->isAdmin())
+            <x-form.button class="ml-4"> <a href="/courses/create">Добавить</a></x-form.button>
+        @endif
     </div>
 
 

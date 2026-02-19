@@ -6,11 +6,15 @@
     <h1 class=" mt-6 text-primary text-2xl sm:text-4xl">Добавить новую новость</h1>
 
     <div class="text-sm sm:text-base mt-6 space-y-6">
-        <x-form.form method="POST" action="{{route('news.list')}}" class="pb-12">
+        <x-form.form method="POST" action="{{route('news.list')}}" class="pb-12" enctype="multipart/form-data">
             <x-form.input label="Заголовок новости" name="title" placeholder="Экзамены по CIPA прошли успешно"></x-form.input>
             <x-form.textarea label="Текст новости" name="text" placeholder="Новость"></x-form.textarea>
+            <div class="my-6">
+                <label for="image" class="block font-bold mb-1">Изображение</label>
+                <input class="border rounded w-full px-3 py-2" type="file" name="image" id="image" accept="image/*">
+            </div>
             <div class="space-x-6">
-            <x-form.button>Сохранить</x-form.button>
+                <x-form.button>Сохранить</x-form.button>
                 <a href="/news/list" class="text hover:text-red-500 transition-colors duration-300">
                     Отмена
                 </a>

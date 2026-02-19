@@ -8,6 +8,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CoursesController extends Controller
 {
@@ -16,20 +17,26 @@ class CoursesController extends Controller
         return view('courses.index');
     }
 
-    public function list(): View|Factory|Application
+    public function list(Request $request): View|Factory|Application
     {
-        $courses = Course::query()->get()->sortBy('id');
+        $query = Course::query();
+
+        if ($search = $request->input('search')) {
+            $query->where('title', 'like', "%{$search}%");
+        }
+        // Если потребуется подгружать связи: ->with('instructor')
+        $courses = $query->orderBy('id')->paginate(10);
         return view('courses.list', ['courses' => $courses]);
     }
 
-    public function show($id)
+    public function show(Course $course): View|Factory|Application
     {
-        $course = Course::findOrFail($id);
         return view('courses.show', compact('course'));
     }
 
     public function create(): View|Factory|Application
     {
+        $this->authorize('create', Course::class);
         return view('courses.create');
     }
 
@@ -39,6 +46,7 @@ class CoursesController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $this->authorize('create', Course::class);
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -47,46 +55,60 @@ class CoursesController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $imageName = time() . '.' . $request->image->extension();
+            $imageName = uniqid('course_', true) . '.' . $request->image->extension();
             $request->image->storeAs('courses', $imageName, 'public');
             $validated['image'] = $imageName;
         }
 
         Course::create($validated);
 
-        return redirect()->route('courses.list')->with('success', 'Курс успешно добавлен!');
+        return redirect()->route('courses.list')->with('success', __('Курс успешно добавлен!'));
     }
 
 
-    public function edit($id)
+    public function edit(Course $course): View|Factory|Application
     {
-        $course = Course::findOrFail($id);
+        $this->authorize('update', $course);
         return view('courses.edit', compact('course'));
     }
 
-    public function update(Request $request, $id): RedirectResponse
+    public function update(Request $request, Course $course): RedirectResponse
     {
+        $this->authorize('update', $course);
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'hours' => 'required|integer|min:1',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
-        $resource = Course::findOrFail($id);
-        $resource->update($validated);
+        if ($request->hasFile('image')) {
+            if ($course->image && Storage::disk('public')->exists('courses/' . $course->image)) {
+                Storage::disk('public')->delete('courses/' . $course->image);
+            }
 
-        return redirect()->route('courses.list')->with('success', 'Курс обновлён.');
+            $imageName = uniqid('course_', true) . '.' . $request->image->extension();
+            $request->image->storeAs('courses', $imageName, 'public');
+            $validated['image'] = $imageName;
+        }
+
+        $course->update($validated);
+
+        return redirect()->route('courses.list')->with('success', __('Курс обновлён.'));
 
     }
 
-    public function destroy($id): RedirectResponse
+    public function destroy(Course $course): RedirectResponse
     {
-        $resource = Course::findOrFail($id);
-        $resource->delete();
+        $this->authorize('delete', $course);
 
-        return redirect()->route('courses.list')->with('success', 'Курс удален успешно.');
+        if ($course->image && Storage::disk('public')->exists('courses/' . $course->image)) {
+            Storage::disk('public')->delete('courses/' . $course->image);
+        }
+
+        $course->delete();
+
+        return redirect()->route('courses.list')->with('success', __('Курс удален успешно.'));
     }
-
 
     public function schedule(): View|Factory|Application
     {
