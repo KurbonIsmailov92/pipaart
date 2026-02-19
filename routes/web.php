@@ -93,6 +93,15 @@ Route::resource('/gallery', GalleryController::class);
 Route::get('/search', SearchController::class);
 
 Route::prefix('auth')->name('auth.')->group(function () {
+Route::middleware('guest')->prefix('auth')->name('auth.')->group(function () {
+    Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
+
+    Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+});
+
+
     Route::middleware('guest')->group(function () {
         Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
         Route::post('/register', [AuthController::class, 'register'])->name('register.store');
