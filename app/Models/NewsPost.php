@@ -10,6 +10,9 @@ class NewsPost extends Model
     /** @use HasFactory<\Database\Factories\NewsPostFactory> */
     use HasFactory;
 
-    protected $table = 'news_posts';
-    protected $guarded = [];
+    protected $fillable = [
+        'title',
+        'text',
+        'image',
+    ];
 }
