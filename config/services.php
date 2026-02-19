@@ -28,6 +28,20 @@ return [
         'key' => env('RESEND_KEY'),
     ],
 
+
+    'contact' => [
+        'recipient' => env('CONTACT_RECIPIENT_EMAIL', 'info@pipaa.tj'),
+    ],
+
+    'sms' => [
+        'enabled' => env('SMS_ENABLED', false),
+        'url' => env('SMS_API_URL'),
+        'token' => env('SMS_API_TOKEN'),
+        'to' => env('SMS_TO'),
+        'sender' => env('SMS_SENDER', 'PIPAA'),
+        'timeout' => env('SMS_TIMEOUT', 5),
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),

@@ -3,10 +3,12 @@
 use App\Http\Controllers\AboutPipaaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CipaController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\GarpController;
 use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\NewsPostController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
@@ -66,6 +68,14 @@ Route::prefix('library')->group(function () {
     Route::get('/books', [LibraryController::class, 'books'])->name('library.books');
     Route::get('/for-cipa', [LibraryController::class, 'forCipa'])->name('library.for-cipa');
     Route::get('/links', [LibraryController::class, 'links'])->name('library.links');
+});
+
+
+Route::prefix('contacts')->name('contacts.')->group(function () {
+    Route::get('/', [ContactController::class, 'index'])->name('index');
+    Route::get('/info', [ContactController::class, 'info'])->name('info');
+    Route::get('/message', [MessageController::class, 'create'])->name('message');
+    Route::post('/message', [MessageController::class, 'store'])->name('message.store');
 });
 
 Route::prefix('news')->group(function () {
