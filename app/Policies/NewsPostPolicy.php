@@ -13,14 +13,14 @@ class NewsPostPolicy
     }
     public function create(User $user)
     {
-        return $user->is_admin;
+        return $user->isAdmin();
     }
     public function update(User $user, NewsPost $newsPost)
     {
-        return $user->is_admin;
+        return $user->isAdmin();
     }
     public function delete(User $user, NewsPost $newsPost)
     {
-        return $user->is_admin;
+        return $user->isAdmin();
     }
 }

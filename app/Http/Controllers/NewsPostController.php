@@ -22,12 +22,12 @@ class NewsPostController extends Controller {
     }
 
     public function create(): View|Factory|Application {
-        $this->authorize('adminOnly', NewsPost::class);
+        $this->authorize('create', NewsPost::class);
         return view('news-post.create');
     }
 
     public function store(Request $request): RedirectResponse {
-        $this->authorize('adminOnly', NewsPost::class);
+        $this->authorize('create', NewsPost::class);
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'text' => 'required|string',
@@ -47,12 +47,12 @@ class NewsPostController extends Controller {
     }
 
     public function edit(NewsPost $newsPost): View|Factory|Application {
-        $this->authorize('adminOnly', $newsPost);
+        $this->authorize('update', $newsPost);
         return view('news-post.edit', ['resource' => $newsPost]);
     }
 
     public function update(Request $request, NewsPost $newsPost): RedirectResponse {
-        $this->authorize('adminOnly', $newsPost);
+        $this->authorize('update', $newsPost);
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'text' => 'required|string',
@@ -72,7 +72,7 @@ class NewsPostController extends Controller {
     }
 
     public function destroy(NewsPost $newsPost): RedirectResponse {
-        $this->authorize('adminOnly', $newsPost);
+        $this->authorize('delete', $newsPost);
 
         if ($newsPost->image && Storage::disk('public')->exists('news/' . $newsPost->image)) {
             Storage::disk('public')->delete('news/' . $newsPost->image);
