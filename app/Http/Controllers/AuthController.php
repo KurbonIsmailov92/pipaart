@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ForgotPasswordRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\SignInRequest;
 use App\Http\Requests\SignUpRequest;
 use App\Models\User;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\View\View;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\View;
-use Illuminate\View\Factory;
-
 
 class AuthController extends Controller
 {
@@ -43,13 +42,14 @@ class AuthController extends Controller
 
     public function login(SignInRequest $request): RedirectResponse
     {
-        if (!auth()->attempt($request->validated())) {
+        if (! auth()->attempt($request->validated())) {
             return back()->withErrors([
                 'email' => __('auth.failed'),
             ])->onlyInput('email');
         }
 
         $request->session()->regenerate();
+
         return redirect()->intended(route('home'));
     }
 
@@ -62,40 +62,32 @@ class AuthController extends Controller
         return redirect()->route('home');
     }
 
-    public function forgot(): View|Factory|Application|RedirectResponse
+    public function forgot(): View
     {
         return view('auth.forgot-password');
     }
 
-    public function forgotPassword(ForgotPasswordRequest $request): View|Factory|Application|RedirectResponse
+    public function forgotPassword(ForgotPasswordRequest $request): RedirectResponse
     {
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        $status = Password::sendResetLink($request->only('email'));
 
         return $status === Password::RESET_LINK_SENT
             ? back()->with(['message' => __($status)])
             : back()->withErrors(['email' => __($status)]);
     }
 
-
-    public function reset(string $token): View|Factory|Application|RedirectResponse
+    public function reset(string $token): View
     {
-        return view('auth.reset-password', [
-            'token' => $token
-        ]);
+        return view('auth.reset-password', ['token' => $token]);
     }
 
-    public function resetPassword (ResetPasswordRequest $request): View|Factory|Application|RedirectResponse
-
+    public function resetPassword(ResetPasswordRequest $request): RedirectResponse
     {
-
-
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
-            function (User $user, string $password) {
+            function (User $user, string $password): void {
                 $user->forceFill([
-                    'password' => bcrypt($password)
+                    'password' => Hash::make($password),
                 ])->setRememberToken(str()->random(60));
 
                 $user->save();
@@ -109,4 +101,23 @@ class AuthController extends Controller
             : back()->withErrors(['email' => [__($status)]]);
     }
 
+    public function index(): View
+    {
+        return view('auth.index');
+    }
+
+    public function signIn(SignInRequest $request): RedirectResponse
+    {
+        return $this->login($request);
+    }
+
+    public function signUp(): View
+    {
+        return view('auth.sign-up');
+    }
+
+    public function store(SignUpRequest $request): RedirectResponse
+    {
+        return $this->register($request);
+    }
 }
