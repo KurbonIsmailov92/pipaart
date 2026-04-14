@@ -8,6 +8,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class NewsPostController extends Controller {
     public function index(Request $request): View|Factory|Application {
@@ -21,12 +22,12 @@ class NewsPostController extends Controller {
     }
 
     public function create(): View|Factory|Application {
-        $this->authorize('adminOnly', NewsPost::class);
+        $this->authorize('create', NewsPost::class);
         return view('news-post.create');
     }
 
     public function store(Request $request): RedirectResponse {
-        $this->authorize('adminOnly', NewsPost::class);
+        $this->authorize('create', NewsPost::class);
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'text' => 'required|string',
@@ -41,18 +42,17 @@ class NewsPostController extends Controller {
         return redirect()->route('news.list')->with('success', __('Новость успешно добавлена!'));
     }
 
-    public function show($id): View|Factory|Application {
-        $newsPost = NewsPost::findOrFail($id);
+    public function show(NewsPost $newsPost): View|Factory|Application {
         return view('news-post.show', compact('newsPost'));
     }
 
     public function edit(NewsPost $newsPost): View|Factory|Application {
-        $this->authorize('adminOnly', $newsPost);
+        $this->authorize('update', $newsPost);
         return view('news-post.edit', ['resource' => $newsPost]);
     }
 
     public function update(Request $request, NewsPost $newsPost): RedirectResponse {
-        $this->authorize('adminOnly', $newsPost);
+        $this->authorize('update', $newsPost);
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'text' => 'required|string',
@@ -60,8 +60,8 @@ class NewsPostController extends Controller {
         ]);
         if ($request->hasFile('image')) {
             // удалить старый файл если был
-            if ($newsPost->image && \Storage::disk('public')->exists('news/'.$newsPost->image)) {
-                \Storage::disk('public')->delete('news/'.$newsPost->image);
+            if ($newsPost->image && Storage::disk('public')->exists('news/' . $newsPost->image)) {
+                Storage::disk('public')->delete('news/' . $newsPost->image);
             }
             $imageName = uniqid('news_', true) . '.' . $request->image->extension();
             $request->image->storeAs('news', $imageName, 'public');
@@ -72,7 +72,12 @@ class NewsPostController extends Controller {
     }
 
     public function destroy(NewsPost $newsPost): RedirectResponse {
-        $this->authorize('adminOnly', $newsPost);
+        $this->authorize('delete', $newsPost);
+
+        if ($newsPost->image && Storage::disk('public')->exists('news/' . $newsPost->image)) {
+            Storage::disk('public')->delete('news/' . $newsPost->image);
+        }
+
         $newsPost->delete();
 
         return redirect()->route('news.list')->with('success', __('Новость удалена.'));

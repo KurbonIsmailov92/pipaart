@@ -12,7 +12,7 @@ describe('Courses', function () {
     });
 
     it('prevents non-admin user from deleting courses', function () {
-        $user = \App\Models\User::factory()->create(['is_admin'=>false]);
+        $user = \App\Models\User::factory()->create(['role' => \App\Models\User::ROLE_READER]);
         $this->actingAs($user);
         $course = \App\Models\Course::factory()->create();
 
