@@ -1,7 +1,7 @@
 FROM composer:2.7 AS vendor
 WORKDIR /app
 
-COPY . .
+COPY composer.json composer.lock ./
 RUN composer install \
     --no-dev \
     --prefer-dist \
@@ -36,6 +36,10 @@ RUN apt-get update \
     && docker-php-ext-install pdo pdo_pgsql zip \
     && a2dismod mpm_event || true \
     && a2dismod mpm_worker || true \
+    && rm -f /etc/apache2/mods-enabled/mpm_event.load \
+    && rm -f /etc/apache2/mods-enabled/mpm_event.conf \
+    && rm -f /etc/apache2/mods-enabled/mpm_worker.load \
+    && rm -f /etc/apache2/mods-enabled/mpm_worker.conf \
     && a2enmod mpm_prefork rewrite headers \
     && rm -rf /var/lib/apt/lists/*
 
