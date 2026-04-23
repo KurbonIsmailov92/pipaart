@@ -1,3 +1,3 @@
-<main class="container mx-auto px-4 py-6 flex-grow">
+<main class="shell-container flex-grow py-6 sm:py-8">
     @yield('content')
 </main>

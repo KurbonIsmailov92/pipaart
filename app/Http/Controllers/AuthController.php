@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRole;
 use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\SignInRequest;
@@ -9,35 +10,50 @@ use App\Http\Requests\SignUpRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 
 class AuthController extends Controller
 {
-    public function registerForm(): View
+    public function registerForm(): View|Factory|Application
     {
         return view('auth.register');
     }
 
-    public function register(SignUpRequest $request): RedirectResponse
+    public function signUp(): View|Factory|Application
     {
-        $user = User::query()->create([
-            'name' => $request->get('name'),
-            'email' => $request->get('email'),
-            'password' => Hash::make($request->get('password')),
-        ]);
-
-        event(new Registered($user));
-        auth()->login($user);
-
-        return redirect()->intended(route('home'));
+        return view('auth.sign-up');
     }
 
-    public function loginForm(): View
+    public function loginForm(): View|Factory|Application
     {
         return view('auth.login');
+    }
+
+    public function forgot(): View|Factory|Application
+    {
+        return view('auth.forgot-password');
+    }
+
+    public function reset(string $token): View|Factory|Application
+    {
+        return view('auth.reset-password', [
+            'token' => $token,
+        ]);
+    }
+
+    public function register(SignUpRequest $request): RedirectResponse
+    {
+        return $this->createAndLoginUser($request);
+    }
+
+    public function store(SignUpRequest $request): RedirectResponse
+    {
+        return $this->createAndLoginUser($request);
     }
 
     public function login(SignInRequest $request): RedirectResponse
@@ -62,30 +78,20 @@ class AuthController extends Controller
         return redirect()->route('home');
     }
 
-    public function forgot(): View
-    {
-        return view('auth.forgot-password');
-    }
-
     public function forgotPassword(ForgotPasswordRequest $request): RedirectResponse
     {
         $status = Password::sendResetLink($request->only('email'));
 
         return $status === Password::RESET_LINK_SENT
-            ? back()->with(['message' => __($status)])
+            ? back()->with('message', __($status))
             : back()->withErrors(['email' => __($status)]);
-    }
-
-    public function reset(string $token): View
-    {
-        return view('auth.reset-password', ['token' => $token]);
     }
 
     public function resetPassword(ResetPasswordRequest $request): RedirectResponse
     {
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
-            function (User $user, string $password): void {
+            static function (User $user, string $password): void {
                 $user->forceFill([
                     'password' => Hash::make($password),
                 ])->setRememberToken(str()->random(60));
@@ -101,23 +107,20 @@ class AuthController extends Controller
             : back()->withErrors(['email' => [__($status)]]);
     }
 
-    public function index(): View
+    protected function createAndLoginUser(SignUpRequest $request): RedirectResponse
     {
-        return view('auth.index');
-    }
+        $user = User::query()->create([
+            'name' => $request->string('name')->value(),
+            'email' => $request->string('email')->lower()->value(),
+            'password' => Hash::make($request->string('password')->value()),
+            'role' => UserRole::Student->value,
+        ]);
 
-    public function signIn(SignInRequest $request): RedirectResponse
-    {
-        return $this->login($request);
-    }
+        event(new Registered($user));
 
-    public function signUp(): View
-    {
-        return view('auth.sign-up');
-    }
+        auth()->login($user);
+        $request->session()->regenerate();
 
-    public function store(SignUpRequest $request): RedirectResponse
-    {
-        return $this->register($request);
+        return redirect()->intended(route('home'));
     }
 }

@@ -2,78 +2,99 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    background-color: #f8f9fa; /* Светло-серый фон */
-    color: #333;
-}
+@layer base {
+    :root {
+        --font-display: "Space Grotesk", "Segoe UI", sans-serif;
+        --font-body: "Hanken Grotesk", "Segoe UI", sans-serif;
+        --color-ink: #0f172a;
+        --color-muted: #475569;
+        --color-surface: rgba(255, 255, 255, 0.92);
+        --color-surface-strong: #ffffff;
+        --color-brand: #0f3d91;
+        --color-brand-soft: #dbeafe;
+        --color-accent: #0f766e;
+        --color-border: rgba(148, 163, 184, 0.28);
+        --shadow-soft: 0 18px 50px rgba(15, 23, 42, 0.08);
+    }
 
-header {
-    background-color: #0056b3; /* Тёмно-синий */
-    color: white;
-}
-
-footer {
-    background-color: #333;
-    color: white;
-}
-
-.navbar-light .navbar-nav .nav-link {
-    color: #0056b3;
-}
-
-.navbar-light .navbar-nav .nav-link:hover {
-    color: #003d82;
-}
-
-.jumbotron {
-    background-color: #e9ecef; /* Светлый серый для выделения */
-    border-radius: 5px;
-    padding: 2rem;
-}
-
-h1, h3 {
-    color: #0056b3;
-}
-
-.carousel-item img {
-    width: 100%; /* Растянуть изображение на всю ширину контейнера */
-    height: 360px; /* Базовая высота для десктопа */
-    object-fit: cover; /* Обрезать изображение, сохраняя пропорции */
-    object-position: center; /* Более аккуратное кадрирование */
-}
-
-header {
-    position: relative;
-    z-index: 1050; /* Поверх карусели */
-}
-
-.carousel {
-    position: relative;
-    z-index: 1; /* Под хедером */
-}
-
-.x-dropdown-menu {
-    position: absolute;
-    z-index: 1060; /* Поверх карусели */
-}
-
-textarea:focus {
-    background-color: white !important;
-}
-
-input:focus {
-    background-color: white !important;
-}
-
-@media (max-width: 640px) {
-    .carousel-item img {
-        height: 220px; /* Меньшая высота на мобильных */
+    html {
+        scroll-behavior: smooth;
     }
 
     body {
-        background-image: none !important;
+        font-family: var(--font-body);
+        color: var(--color-ink);
+        line-height: 1.6;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--font-display);
+        letter-spacing: -0.02em;
+    }
+
+    a {
+        @apply transition-colors duration-200;
+    }
+
+    input,
+    textarea,
+    select {
+        @apply text-slate-900;
     }
 }
 
+@layer components {
+    .shell-container {
+        @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+    }
+
+    .surface-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        box-shadow: var(--shadow-soft);
+        @apply rounded-3xl backdrop-blur;
+    }
+
+    .surface-card-strong {
+        background: var(--color-surface-strong);
+        border: 1px solid rgba(148, 163, 184, 0.22);
+        box-shadow: var(--shadow-soft);
+        @apply rounded-3xl;
+    }
+
+    .pill-link {
+        @apply inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white/90 backdrop-blur hover:bg-white/20;
+    }
+
+    .admin-nav-link {
+        @apply block rounded-2xl px-4 py-3 text-sm text-slate-200 transition hover:bg-slate-900 hover:text-white;
+    }
+
+    .table-shell {
+        @apply overflow-x-auto rounded-3xl bg-white shadow-sm ring-1 ring-slate-200;
+    }
+
+    .data-table {
+        @apply min-w-full divide-y divide-slate-200 text-sm;
+    }
+
+    .data-table thead {
+        @apply bg-slate-50 text-left text-slate-500;
+    }
+
+    .data-table th,
+    .data-table td {
+        @apply px-4 py-3 align-top;
+    }
+}
+
+@media (max-width: 640px) {
+    .prose {
+        overflow-wrap: anywhere;
+    }
+}

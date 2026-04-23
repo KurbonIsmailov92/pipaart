@@ -2,28 +2,34 @@
 
 namespace App\Policies;
 
-use App\Models\User;
+use App\Enums\UserRole;
 use App\Models\Course;
+use App\Models\User;
 
 class CoursePolicy
 {
-    public function view(User $user, Course $course)
+    public function viewAny(?User $user): bool
     {
-        return true; // Everyone can view
+        return true;
     }
 
-    public function create(User $user)
+    public function view(?User $user, Course $course): bool
     {
-        return $user->isAdmin();
+        return true;
     }
 
-    public function update(User $user, Course $course)
+    public function create(User $user): bool
     {
-        return $user->isAdmin();
+        return $user->hasRole([UserRole::Admin, UserRole::Teacher]);
     }
 
-    public function delete(User $user, Course $course)
+    public function update(User $user, Course $course): bool
     {
-        return $user->isAdmin();
+        return $user->hasRole([UserRole::Admin, UserRole::Teacher]);
+    }
+
+    public function delete(User $user, Course $course): bool
+    {
+        return $user->hasRole([UserRole::Admin, UserRole::Teacher]);
     }
 }

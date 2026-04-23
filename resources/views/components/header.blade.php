@@ -1,80 +1,40 @@
-<header class="bg-blue-950 text-white px-4 py-3 mt-2 relative z-50">
-    <x-navigation>
-        <!-- Лого -->
-        <x-logo></x-logo>
-        <!-- Ссылки -->
-        <x-header-links>
+<header class="relative z-50 mt-4 text-white">
+    <div class="shell-container">
+        <div class="surface-card border border-white/10 bg-slate-950/75 px-4 py-4 text-white shadow-2xl sm:px-6">
+            <div class="flex items-center justify-between gap-4">
+                <a href="{{ route('home') }}" class="text-xl font-semibold tracking-[0.18em] sm:text-2xl">
+                    {{ $siteSettings['site_name'] ?? 'PIPAA' }}
+                </a>
 
-            <!-- ОИПБА РТ -->
-            <x-dropdown buttonHref="/oipba" buttonText="ОИПБА РТ">
-                <x-dropdown-link href="/oipba/work" text="Деятельность"/>
-                <x-dropdown-link href="/oipba/membership" text="Членство"/>
-                <x-dropdown-link href="/oipba/partners" text="Партнеры"/>
-                <x-dropdown-link href="/oipba/customers" text="Клиенты"/>
-                <x-dropdown-link href="/oipba/collective" text="Сотрудники"/>
-                <x-dropdown-link href="/oipba/gallery" text="Фотогалерея"/>
-{{--                <x-dropdown-link href="/oipba/in-our-memory" text="В память о Нашем Абире Хушбахтовиче"/>--}}
-            </x-dropdown>
+                <nav class="hidden items-center gap-5 text-sm uppercase tracking-[0.18em] lg:flex">
+                    <a href="{{ route('home') }}" class="hover:text-blue-200">Home</a>
+                    <a href="{{ route('about') }}" class="hover:text-blue-200">About</a>
+                    <a href="{{ route('certifications') }}" class="hover:text-blue-200">Certifications</a>
+                    <a href="{{ route('courses.index') }}" class="hover:text-blue-200">Courses</a>
+                    <a href="{{ route('schedule.index') }}" class="hover:text-blue-200">Schedule</a>
+                    <a href="{{ route('news.index') }}" class="hover:text-blue-200">News</a>
+                    <a href="{{ route('gallery.index') }}" class="hover:text-blue-200">Gallery</a>
+                    <a href="{{ route('contact') }}" class="hover:text-blue-200">Contact</a>
+                </nav>
 
-            <!-- КУРСЫ -->
-            <x-dropdown buttonHref="/courses" buttonText="КУРСЫ">
-                <x-dropdown-link href="/courses/list" text="Перечень курсов"/>
-                <x-dropdown-link href="/courses/schedule" text="Расписание"/>
-                <x-dropdown-link href="/courses/reviews" text="Отзывы"/>
-                <x-dropdown-link href="/courses/registration" text="Онлайн регистрация"/>
-                <x-dropdown-link href="/courses/training-centers" text="Учебные центры"/>
-            </x-dropdown>
-
-            <!-- CIPA -->
-            <x-dropdown buttonHref="/cipa" buttonText="CIPA">
-                <x-dropdown-link href="/cipa/schedule" text="Расписание"/>
-                <x-dropdown-link href="/cipa/registration" text="Регистрация"/>
-                <x-dropdown-link href="/cipa/appeal" text="Апелляция"/>
-                <x-dropdown-link href="/cipa/rules" text="Правила проведения экзаменов CIPA"/>
-                <x-dropdown-link href="/cipa/id" text="ИД (ID)"/>
-                <x-dropdown-link href="/cipa/certification" text="Сертификация"/>
-                <x-dropdown-link href="/cipa/certificates" text="Реестр Сертификатов"/>
-            </x-dropdown>
-
-            <!-- GARP -->
-            <x-dropdown buttonHref="/garp" buttonText="GARP">
-                <x-dropdown-link href="/garp/schedule" text="Расписание"/>
-                <x-dropdown-link href="/garp/registration" text="Регистрация"/>
-                <x-dropdown-link href="/garp/certification" text="Сертификация"/>
-                <x-dropdown-link href="/garp/topic" text="Тематика"/>
-            </x-dropdown>
-
-            <!-- А&М -->
-            <x-dropdown buttonHref="/am" buttonText="A&M">
-                <x-dropdown-link href="/am/" text="Пункт 1"/>
-                <x-dropdown-link href="/am/" text="Пункт 2"/>
-                <x-dropdown-link href="/am/" text="Пункт 3"/>
-                <x-dropdown-link href="/am/" text="Пункт 4"/>
-            </x-dropdown>
-
-            <!-- БИБЛИОТЕКА -->
-            <x-dropdown buttonHref="/library" buttonText="БИБЛИОТЕКА">
-                <x-dropdown-link href="/library/docs" text="Нормативные документы"/>
-                <x-dropdown-link href="/library/books" text="Книги"/>
-                <x-dropdown-link href="/library/for-cipa" text="Материалы для экзамена CIPA"/>
-                <x-dropdown-link href="/library/links" text="Полезные ссылки"/>
-            </x-dropdown>
-
-            <!-- ВАКАНСИИ -->
-            <x-dropdown buttonHref="/job" buttonText="ВАКАНСИИ">
-                <x-dropdown-link href="/library/need-worker" text="Требуется"/>
-                <x-dropdown-link href="/library/need-job" text="Ищу работу"/>
-            </x-dropdown>
-
-            <!-- НОВОСТИ -->
-            <x-dropdown buttonHref="/news/list" buttonText="НОВОСТИ"></x-dropdown>
-
-            <!-- КОНТАКТЫ -->
-            <x-dropdown buttonHref="/contacts" buttonText="КОНТАКТЫ">
-                <x-dropdown-link href="/contacts/info" text="Адреса, социальные сети и телефоны"/>
-                <x-dropdown-link href="/contacts/message" text="Написать нам"/>
-            </x-dropdown>
-
-        </x-header-links>
-    </x-navigation>
+                <details class="group lg:hidden">
+                    <summary class="list-none rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium backdrop-blur marker:hidden">
+                        Menu
+                    </summary>
+                    <div class="absolute right-4 top-full mt-3 w-[min(18rem,calc(100vw-2rem))] overflow-hidden rounded-3xl border border-white/15 bg-slate-950/95 p-3 shadow-2xl">
+                        <div class="grid gap-2 text-sm">
+                            <a href="{{ route('home') }}" class="rounded-2xl px-4 py-3 hover:bg-white/10">Home</a>
+                            <a href="{{ route('about') }}" class="rounded-2xl px-4 py-3 hover:bg-white/10">About</a>
+                            <a href="{{ route('certifications') }}" class="rounded-2xl px-4 py-3 hover:bg-white/10">Certifications</a>
+                            <a href="{{ route('courses.index') }}" class="rounded-2xl px-4 py-3 hover:bg-white/10">Courses</a>
+                            <a href="{{ route('schedule.index') }}" class="rounded-2xl px-4 py-3 hover:bg-white/10">Schedule</a>
+                            <a href="{{ route('news.index') }}" class="rounded-2xl px-4 py-3 hover:bg-white/10">News</a>
+                            <a href="{{ route('gallery.index') }}" class="rounded-2xl px-4 py-3 hover:bg-white/10">Gallery</a>
+                            <a href="{{ route('contact') }}" class="rounded-2xl px-4 py-3 hover:bg-white/10">Contact</a>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </div>
 </header>

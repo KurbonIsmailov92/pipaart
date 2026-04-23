@@ -3,20 +3,30 @@
 use App\Http\Controllers\AboutPipaaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CipaController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\GarpController;
 use App\Http\Controllers\LibraryController;
-use App\Http\Controllers\NewsPostController;
-use App\Http\Controllers\MessageController;
-use App\Http\Controllers\PageController;
-use App\Http\Controllers\SearchController;
+use App\Http\Controllers\Public\ContactController as PublicContactController;
+use App\Http\Controllers\Public\CoursesController as PublicCoursesController;
+use App\Http\Controllers\Public\GalleryController as PublicGalleryController;
+use App\Http\Controllers\Public\MessageController as PublicMessageController;
+use App\Http\Controllers\Public\NewsPostController as PublicNewsPostController;
+use App\Http\Controllers\Public\PageContentController;
+use App\Http\Controllers\Public\PageController;
+use App\Http\Controllers\Public\ScheduleController as PublicScheduleController;
+use App\Http\Controllers\Public\SearchController as PublicSearchController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\GalleryController;
 
 Route::get('/', [PageController::class, 'index'])->name('home');
+Route::get('/about', [PageContentController::class, 'show'])->defaults('slug', 'about')->name('about');
+Route::get('/certifications', [PageContentController::class, 'show'])->defaults('slug', 'certifications')->name('certifications');
 
-Route::prefix('oipba')->group(function () {
+Route::get('/courses', [PublicCoursesController::class, 'index'])->name('courses.index');
+Route::get('/schedule', [PublicScheduleController::class, 'index'])->name('schedule.index');
+Route::get('/news', [PublicNewsPostController::class, 'index'])->name('news.index');
+Route::get('/gallery', [PublicGalleryController::class, 'index'])->name('gallery.index');
+Route::get('/contact', [PublicContactController::class, 'info'])->name('contact');
+
+Route::prefix('oipba')->group(function (): void {
     Route::get('/', [AboutPipaaController::class, 'index'])->name('oipba.index');
     Route::get('/work', [AboutPipaaController::class, 'work'])->name('oipba.work');
     Route::get('/membership', [AboutPipaaController::class, 'membership'])->name('oipba.membership');
@@ -26,24 +36,16 @@ Route::prefix('oipba')->group(function () {
     Route::get('/gallery', [AboutPipaaController::class, 'gallery'])->name('oipba.gallery');
 });
 
-Route::prefix('courses')->group(function () {
-    Route::get('/', [CoursesController::class, 'index'])->name('courses.index');
-    Route::get('/list', [CoursesController::class, 'list'])->name('courses.list');
-    Route::get('/schedule', [CoursesController::class, 'schedule'])->name('courses.schedule');
-    Route::get('/reviews', [CoursesController::class, 'reviews'])->name('courses.reviews');
-    Route::get('/registration', [CoursesController::class, 'registration'])->name('courses.registration');
-    Route::get('/training-centers', [CoursesController::class, 'trainingСenters'])->name('courses.training-centers');
-
-    Route::get('/create', [CoursesController::class, 'create'])->name('courses.create');
-    Route::post('/list', [CoursesController::class, 'store'])->name('courses.store');
-
-    Route::get('/{course}', [CoursesController::class, 'show'])->name('courses.show');
-    Route::get('/{course}/edit', [CoursesController::class, 'edit'])->name('courses.edit');
-    Route::put('/{course}', [CoursesController::class, 'update'])->name('courses.update');
-    Route::delete('/{course}', [CoursesController::class, 'destroy'])->name('courses.delete');
+Route::prefix('courses')->name('courses.')->group(function (): void {
+    Route::get('/list', [PublicCoursesController::class, 'index'])->name('list');
+    Route::get('/schedule', [PublicScheduleController::class, 'index'])->name('schedule');
+    Route::get('/reviews', fn () => view('courses.reviews'))->name('reviews');
+    Route::get('/registration', fn () => view('courses.registration'))->name('registration');
+    Route::get('/training-centers', fn () => view('courses.training-centers'))->name('training-centers');
+    Route::get('/{course}', [PublicCoursesController::class, 'show'])->name('show');
 });
 
-Route::prefix('cipa')->group(function () {
+Route::prefix('cipa')->group(function (): void {
     Route::get('/', [CipaController::class, 'index'])->name('cipa.index');
     Route::get('/schedule', [CipaController::class, 'schedule'])->name('cipa.schedule');
     Route::get('/registration', [CipaController::class, 'registration'])->name('cipa.registration');
@@ -54,7 +56,7 @@ Route::prefix('cipa')->group(function () {
     Route::get('/certificates', [CipaController::class, 'certificates'])->name('cipa.certificates');
 });
 
-Route::prefix('garp')->group(function () {
+Route::prefix('garp')->group(function (): void {
     Route::get('/', [GarpController::class, 'index'])->name('garp.index');
     Route::get('/schedule', [GarpController::class, 'schedule'])->name('garp.schedule');
     Route::get('/registration', [GarpController::class, 'registration'])->name('garp.registration');
@@ -62,7 +64,7 @@ Route::prefix('garp')->group(function () {
     Route::get('/topic', [GarpController::class, 'topic'])->name('garp.topic');
 });
 
-Route::prefix('library')->group(function () {
+Route::prefix('library')->group(function (): void {
     Route::get('/', [LibraryController::class, 'index'])->name('library.index');
     Route::get('/docs', [LibraryController::class, 'docs'])->name('library.docs');
     Route::get('/books', [LibraryController::class, 'books'])->name('library.books');
@@ -70,38 +72,29 @@ Route::prefix('library')->group(function () {
     Route::get('/links', [LibraryController::class, 'links'])->name('library.links');
 });
 
-
-Route::prefix('contacts')->name('contacts.')->group(function () {
-    Route::get('/', [ContactController::class, 'index'])->name('index');
-    Route::get('/info', [ContactController::class, 'info'])->name('info');
-    Route::get('/message', [MessageController::class, 'create'])->name('message');
-    Route::post('/message', [MessageController::class, 'store'])->name('message.store');
+Route::prefix('contacts')->name('contacts.')->group(function (): void {
+    Route::get('/', [PublicContactController::class, 'info'])->name('index');
+    Route::get('/info', [PublicContactController::class, 'info'])->name('info');
+    Route::get('/message', [PublicMessageController::class, 'create'])->name('message');
+    Route::post('/message', [PublicMessageController::class, 'store'])->name('message.store');
 });
 
-Route::prefix('news')->group(function () {
-    Route::get('/list', [NewsPostController::class, 'index'])->name('news.list');
-    Route::get('/create', [NewsPostController::class, 'create'])->name('news.create');
-    Route::post('/list', [NewsPostController::class, 'store'])->name('news.store');
-    Route::get('/{newsPost}', [NewsPostController::class, 'show'])->name('news.show');
-    Route::get('/{newsPost}/edit', [NewsPostController::class, 'edit'])->name('news.edit');
-    Route::put('/{newsPost}', [NewsPostController::class, 'update'])->name('news.update');
-    Route::delete('/{newsPost}', [NewsPostController::class, 'destroy'])->name('news.delete');
+Route::prefix('news')->name('news.')->group(function (): void {
+    Route::get('/list', [PublicNewsPostController::class, 'index'])->name('list');
+    Route::get('/{newsPost}', [PublicNewsPostController::class, 'show'])->name('show');
 });
 
-Route::resource('/gallery', GalleryController::class);
+Route::get('/gallery/{gallery}', [PublicGalleryController::class, 'show'])->name('gallery.show');
+Route::get('/search', PublicSearchController::class)->name('search');
 
-Route::get('/search', SearchController::class);
-
-Route::prefix('auth')->name('auth.')->group(function () {
-    Route::middleware('guest')->group(function () {
+Route::prefix('auth')->name('auth.')->group(function (): void {
+    Route::middleware('guest')->group(function (): void {
         Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
         Route::post('/register', [AuthController::class, 'register'])->name('register.store');
 
         Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
         Route::post('/login', [AuthController::class, 'login'])->name('login.store');
-        Route::post('/sign-in', [AuthController::class, 'signIn'])->name('sign-in');
 
-        // Backward-compatible aliases for newer auth UI naming.
         Route::get('/sign-up', [AuthController::class, 'signUp'])->name('sign-up');
         Route::post('/sign-up', [AuthController::class, 'store'])->name('sign-up.store');
 
@@ -111,7 +104,7 @@ Route::prefix('auth')->name('auth.')->group(function () {
         Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
     });
 
-    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+    Route::post('/logout', [AuthController::class, 'logout'])
+        ->middleware('auth')
+        ->name('logout');
 });
-
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
