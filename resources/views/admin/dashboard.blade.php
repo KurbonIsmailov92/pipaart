@@ -23,7 +23,7 @@
                 @forelse($latestCourses as $course)
                     <div class="rounded-xl border border-slate-200 px-4 py-3">
                         <p class="font-medium">{{ $course->title }}</p>
-                        <p class="mt-1 text-sm text-slate-500">{{ $course->hours }} hours</p>
+                        <p class="mt-1 text-sm text-slate-500">{{ $course->duration }}</p>
                     </div>
                 @empty
                     <p class="text-sm text-slate-500">No courses yet.</p>
@@ -40,10 +40,27 @@
                 @forelse($latestNews as $news)
                     <div class="rounded-xl border border-slate-200 px-4 py-3">
                         <p class="font-medium">{{ $news->title }}</p>
-                        <p class="mt-1 text-sm text-slate-500">{{ $news->created_at?->format('M d, Y') }}</p>
+                        <p class="mt-1 text-sm text-slate-500">{{ $news->published_at?->format('M d, Y') }}</p>
                     </div>
                 @empty
                     <p class="text-sm text-slate-500">No news posts yet.</p>
+                @endforelse
+            </div>
+        </section>
+
+        <section class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 xl:col-span-2">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold">Upcoming Schedule</h2>
+                <a href="{{ route('admin.schedules.index') }}" class="text-sm text-blue-600">Manage</a>
+            </div>
+            <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                @forelse($latestSchedules as $schedule)
+                    <div class="rounded-xl border border-slate-200 px-4 py-3">
+                        <p class="font-medium">{{ $schedule->course?->title }}</p>
+                        <p class="mt-1 text-sm text-slate-500">{{ $schedule->start_date?->format('M d, Y') }} • {{ $schedule->teacher }}</p>
+                    </div>
+                @empty
+                    <p class="text-sm text-slate-500">No schedule entries yet.</p>
                 @endforelse
             </div>
         </section>

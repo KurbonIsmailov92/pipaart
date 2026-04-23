@@ -8,9 +8,15 @@
     </div>
 
     <div>
-        <label for="text" class="mb-2 block text-sm font-medium text-slate-700">Content</label>
-        <textarea id="text" name="text" rows="8" class="w-full rounded-xl border border-slate-300 px-4 py-3" required>{{ old('text', $newsPost->text) }}</textarea>
-        @error('text') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+        <label for="content" class="mb-2 block text-sm font-medium text-slate-700">Content</label>
+        <textarea id="content" name="content" rows="8" class="w-full rounded-xl border border-slate-300 px-4 py-3" required>{{ old('content', $newsPost->content) }}</textarea>
+        @error('content') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+    </div>
+
+    <div>
+        <label for="published_at" class="mb-2 block text-sm font-medium text-slate-700">Published At</label>
+        <input id="published_at" name="published_at" type="datetime-local" value="{{ old('published_at', $newsPost->published_at?->format('Y-m-d\\TH:i')) }}" class="w-full rounded-xl border border-slate-300 px-4 py-3">
+        @error('published_at') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
     </div>
 
     <div>

@@ -13,7 +13,8 @@
             <thead class="bg-slate-50 text-left text-slate-500">
             <tr>
                 <th class="px-4 py-3">Title</th>
-                <th class="px-4 py-3">Hours</th>
+                <th class="px-4 py-3">Duration</th>
+                <th class="px-4 py-3">Price</th>
                 <th class="px-4 py-3">Updated</th>
                 <th class="px-4 py-3 text-right">Actions</th>
             </tr>
@@ -22,7 +23,8 @@
             @forelse($courses as $course)
                 <tr>
                     <td class="px-4 py-3 font-medium">{{ $course->title }}</td>
-                    <td class="px-4 py-3">{{ $course->hours }}</td>
+                    <td class="px-4 py-3">{{ $course->duration }}</td>
+                    <td class="px-4 py-3">{{ number_format((float) $course->price, 2) }}</td>
                     <td class="px-4 py-3">{{ $course->updated_at?->diffForHumans() }}</td>
                     <td class="px-4 py-3">
                         <div class="flex justify-end gap-3">
@@ -37,7 +39,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="4" class="px-4 py-8 text-center text-slate-500">No courses found.</td>
+                    <td colspan="5" class="px-4 py-8 text-center text-slate-500">No courses found.</td>
                 </tr>
             @endforelse
             </tbody>

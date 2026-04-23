@@ -14,6 +14,7 @@
                 <img src="{{ Storage::url($photo->image) }}" alt="{{ $photo->title }}" class="h-52 w-full object-cover">
                 <div class="p-5">
                     <h2 class="text-lg font-semibold">{{ $photo->title }}</h2>
+                    <p class="mt-1 text-xs uppercase tracking-[0.3em] text-slate-400">{{ $photo->category }}</p>
                     <p class="mt-2 text-sm text-slate-600">{{ \Illuminate\Support\Str::limit($photo->description, 120) }}</p>
                     <div class="mt-4 flex gap-3 text-sm">
                         <a href="{{ route('admin.gallery.edit', $photo) }}" class="text-blue-600">Edit</a>

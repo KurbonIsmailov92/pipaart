@@ -13,10 +13,17 @@
         @error('description') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
     </div>
 
-    <div>
-        <label for="hours" class="mb-2 block text-sm font-medium text-slate-700">Hours</label>
-        <input id="hours" name="hours" type="number" min="1" max="1000" value="{{ old('hours', $course->hours) }}" class="w-full rounded-xl border border-slate-300 px-4 py-3" required>
-        @error('hours') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+    <div class="grid gap-6 md:grid-cols-2">
+        <div>
+            <label for="duration" class="mb-2 block text-sm font-medium text-slate-700">Duration</label>
+            <input id="duration" name="duration" type="text" value="{{ old('duration', $course->duration) }}" class="w-full rounded-xl border border-slate-300 px-4 py-3" required>
+            @error('duration') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+        </div>
+        <div>
+            <label for="price" class="mb-2 block text-sm font-medium text-slate-700">Price</label>
+            <input id="price" name="price" type="number" min="0" step="0.01" value="{{ old('price', $course->price) }}" class="w-full rounded-xl border border-slate-300 px-4 py-3">
+            @error('price') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+        </div>
     </div>
 
     <div>
