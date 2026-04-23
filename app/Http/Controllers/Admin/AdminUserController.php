@@ -43,7 +43,7 @@ class AdminUserController extends Controller
     {
         $this->userService->create($request->validated());
 
-        return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
+        return redirect()->route('admin.users.index')->with('success', __('ui.flash.user_created'));
     }
 
     public function edit(User $user): View|Factory|Application
@@ -60,7 +60,7 @@ class AdminUserController extends Controller
     {
         $this->userService->update($user, $request->validated());
 
-        return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
+        return redirect()->route('admin.users.index')->with('success', __('ui.flash.user_updated'));
     }
 
     public function destroy(User $user): RedirectResponse
@@ -69,7 +69,7 @@ class AdminUserController extends Controller
 
         $this->userService->delete($user);
 
-        return redirect()->route('admin.users.index')->with('success', 'User deleted successfully.');
+        return redirect()->route('admin.users.index')->with('success', __('ui.flash.user_deleted'));
     }
 
     /**

@@ -41,7 +41,7 @@ class AdminCourseController extends Controller
     {
         $this->courseService->create($request->validated());
 
-        return redirect()->route('admin.courses.index')->with('success', 'Course created successfully.');
+        return redirect()->route('admin.courses.index')->with('success', __('ui.flash.course_created'));
     }
 
     public function edit(Course $course): View|Factory|Application
@@ -57,7 +57,7 @@ class AdminCourseController extends Controller
     {
         $this->courseService->update($course, $request->validated());
 
-        return redirect()->route('admin.courses.index')->with('success', 'Course updated successfully.');
+        return redirect()->route('admin.courses.index')->with('success', __('ui.flash.course_updated'));
     }
 
     public function destroy(Course $course): RedirectResponse
@@ -66,6 +66,6 @@ class AdminCourseController extends Controller
 
         $this->courseService->delete($course);
 
-        return redirect()->route('admin.courses.index')->with('success', 'Course deleted successfully.');
+        return redirect()->route('admin.courses.index')->with('success', __('ui.flash.course_deleted'));
     }
 }

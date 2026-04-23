@@ -21,7 +21,7 @@ class CourseService
             $data['image'] = $this->mediaService->storeImage($data['image'], 'courses');
         }
 
-        $data['slug'] = $this->generateUniqueSlug((string) $data['title']);
+        $data['slug'] = $this->generateUniqueSlug($data['title']);
         $data['duration'] = $data['duration'] ?? $this->resolveDuration($data);
         $data['price'] = $data['price'] ?? 0;
 
@@ -39,8 +39,8 @@ class CourseService
             'courses',
         );
 
-        if (isset($data['title']) && $data['title'] !== $course->title) {
-            $data['slug'] = $this->generateUniqueSlug((string) $data['title'], $course);
+        if (isset($data['title']) && $this->resolveSlugSource($data['title']) !== $course->getTranslation('title')) {
+            $data['slug'] = $this->generateUniqueSlug($data['title'], $course);
         }
 
         $data['duration'] = $data['duration'] ?? $course->duration ?? $this->resolveDuration($data);
@@ -73,9 +73,9 @@ class CourseService
         return null;
     }
 
-    protected function generateUniqueSlug(string $title, ?Course $course = null): string
+    protected function generateUniqueSlug(string|array $title, ?Course $course = null): string
     {
-        $baseSlug = Str::slug($title);
+        $baseSlug = Str::slug($this->resolveSlugSource($title));
         $baseSlug = $baseSlug !== '' ? $baseSlug : 'course';
         $slug = $baseSlug;
         $suffix = 2;
@@ -91,5 +91,18 @@ class CourseService
         }
 
         return $slug;
+    }
+
+    protected function resolveSlugSource(string|array $title): string
+    {
+        if (is_string($title)) {
+            return $title;
+        }
+
+        return (string) ($title[config('app.fallback_locale', 'ru')]
+            ?? $title['en']
+            ?? $title['tg']
+            ?? reset($title)
+            ?: 'course');
     }
 }

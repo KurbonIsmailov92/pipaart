@@ -42,17 +42,17 @@ class AppServiceProvider extends ServiceProvider
             return $user->isAdmin() ? true : null;
         });
 
-        $defaultSettings = [
-            'site_name' => 'PIPAA CMS',
-            'hero_title' => 'Professional accounting and audit education in Tajikistan.',
-            'hero_subtitle' => 'A production-ready Laravel CMS for institute pages, courses, schedules, news, gallery, and contacts.',
-            'contact_email' => 'info@pipaa.tj',
-            'contact_backup_email' => '',
-            'contact_phone' => '',
-            'contact_address' => 'Dushanbe, Tajikistan',
-        ];
+        View::composer(['layouts.app', 'components.header', 'components.footer'], static function ($view): void {
+            $defaultSettings = [
+                'site_name' => 'PIPAA CMS',
+                'hero_title' => __('ui.home.hero_title'),
+                'hero_subtitle' => __('ui.home.hero_subtitle'),
+                'contact_email' => 'info@pipaa.tj',
+                'contact_backup_email' => '',
+                'contact_phone' => '',
+                'contact_address' => __('ui.contact.default_address'),
+            ];
 
-        View::composer(['layouts.app', 'components.header', 'components.footer'], static function ($view) use ($defaultSettings): void {
             $settings = $defaultSettings;
 
             if (Schema::hasTable('settings')) {

@@ -19,7 +19,7 @@ class CoursesController extends Controller
             ->paginate(9)
             ->withQueryString();
 
-        return view('public.courses.index', [
+        return view('public.courses.list', [
             'courses' => $courses,
         ]);
     }

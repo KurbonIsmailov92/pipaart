@@ -21,7 +21,7 @@ class ContactController extends Controller
             'contact_email' => 'info@pipaa.tj',
             'contact_backup_email' => '',
             'contact_phone' => '',
-            'contact_address' => 'Dushanbe, Tajikistan',
+            'contact_address' => __('ui.contact.default_address'),
         ];
 
         return view('public.contacts.info', [

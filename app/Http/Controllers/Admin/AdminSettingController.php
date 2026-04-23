@@ -36,6 +36,6 @@ class AdminSettingController extends Controller
 
         $this->settingsService->updateMany($payload);
 
-        return redirect()->route('admin.settings.index')->with('success', 'Settings updated successfully.');
+        return redirect()->route('admin.settings.index')->with('success', __('ui.flash.settings_updated'));
     }
 }

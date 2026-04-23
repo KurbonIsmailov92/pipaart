@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\EnsureUserHasRole;
+use App\Http\Middleware\SetApplicationLocale;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,8 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->append(SetApplicationLocale::class);
         $middleware->redirectGuestsTo(static fn (): string => route('auth.login'));
         $middleware->alias([
+            'locale' => SetApplicationLocale::class,
             'role' => EnsureUserHasRole::class,
         ]);
     })

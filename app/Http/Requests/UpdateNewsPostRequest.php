@@ -2,11 +2,14 @@
 
 namespace App\Http\Requests;
 
+use App\Http\Requests\Concerns\BuildsLocalizedRules;
 use App\Models\NewsPost;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateNewsPostRequest extends FormRequest
 {
+    use BuildsLocalizedRules;
+
     public function authorize(): bool
     {
         $newsPost = $this->route('news');
@@ -22,10 +25,10 @@ class UpdateNewsPostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:255'],
-            'content' => ['required', 'string'],
             'published_at' => ['nullable', 'date'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            ...$this->localizedFieldRules('title', ['string', 'max:255']),
+            ...$this->localizedFieldRules('content', ['string']),
         ];
     }
 }

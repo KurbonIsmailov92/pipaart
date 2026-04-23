@@ -43,7 +43,7 @@ class AdminScheduleController extends Controller
     {
         $this->scheduleService->create($request->validated());
 
-        return redirect()->route('admin.schedules.index')->with('success', 'Schedule created successfully.');
+        return redirect()->route('admin.schedules.index')->with('success', __('ui.flash.schedule_created'));
     }
 
     public function edit(Schedule $schedule): View|Factory|Application
@@ -60,7 +60,7 @@ class AdminScheduleController extends Controller
     {
         $this->scheduleService->update($schedule, $request->validated());
 
-        return redirect()->route('admin.schedules.index')->with('success', 'Schedule updated successfully.');
+        return redirect()->route('admin.schedules.index')->with('success', __('ui.flash.schedule_updated'));
     }
 
     public function destroy(Schedule $schedule): RedirectResponse
@@ -69,6 +69,6 @@ class AdminScheduleController extends Controller
 
         $this->scheduleService->delete($schedule);
 
-        return redirect()->route('admin.schedules.index')->with('success', 'Schedule deleted successfully.');
+        return redirect()->route('admin.schedules.index')->with('success', __('ui.flash.schedule_deleted'));
     }
 }

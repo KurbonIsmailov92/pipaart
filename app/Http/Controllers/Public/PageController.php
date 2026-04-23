@@ -22,8 +22,8 @@ class PageController extends Controller
     {
         $defaults = [
             'site_name' => 'PIPAA CMS',
-            'hero_title' => 'Professional accounting and audit education for the next generation of specialists.',
-            'hero_subtitle' => 'Courses, schedules, certifications, and institute news managed from a single Laravel CMS.',
+            'hero_title' => __('ui.home.hero_title'),
+            'hero_subtitle' => __('ui.home.hero_subtitle'),
         ];
 
         return view('public.home.index', [

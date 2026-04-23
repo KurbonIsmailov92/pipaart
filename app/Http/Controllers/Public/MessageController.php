@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContactMessageRequest;
 use App\Services\ContactMessageService;
+use App\Services\SettingsService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -14,18 +15,28 @@ class MessageController extends Controller
 {
     public function __construct(
         protected ContactMessageService $contactMessageService,
+        protected SettingsService $settingsService,
     ) {
     }
 
     public function create(): View|Factory|Application
     {
-        return view('public.contacts.message');
+        $defaults = [
+            'contact_email' => 'info@pipaa.tj',
+            'contact_backup_email' => '',
+            'contact_phone' => '',
+            'contact_address' => __('ui.contact.default_address'),
+        ];
+
+        return view('public.contacts.message', [
+            'settings' => $this->settingsService->getPublicSettings($defaults),
+        ]);
     }
 
     public function store(ContactMessageRequest $request): RedirectResponse
     {
         $this->contactMessageService->createAndQueue($request->validated());
 
-        return back()->with('success', 'Your message has been received and queued for delivery.');
+        return back()->with('success', __('ui.flash.contact_message_queued'));
     }
 }

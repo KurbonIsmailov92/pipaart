@@ -23,7 +23,7 @@ class NewsService
 
         $data['content'] = $data['content'] ?? $data['text'] ?? '';
         $data['text'] = $data['content'];
-        $data['slug'] = $this->generateUniqueSlug((string) $data['title']);
+        $data['slug'] = $this->generateUniqueSlug($data['title']);
         $data['published_at'] = $data['published_at'] ?? now();
 
         return NewsPost::query()->create($data);
@@ -40,8 +40,8 @@ class NewsService
             'news',
         );
 
-        if (isset($data['title']) && $data['title'] !== $newsPost->title) {
-            $data['slug'] = $this->generateUniqueSlug((string) $data['title'], $newsPost);
+        if (isset($data['title']) && $this->resolveSlugSource($data['title']) !== $newsPost->getTranslation('title')) {
+            $data['slug'] = $this->generateUniqueSlug($data['title'], $newsPost);
         }
 
         $data['content'] = $data['content'] ?? $data['text'] ?? $newsPost->content ?? $newsPost->text;
@@ -59,9 +59,9 @@ class NewsService
         $newsPost->delete();
     }
 
-    protected function generateUniqueSlug(string $title, ?NewsPost $newsPost = null): string
+    protected function generateUniqueSlug(string|array $title, ?NewsPost $newsPost = null): string
     {
-        $baseSlug = Str::slug($title);
+        $baseSlug = Str::slug($this->resolveSlugSource($title));
         $baseSlug = $baseSlug !== '' ? $baseSlug : 'news';
         $slug = $baseSlug;
         $suffix = 2;
@@ -77,5 +77,18 @@ class NewsService
         }
 
         return $slug;
+    }
+
+    protected function resolveSlugSource(string|array $title): string
+    {
+        if (is_string($title)) {
+            return $title;
+        }
+
+        return (string) ($title[config('app.fallback_locale', 'ru')]
+            ?? $title['en']
+            ?? $title['tg']
+            ?? reset($title)
+            ?: 'news');
     }
 }

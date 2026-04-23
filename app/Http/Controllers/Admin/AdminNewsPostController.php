@@ -41,7 +41,7 @@ class AdminNewsPostController extends Controller
     {
         $this->newsService->create($request->validated());
 
-        return redirect()->route('admin.news.index')->with('success', 'News item created successfully.');
+        return redirect()->route('admin.news.index')->with('success', __('ui.flash.news_created'));
     }
 
     public function edit(NewsPost $news): View|Factory|Application
@@ -57,7 +57,7 @@ class AdminNewsPostController extends Controller
     {
         $this->newsService->update($news, $request->validated());
 
-        return redirect()->route('admin.news.index')->with('success', 'News item updated successfully.');
+        return redirect()->route('admin.news.index')->with('success', __('ui.flash.news_updated'));
     }
 
     public function destroy(NewsPost $news): RedirectResponse
@@ -66,6 +66,6 @@ class AdminNewsPostController extends Controller
 
         $this->newsService->delete($news);
 
-        return redirect()->route('admin.news.index')->with('success', 'News item deleted successfully.');
+        return redirect()->route('admin.news.index')->with('success', __('ui.flash.news_deleted'));
     }
 }

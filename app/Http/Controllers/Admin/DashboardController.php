@@ -26,8 +26,9 @@ class DashboardController extends Controller
                 'gallery' => Gallery::query()->count(),
                 'users' => User::query()->count(),
             ],
-            'recentCourses' => Course::query()->latest()->take(5)->get(),
-            'recentNews' => NewsPost::query()->ordered()->take(5)->get(),
+            'latestCourses' => Course::query()->latest()->take(5)->get(),
+            'latestNews' => NewsPost::query()->ordered()->take(5)->get(),
+            'latestSchedules' => Schedule::query()->with('course')->upcoming()->take(6)->get(),
         ]);
     }
 }

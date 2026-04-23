@@ -44,7 +44,7 @@ class AdminPageController extends Controller
             'is_published' => $request->boolean('is_published'),
         ]);
 
-        return redirect()->route('admin.pages.index')->with('success', 'Page created successfully.');
+        return redirect()->route('admin.pages.index')->with('success', __('ui.flash.page_created'));
     }
 
     public function edit(Page $page): View|Factory|Application
@@ -63,7 +63,7 @@ class AdminPageController extends Controller
             'is_published' => $request->boolean('is_published'),
         ]);
 
-        return redirect()->route('admin.pages.index')->with('success', 'Page updated successfully.');
+        return redirect()->route('admin.pages.index')->with('success', __('ui.flash.page_updated'));
     }
 
     public function destroy(Page $page): RedirectResponse
@@ -72,6 +72,6 @@ class AdminPageController extends Controller
 
         $this->pageService->delete($page);
 
-        return redirect()->route('admin.pages.index')->with('success', 'Page deleted successfully.');
+        return redirect()->route('admin.pages.index')->with('success', __('ui.flash.page_deleted'));
     }
 }

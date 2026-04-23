@@ -41,7 +41,7 @@ class AdminGalleryController extends Controller
     {
         $this->galleryService->create($request->validated());
 
-        return redirect()->route('admin.gallery.index')->with('success', 'Gallery item created successfully.');
+        return redirect()->route('admin.gallery.index')->with('success', __('ui.flash.gallery_created'));
     }
 
     public function edit(Gallery $gallery): View|Factory|Application
@@ -57,7 +57,7 @@ class AdminGalleryController extends Controller
     {
         $this->galleryService->update($gallery, $request->validated());
 
-        return redirect()->route('admin.gallery.index')->with('success', 'Gallery item updated successfully.');
+        return redirect()->route('admin.gallery.index')->with('success', __('ui.flash.gallery_updated'));
     }
 
     public function destroy(Gallery $gallery): RedirectResponse
@@ -66,6 +66,6 @@ class AdminGalleryController extends Controller
 
         $this->galleryService->delete($gallery);
 
-        return redirect()->route('admin.gallery.index')->with('success', 'Gallery item deleted successfully.');
+        return redirect()->route('admin.gallery.index')->with('success', __('ui.flash.gallery_deleted'));
     }
 }

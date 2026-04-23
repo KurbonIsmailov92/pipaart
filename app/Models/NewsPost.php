@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasTranslatableAttributes;
+use App\Support\TranslationQuery;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,6 +12,16 @@ class NewsPost extends Model
 {
     /** @use HasFactory<\Database\Factories\NewsPostFactory> */
     use HasFactory;
+    use HasTranslatableAttributes;
+
+    /**
+     * @var list<string>
+     */
+    protected array $translatable = [
+        'title',
+        'content',
+        'text',
+    ];
 
     protected $fillable = [
         'title',
@@ -23,6 +35,9 @@ class NewsPost extends Model
     protected function casts(): array
     {
         return [
+            'title' => 'array',
+            'content' => 'array',
+            'text' => 'array',
             'published_at' => 'datetime',
         ];
     }
@@ -34,7 +49,9 @@ class NewsPost extends Model
 
     public function scopeOrdered(Builder $query): Builder
     {
-        return $query->orderByDesc('published_at')->orderByDesc('id');
+        return $query
+            ->orderByDesc('published_at')
+            ->orderByDesc('id');
     }
 
     public function scopePublished(Builder $query): Builder
@@ -52,12 +69,7 @@ class NewsPost extends Model
             return $query;
         }
 
-        return $query->where(function (Builder $builder) use ($search): void {
-            $builder
-                ->where('title', 'like', '%'.$search.'%')
-                ->orWhere('content', 'like', '%'.$search.'%')
-                ->orWhere('text', 'like', '%'.$search.'%');
-        });
+        return TranslationQuery::whereAnyTranslatedLike($query, ['title', 'content'], $search);
     }
 
     public function getBodyAttribute(): string
