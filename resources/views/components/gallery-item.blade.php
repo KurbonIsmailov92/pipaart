@@ -1,9 +1,9 @@
 @props(['photo' => null])
 
 @php
-    $imageSrc = $photo?->image ? asset('storage/gallery/' . $photo->image) : 'https://picsum.photos/500/400';
-    $imageAlt = $photo?->title ?: 'Фото';
-    $description = $photo?->title ?: 'Описание фото';
+    $imageSrc = $photo?->image ? Storage::url($photo->image) : 'https://picsum.photos/500/400';
+    $imageAlt = $photo?->title ?: 'Gallery photo';
+    $description = $photo?->title ?: 'Gallery photo';
 @endphp
 
 <x-panel>

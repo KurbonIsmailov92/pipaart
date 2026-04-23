@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -11,40 +12,41 @@ use Illuminate\Support\Str;
  */
 class UserFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
     protected static ?string $password;
 
     /**
-     * Define the model's default state.
-     *
      * @return array<string, mixed>
      */
     public function definition(): array
     {
-        $roles = [
-            ...array_fill(0, 1, 'admin'),
-            ...array_fill(0, 2, 'teacher'),
-            ...array_fill(0, 5, 'student'),
-            ...array_fill(0, 8, 'reader'),
-        ];
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
-            'role' => fake()->randomElement($roles),
+            'role' => fake()->randomElement(UserRole::values()),
             'remember_token' => Str::random(10),
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
+    public function admin(): static
+    {
+        return $this->state(fn () => ['role' => UserRole::Admin->value]);
+    }
+
+    public function teacher(): static
+    {
+        return $this->state(fn () => ['role' => UserRole::Teacher->value]);
+    }
+
+    public function student(): static
+    {
+        return $this->state(fn () => ['role' => UserRole::Student->value]);
+    }
+
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn () => [
             'email_verified_at' => null,
         ]);
     }

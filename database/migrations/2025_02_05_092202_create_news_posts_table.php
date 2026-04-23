@@ -6,23 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('news_posts', function (Blueprint $table) {
-            $table->id()->autoIncrement()->index();
-            $table->string('title')->nullable(false)->index();
-            $table->text('text')->nullable(false);
-            $table->string('image')->nullable(true);
+        Schema::create('news_posts', function (Blueprint $table): void {
+            $table->id();
+            $table->string('title')->index();
+            $table->text('text');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('news_posts');
