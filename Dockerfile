@@ -6,7 +6,8 @@ RUN composer install \
     --no-dev \
     --prefer-dist \
     --no-interaction \
-    --optimize-autoloader
+    --optimize-autoloader \
+    --no-scripts
 
 FROM node:20-alpine AS assets
 WORKDIR /app
