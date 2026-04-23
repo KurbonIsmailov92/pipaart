@@ -9,7 +9,7 @@
         @endif
 
         <h1 class="text-3xl font-bold text-gray-900">{{ $course->title }}</h1>
-        <p class="mt-2 text-sm uppercase tracking-[0.2em] text-slate-500">{{ $course->hours }} hours</p>
+        <p class="mt-2 text-sm uppercase tracking-[0.2em] text-slate-500">{{ $course->duration }} • {{ number_format((float) $course->price, 2) }}</p>
 
         <div class="mt-6 text-lg text-gray-800">
             {{ $course->description }}

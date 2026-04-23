@@ -9,10 +9,10 @@
         @endif
 
         <h1 class="text-3xl font-bold text-gray-900">{{ $newsPost->title }}</h1>
-        <p class="mt-2 text-gray-600">{{ $newsPost->created_at?->format('d.m.Y') }}</p>
+        <p class="mt-2 text-gray-600">{{ $newsPost->published_at?->format('d.m.Y') }}</p>
 
         <div class="mt-6 text-lg text-gray-800">
-            {{ $newsPost->text }}
+            {{ $newsPost->content }}
         </div>
 
         <div class="mt-8 flex items-center justify-between gap-4">

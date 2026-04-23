@@ -11,7 +11,7 @@
     <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
         @forelse($photos as $photo)
             <article class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
-                <img src="{{ Storage::url($photo->image) }}" alt="{{ $photo->title }}" class="h-52 w-full object-cover">
+                <img src="{{ Storage::url($photo->image_path) }}" alt="{{ $photo->title }}" class="h-52 w-full object-cover">
                 <div class="p-5">
                     <h2 class="text-lg font-semibold">{{ $photo->title }}</h2>
                     <p class="mt-1 text-xs uppercase tracking-[0.3em] text-slate-400">{{ $photo->category }}</p>

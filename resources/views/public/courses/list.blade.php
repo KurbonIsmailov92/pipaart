@@ -21,7 +21,7 @@
                 text="{{ $course->description }}"
                 argc="{{ route('courses.show', $course) }}"
             >
-                Course duration: {{ $course->hours }} hours
+                Course duration: {{ $course->duration }} | Price: {{ number_format((float) $course->price, 2) }}
             </x-course-item>
         @empty
             <p>No courses found.</p>

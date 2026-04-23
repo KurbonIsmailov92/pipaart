@@ -17,7 +17,7 @@
     <div class="mt-6 space-y-6 text-sm sm:text-base">
         @forelse($newsPosts as $newsPost)
             <x-old-news title="{{ $newsPost->title }}">
-                {{ \Illuminate\Support\Str::limit($newsPost->text, 200) }}
+                {{ \Illuminate\Support\Str::limit($newsPost->content, 200) }}
                 <br><br>
                 <a href="{{ route('news.show', $newsPost) }}" class="inline-flex rounded-xl bg-slate-900 px-4 py-3 text-sm text-white">
                     Read more

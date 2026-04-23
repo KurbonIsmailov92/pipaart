@@ -18,6 +18,7 @@
                         <x-gallery-item :photo="$photo" />
                     </a>
                     <h3 class="mt-4 text-lg font-semibold">{{ $photo->title }}</h3>
+                    <p class="mt-1 text-xs uppercase tracking-[0.3em] text-slate-400">{{ $photo->category }}</p>
                     <div class="mt-2 line-clamp-2 text-gray-600">{{ $photo->description }}</div>
                 </div>
             @empty
