@@ -1,6 +1,6 @@
 <button
     type="submit"
-    class="bg-blue-900 text-white px-6 py-2 rounded-xl hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-    {{$slot}}
+    {{ $attributes->merge(['class' => 'inline-flex items-center justify-center rounded-2xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-400']) }}
+>
+    {{ $slot }}
 </button>
-

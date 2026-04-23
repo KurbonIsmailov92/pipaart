@@ -23,8 +23,9 @@ class NewsPostFactory extends Factory
         return [
             'title' => $title,
             'slug' => Str::slug($title),
-            'text' => fake()->paragraphs(4, true),
+            'content' => fake()->paragraphs(4, true),
             'image' => null,
+            'published_at' => now()->subDay(),
         ];
     }
 }

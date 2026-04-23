@@ -5,14 +5,11 @@
         'type' => 'text',
         'id' => $name,
         'name' => $name,
-        'class' => 'rounded-xl bg-white/40 border px-5 py-3 w-full border-white
-                    focus:border-blue-900 focus:ring focus:ring-blue-300 focus:outline-none focus:!bg-white/80',
-        'value' => old($name)
+        'class' => 'w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200',
+        'value' => old($name),
     ];
 @endphp
 
 <x-form.field :$label :$name>
-    <input {{ $attributes($defaults) }}>
+    <input {{ $attributes->merge($defaults) }}>
 </x-form.field>
-
-

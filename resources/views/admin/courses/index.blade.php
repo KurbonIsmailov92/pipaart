@@ -8,8 +8,8 @@
         <a href="{{ route('admin.courses.create') }}" class="rounded-xl bg-slate-950 px-4 py-3 text-white">Add course</a>
     </div>
 
-    <div class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
-        <table class="min-w-full divide-y divide-slate-200 text-sm">
+    <div class="table-shell">
+        <table class="data-table">
             <thead class="bg-slate-50 text-left text-slate-500">
             <tr>
                 <th class="px-4 py-3">Title</th>

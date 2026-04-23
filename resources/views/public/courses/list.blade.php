@@ -3,32 +3,33 @@
 @section('title', 'Courses')
 
 @section('content')
-    <div class="flex items-center justify-between gap-4">
-        <h1 class="mt-6 text-2xl text-primary sm:text-4xl">Courses</h1>
-        @can('create', \App\Models\Course::class)
-            <a href="{{ route('admin.courses.index') }}" class="rounded-xl bg-slate-900 px-4 py-3 text-sm text-white">Manage in CMS</a>
-        @endcan
-    </div>
+    <x-ui.page-header title="Courses" description="Professional training programs managed through the CMS and designed for modern accounting and finance careers.">
+        <x-slot:actions>
+            @can('create', \App\Models\Course::class)
+                <x-ui.button-link :href="route('admin.courses.index')" variant="secondary">Manage in CMS</x-ui.button-link>
+            @endcan
+        </x-slot:actions>
+    </x-ui.page-header>
 
-    <div class="mt-6">
-        <x-search />
-    </div>
+    <x-search :action="route('courses.index')" name="search" placeholder="Search courses..." />
 
-    <div class="mt-6 space-y-6 text-sm sm:text-base">
+    <div class="mt-8 grid gap-6 lg:grid-cols-2">
         @forelse($courses as $course)
-            <x-course-item
-                title="{{ $course->title }}"
-                text="{{ $course->description }}"
-                argc="{{ route('courses.show', $course) }}"
-            >
-                Course duration: {{ $course->duration }} | Price: {{ number_format((float) $course->price, 2) }}
-            </x-course-item>
+            <x-ui.card>
+                <p class="text-xs uppercase tracking-[0.3em] text-slate-400">{{ $course->duration }}</p>
+                <h2 class="mt-3 text-2xl font-semibold text-slate-950">{{ $course->title }}</h2>
+                <p class="mt-4 text-slate-600">{{ \Illuminate\Support\Str::limit($course->description, 220) }}</p>
+                <div class="mt-6 flex flex-wrap items-center justify-between gap-3">
+                    <span class="text-sm font-medium text-blue-900">{{ number_format((float) $course->price, 2) }}</span>
+                    <x-ui.button-link :href="route('courses.show', $course)" variant="secondary">Open Course</x-ui.button-link>
+                </div>
+            </x-ui.card>
         @empty
-            <p>No courses found.</p>
+            <x-ui.card class="lg:col-span-2">
+                <p class="text-slate-500">No courses found.</p>
+            </x-ui.card>
         @endforelse
     </div>
 
-    <div class="mt-8">
-        {{ $courses->links() }}
-    </div>
+    <div class="mt-8">{{ $courses->links() }}</div>
 @endsection

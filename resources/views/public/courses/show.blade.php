@@ -3,23 +3,28 @@
 @section('title', $course->title)
 
 @section('content')
-    <div class="mx-auto mt-6 max-w-3xl">
-        @if($course->image)
-            <img src="{{ Storage::url($course->image) }}" alt="{{ $course->title }}" class="mb-6 h-72 w-full rounded-2xl object-cover">
-        @endif
-
-        <h1 class="text-3xl font-bold text-gray-900">{{ $course->title }}</h1>
-        <p class="mt-2 text-sm uppercase tracking-[0.2em] text-slate-500">{{ $course->duration }} • {{ number_format((float) $course->price, 2) }}</p>
-
-        <div class="mt-6 text-lg text-gray-800">
-            {{ $course->description }}
-        </div>
-
-        <div class="mt-8 flex items-center justify-between gap-4">
-            <a href="{{ route('courses.list') }}" class="rounded-xl bg-slate-900 px-4 py-3 text-white">Back to courses</a>
+    <x-ui.page-header :title="$course->title" :description="$course->duration.' | '.number_format((float) $course->price, 2)">
+        <x-slot:actions>
+            <x-ui.button-link :href="route('courses.index')" variant="secondary">Back to Courses</x-ui.button-link>
             @can('update', $course)
-                <a href="{{ route('admin.courses.edit', $course) }}" class="text-sm font-semibold text-blue-600">Edit in CMS</a>
+                <x-ui.button-link :href="route('admin.courses.edit', $course)" variant="ghost">Edit in CMS</x-ui.button-link>
             @endcan
-        </div>
+        </x-slot:actions>
+    </x-ui.page-header>
+
+    <div class="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+        <x-ui.card>
+            <div class="prose prose-slate max-w-none">
+                <p>{{ $course->description }}</p>
+            </div>
+        </x-ui.card>
+
+        <x-ui.card class="overflow-hidden p-0">
+            @if($course->image)
+                <img src="{{ Storage::url($course->image) }}" alt="{{ $course->title }}" class="h-80 w-full object-cover">
+            @else
+                <div class="flex h-80 items-center justify-center bg-slate-100 text-slate-400">Course image</div>
+            @endif
+        </x-ui.card>
     </div>
 @endsection

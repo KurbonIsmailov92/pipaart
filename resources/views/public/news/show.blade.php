@@ -3,23 +3,28 @@
 @section('title', $newsPost->title)
 
 @section('content')
-    <div class="mx-auto mt-6 max-w-3xl">
-        @if($newsPost->image)
-            <img src="{{ Storage::url($newsPost->image) }}" alt="{{ $newsPost->title }}" class="mb-6 h-72 w-full rounded-2xl object-cover">
-        @endif
-
-        <h1 class="text-3xl font-bold text-gray-900">{{ $newsPost->title }}</h1>
-        <p class="mt-2 text-gray-600">{{ $newsPost->published_at?->format('d.m.Y') }}</p>
-
-        <div class="mt-6 text-lg text-gray-800">
-            {{ $newsPost->content }}
-        </div>
-
-        <div class="mt-8 flex items-center justify-between gap-4">
-            <a href="{{ route('news.list') }}" class="rounded-xl bg-slate-900 px-4 py-3 text-white">Back to news</a>
+    <x-ui.page-header :title="$newsPost->title" :description="$newsPost->published_at?->format('F d, Y')">
+        <x-slot:actions>
+            <x-ui.button-link :href="route('news.index')" variant="secondary">Back to News</x-ui.button-link>
             @can('update', $newsPost)
-                <a href="{{ route('admin.news.edit', $newsPost) }}" class="text-sm font-semibold text-blue-600">Edit in CMS</a>
+                <x-ui.button-link :href="route('admin.news.edit', $newsPost)" variant="ghost">Edit in CMS</x-ui.button-link>
             @endcan
-        </div>
+        </x-slot:actions>
+    </x-ui.page-header>
+
+    <div class="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+        <x-ui.card>
+            <div class="prose prose-slate max-w-none">
+                <p>{{ $newsPost->content }}</p>
+            </div>
+        </x-ui.card>
+
+        <x-ui.card class="overflow-hidden p-0">
+            @if($newsPost->image)
+                <img src="{{ Storage::url($newsPost->image) }}" alt="{{ $newsPost->title }}" class="h-80 w-full object-cover">
+            @else
+                <div class="flex h-80 items-center justify-center bg-slate-100 text-slate-400">News image</div>
+            @endif
+        </x-ui.card>
     </div>
 @endsection

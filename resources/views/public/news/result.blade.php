@@ -3,32 +3,25 @@
 @section('title', 'Search Results')
 
 @section('content')
-    <div class="mb-8 flex items-center justify-between">
-        <h1 class="mt-6 text-2xl text-primary sm:text-4xl">Search Results</h1>
-    </div>
+    <x-ui.page-header title="Search Results" description="News articles matching your query."></x-ui.page-header>
 
-    <div class="mt-6 space-y-6 text-sm sm:text-base">
+    <div class="grid gap-6">
         @forelse($newsPosts as $newsPost)
-            <x-old-news title="{{ $newsPost->title }}">
-                {{ \Illuminate\Support\Str::limit($newsPost->content, 200) }}
-                <br>
-                <br>
-                <x-form.button class="mt-3">
-                    <a href="{{ route('news.show', $newsPost) }}">Read more →</a>
-                </x-form.button>
-            </x-old-news>
+            <x-ui.card>
+                <p class="text-xs uppercase tracking-[0.3em] text-slate-400">{{ $newsPost->published_at?->format('M d, Y') }}</p>
+                <h2 class="mt-3 text-2xl font-semibold text-slate-950">{{ $newsPost->title }}</h2>
+                <p class="mt-4 text-slate-600">{{ \Illuminate\Support\Str::limit($newsPost->content, 200) }}</p>
+                <div class="mt-5 flex flex-wrap gap-3">
+                    <x-ui.button-link :href="route('news.show', $newsPost)" variant="secondary">Read More</x-ui.button-link>
+                    <x-ui.button-link :href="route('home')" variant="ghost">Back Home</x-ui.button-link>
+                </div>
+            </x-ui.card>
         @empty
-            <p>No results found.</p>
+            <x-ui.card>
+                <p class="text-slate-500">No results found.</p>
+            </x-ui.card>
         @endforelse
     </div>
 
-    <div class="mt-8">
-        {{ $newsPosts->links() }}
-    </div>
-
-    <div class="mt-6">
-        <x-form.button>
-            <a href="{{ route('home') }}">Back to home</a>
-        </x-form.button>
-    </div>
+    <div class="mt-8">{{ $newsPosts->links() }}</div>
 @endsection
