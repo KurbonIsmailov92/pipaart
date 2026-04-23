@@ -41,6 +41,7 @@ RUN apt-get update \
     && rm -f /etc/apache2/mods-enabled/mpm_worker.load \
     && rm -f /etc/apache2/mods-enabled/mpm_worker.conf \
     && a2enmod mpm_prefork rewrite headers \
+    && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     && rm -rf /var/lib/apt/lists/*
 
 COPY . .
