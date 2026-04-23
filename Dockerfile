@@ -1,13 +1,12 @@
 FROM composer:2.7 AS vendor
 WORKDIR /app
 
-COPY composer.json composer.lock ./
+COPY . .
 RUN composer install \
     --no-dev \
     --prefer-dist \
     --no-interaction \
-    --optimize-autoloader \
-    --no-scripts
+    --optimize-autoloader
 
 FROM node:20-alpine AS assets
 WORKDIR /app
