@@ -1,66 +1,148 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# PIPAA CMS
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+PIPAA CMS is a Laravel 11 content management system for the Public Institute of Professional Accountants and Auditors. It rebuilds the legacy `pipaa.tj` structure into a modern admin-managed website with public pages, certifications, courses, schedule, news, gallery, contact information, and user management.
 
-## About Laravel
+## Tech Stack
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Laravel 11
+- PHP 8.2+
+- Blade + Vite
+- PostgreSQL or MySQL
+- Laravel queues for contact delivery
+- Tailwind/utility-based UI with reusable Blade components
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Main Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Public website sections:
+  - Home
+  - About
+  - Certifications
+  - Courses
+  - Schedule
+  - News
+  - Gallery
+  - Contact
+- Admin CMS for:
+  - Pages
+  - Courses
+  - Schedule
+  - News
+  - Gallery
+  - Users
+  - Settings
+- Role-based access control:
+  - `admin`
+  - `teacher`
+  - `student`
+  - `guest`
+- Queued contact workflow with stored messages
+- Media uploads through Laravel Storage
 
-## Learning Laravel
+## Roles
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- `admin`: full CMS access, users, settings, gallery
+- `teacher`: access to dashboard, pages, courses, schedule, news
+- `student`: read-only public access
+- `guest`: unauthenticated public access
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Setup
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. Install dependencies:
 
-## Laravel Sponsors
+```bash
+composer install
+npm install
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+2. Create environment file:
 
-### Premium Partners
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+3. Configure database, mail, queue, and storage values in `.env`.
 
-## Contributing
+4. Run migrations and create the storage symlink:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+php artisan migrate
+php artisan storage:link
+```
 
-## Code of Conduct
+5. Start local development:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+composer run dev
+```
 
-## Security Vulnerabilities
+## Important Environment Variables
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- `APP_URL`
+- `DB_CONNECTION`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`
+- `QUEUE_CONNECTION`
+- `FILESYSTEM_DISK=public`
+- `MAIL_MAILER`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`
+- `CONTACT_RECIPIENT_EMAIL`
+- `CONTACT_BACKUP_EMAIL`
+- `CONTACT_PHONE`
+- `CMS_SITE_NAME`
 
-## License
+## Admin Usage
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- Login through `/auth/login`
+- Open `/admin`
+- Manage public pages from `/admin/pages`
+- Manage courses from `/admin/courses`
+- Manage schedule from `/admin/schedules`
+- Manage news from `/admin/news`
+- Manage gallery from `/admin/gallery`
+- Manage users from `/admin/users`
+- Manage site settings from `/admin/settings`
+
+## Deployment
+
+Production deployment should use a real web server or container runtime. Do not use `php artisan serve`.
+
+Recommended flow:
+
+1. Build frontend assets
+2. Install production Composer dependencies
+3. Run migrations
+4. Run:
+
+```bash
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+5. Ensure queue processing is running for contact jobs
+6. Ensure `storage:link` exists
+
+The repository includes:
+
+- `Dockerfile` for containerized deployment
+- `docker/start.sh` for container startup
+- `render-build.sh` for build-time preparation
+- `Procfile` with a single app start command
+
+## Testing
+
+Feature coverage includes:
+
+- admin access control
+- page and course CMS operations
+- public page rendering
+- contact form queuing and validation
+
+Run tests with:
+
+```bash
+php artisan test
+```
+
+## Notes
+
+- This project preserves the legacy information architecture while moving content into a maintainable CMS.
+- Some legacy static sections may still exist in the repository for historical compatibility, but the main public site now centers on CMS-managed content.

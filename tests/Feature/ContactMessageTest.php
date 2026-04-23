@@ -1,19 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Mail;
+use App\Jobs\SendContactMessageJob;
+use App\Models\ContactMessage;
+use Illuminate\Support\Facades\Queue;
 
-it('sends contact message email and sms notification when configured', function (): void {
-    config()->set('services.contact.recipient', 'info@pipaa.tj');
-    config()->set('services.sms.enabled', true);
-    config()->set('services.sms.url', 'https://sms-gateway.local/send');
-    config()->set('services.sms.to', '+992900000000');
-    config()->set('services.sms.token', 'secret');
-
-    Mail::fake();
-    Http::fake([
-        'https://sms-gateway.local/send' => Http::response(['ok' => true], 200),
-    ]);
+it('queues contact message delivery and stores the message', function (): void {
+    Queue::fake();
 
     $response = $this->post(route('contacts.message.store'), [
         'name' => 'Test User',
@@ -24,8 +16,9 @@ it('sends contact message email and sms notification when configured', function 
 
     $response->assertSessionHas('success');
 
-    Mail::assertSentCount(1);
-    Http::assertSentCount(1);
+    expect(ContactMessage::query()->where('email', 'user@example.com')->exists())->toBeTrue();
+
+    Queue::assertPushed(SendContactMessageJob::class);
 });
 
 it('validates required fields for contact message', function (): void {

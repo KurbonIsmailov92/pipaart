@@ -1,15 +1,12 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-# Установка Composer
-curl -sS https://getcomposer.org/installer | php
-php composer.phar install --no-dev --optimize-autoloader
-php artisan serve --host 0.0.0.0 --port $PORT
+composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction
+npm ci
+npm run build
 
-# Выполнение миграций
 php artisan migrate --force
-
-# Кэширование конфигурации
+php artisan storage:link || true
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
-

@@ -10,6 +10,7 @@
             <p><strong>Email:</strong> {{ $settings['contact_email'] }}</p>
             <p><strong>Backup email:</strong> {{ $settings['contact_backup_email'] }}</p>
             <p><strong>Phone:</strong> {{ $settings['contact_phone'] }}</p>
+            <p><strong>Address:</strong> {{ $settings['contact_address'] }}</p>
             <p>
                 If you want to contact us directly from the website, visit
                 <a href="{{ route('contacts.message') }}" class="text-blue-700 underline">the message page</a>.
