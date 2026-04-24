@@ -8,6 +8,7 @@ use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\Public\ContactController as PublicContactController;
 use App\Http\Controllers\Public\CoursesController as PublicCoursesController;
 use App\Http\Controllers\Public\GalleryController as PublicGalleryController;
+use App\Http\Controllers\Public\MediaController;
 use App\Http\Controllers\Public\MessageController as PublicMessageController;
 use App\Http\Controllers\Public\NewsPostController as PublicNewsPostController;
 use App\Http\Controllers\Public\PageContentController;
@@ -20,6 +21,9 @@ $supportedLocales = config('app.supported_locales', ['ru', 'tg', 'en']);
 $supportedLocalesPattern = implode('|', $supportedLocales);
 
 Route::redirect('/', '/ru');
+Route::get('/media/public/{path}', MediaController::class)
+    ->where('path', '.*')
+    ->name('media.public');
 
 Route::prefix('{locale}')
     ->where(['locale' => $supportedLocalesPattern])

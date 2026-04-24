@@ -27,7 +27,10 @@ it('renders uploaded gallery images on admin and public pages', function (): voi
     $photo = Gallery::query()->firstOrFail();
 
     Storage::disk('public')->assertExists($photo->image_path);
-    expect($photo->image_url)->toContain('/storage/gallery/');
+    expect($photo->image_url)->not->toBeNull();
+
+    $this->get(parse_url((string) $photo->image_url, PHP_URL_PATH) ?: '')
+        ->assertOk();
 
     $this->actingAs($admin)
         ->get(route('admin.gallery.index'))
@@ -71,7 +74,10 @@ it('renders uploaded news images on admin and public pages', function (): void {
     $newsPost = NewsPost::query()->firstOrFail();
 
     Storage::disk('public')->assertExists($newsPost->image);
-    expect($newsPost->image_url)->toContain('/storage/news/');
+    expect($newsPost->image_url)->not->toBeNull();
+
+    $this->get(parse_url((string) $newsPost->image_url, PHP_URL_PATH) ?: '')
+        ->assertOk();
 
     $this->actingAs($admin)
         ->get(route('admin.news.index'))
@@ -117,7 +123,10 @@ it('renders uploaded course images on admin and public pages', function (): void
     $course = Course::query()->firstOrFail();
 
     Storage::disk('public')->assertExists($course->image);
-    expect($course->image_url)->toContain('/storage/courses/');
+    expect($course->image_url)->not->toBeNull();
+
+    $this->get(parse_url((string) $course->image_url, PHP_URL_PATH) ?: '')
+        ->assertOk();
 
     $this->actingAs($admin)
         ->get(route('admin.courses.index'))
