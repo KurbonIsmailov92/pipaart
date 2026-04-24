@@ -28,6 +28,7 @@ class NewsPostSeeder extends Seeder
                     'en' => 'Follow institute updates, course announcements, and certification news.',
                 ],
                 'image' => null,
+                'is_published' => true,
                 'published_at' => now()->subDays(7),
             ],
             [
@@ -48,6 +49,7 @@ class NewsPostSeeder extends Seeder
                     'en' => 'The institute has opened registration for upcoming accounting and financial reporting study groups.',
                 ],
                 'image' => null,
+                'is_published' => true,
                 'published_at' => now()->subDays(3),
             ],
             [
@@ -68,6 +70,7 @@ class NewsPostSeeder extends Seeder
                     'en' => 'New study resources have been published in the library section for classes and certification exam preparation.',
                 ],
                 'image' => null,
+                'is_published' => true,
                 'published_at' => now()->subDay(),
             ],
         ];

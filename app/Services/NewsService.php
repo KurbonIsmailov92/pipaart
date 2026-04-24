@@ -8,6 +8,13 @@ use Illuminate\Support\Str;
 
 class NewsService
 {
+    /**
+     * @var list<string>
+     */
+    protected array $reservedSlugs = [
+        'list',
+    ];
+
     public function __construct(
         protected MediaService $mediaService,
     ) {
@@ -24,8 +31,12 @@ class NewsService
 
         $data['content'] = $data['content'] ?? $data['text'] ?? '';
         $data['text'] = $data['content'];
+        $data['is_published'] = $this->normalizePublicationFlag($data['is_published'] ?? null, true);
         $data['slug'] = $this->generateUniqueSlug($data['title']);
-        $data['published_at'] = $this->normalizePublishedAtForCreate($data['published_at'] ?? null);
+        $data['published_at'] = $this->normalizePublishedAtForCreate(
+            $data['published_at'] ?? null,
+            $data['is_published'],
+        );
 
         return NewsPost::query()->create($data);
     }
@@ -41,17 +52,30 @@ class NewsService
             'news',
         );
 
-        if (isset($data['title']) && $this->resolveSlugSource($data['title']) !== $newsPost->getTranslation('title')) {
+        if (
+            isset($data['title'])
+            && $this->resolveSlugSource($data['title']) !== $this->resolveSlugSource($newsPost->getTranslations('title'))
+        ) {
             $data['slug'] = $this->generateUniqueSlug($data['title'], $newsPost);
         }
 
         $data['content'] = $data['content'] ?? $data['text'] ?? $newsPost->content ?? $newsPost->text;
         $data['text'] = $data['content'];
+        $data['is_published'] = $this->normalizePublicationFlag(
+            $data['is_published'] ?? null,
+            $newsPost->is_published,
+        );
 
         if (array_key_exists('published_at', $data)) {
-            $data['published_at'] = $this->normalizePublishedAtForUpdate($data['published_at'], $newsPost);
+            $data['published_at'] = $this->normalizePublishedAtForUpdate(
+                $data['published_at'],
+                $newsPost,
+                $data['is_published'],
+            );
         } else {
-            $data['published_at'] = $newsPost->published_at ?? now();
+            $data['published_at'] = $data['is_published']
+                ? ($newsPost->published_at ?? now())
+                : $newsPost->published_at;
         }
 
         $newsPost->update($data);
@@ -72,12 +96,7 @@ class NewsService
         $slug = $baseSlug;
         $suffix = 2;
 
-        while (
-            NewsPost::query()
-                ->where('slug', $slug)
-                ->when($newsPost !== null, static fn ($query) => $query->whereKeyNot($newsPost->getKey()))
-                ->exists()
-        ) {
+        while ($this->slugExists($slug, $newsPost)) {
             $slug = $baseSlug.'-'.$suffix;
             $suffix++;
         }
@@ -91,26 +110,48 @@ class NewsService
             return $title;
         }
 
-        return (string) ($title[config('app.fallback_locale', 'ru')]
-            ?? $title['en']
-            ?? $title['tg']
-            ?? reset($title)
-            ?: 'news');
+        $preferredLocales = array_unique([
+            app()->getLocale(),
+            config('app.fallback_locale', 'ru'),
+            'ru',
+            'en',
+            'tj',
+            'tg',
+        ]);
+
+        foreach ($preferredLocales as $locale) {
+            if (filled($title[$locale] ?? null)) {
+                return trim((string) $title[$locale]);
+            }
+        }
+
+        foreach ($title as $translation) {
+            if (filled($translation)) {
+                return trim((string) $translation);
+            }
+        }
+
+        return 'news';
     }
 
-    protected function normalizePublishedAtForCreate(mixed $publishedAt): Carbon
+    protected function normalizePublishedAtForCreate(mixed $publishedAt, bool $isPublished): ?Carbon
     {
         if (blank($publishedAt)) {
-            return now();
+            return $isPublished ? now() : null;
         }
 
         return $this->parsePublishedAt($publishedAt);
     }
 
-    protected function normalizePublishedAtForUpdate(mixed $publishedAt, NewsPost $newsPost): Carbon
-    {
+    protected function normalizePublishedAtForUpdate(
+        mixed $publishedAt,
+        NewsPost $newsPost,
+        bool $isPublished
+    ): ?Carbon {
         if (blank($publishedAt)) {
-            return $newsPost->published_at ?? now();
+            return $isPublished
+                ? ($newsPost->published_at ?? now())
+                : $newsPost->published_at;
         }
 
         return $this->parsePublishedAt($publishedAt);
@@ -123,5 +164,26 @@ class NewsService
             $publishedAt instanceof \DateTimeInterface => Carbon::instance($publishedAt),
             default => Carbon::parse((string) $publishedAt, config('app.timezone', 'UTC')),
         };
+    }
+
+    protected function normalizePublicationFlag(mixed $value, bool $default): bool
+    {
+        if ($value === null) {
+            return $default;
+        }
+
+        return filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? $default;
+    }
+
+    protected function slugExists(string $slug, ?NewsPost $newsPost = null): bool
+    {
+        if (in_array($slug, $this->reservedSlugs, true)) {
+            return true;
+        }
+
+        return NewsPost::query()
+            ->where('slug', $slug)
+            ->when($newsPost !== null, static fn ($query) => $query->whereKeyNot($newsPost->getKey()))
+            ->exists();
     }
 }

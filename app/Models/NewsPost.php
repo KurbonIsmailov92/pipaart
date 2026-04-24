@@ -31,6 +31,7 @@ class NewsPost extends Model
         'content',
         'text',
         'image',
+        'is_published',
         'published_at',
     ];
 
@@ -40,6 +41,7 @@ class NewsPost extends Model
             'title' => 'array',
             'content' => 'array',
             'text' => 'array',
+            'is_published' => 'boolean',
             'published_at' => 'datetime',
         ];
     }
@@ -58,11 +60,13 @@ class NewsPost extends Model
 
     public function scopePublished(Builder $query): Builder
     {
-        return $query->where(function (Builder $builder): void {
-            $builder
-                ->whereNull('published_at')
-                ->orWhere('published_at', '<=', now());
-        });
+        return $query
+            ->where('is_published', true)
+            ->where(function (Builder $builder): void {
+                $builder
+                    ->whereNull('published_at')
+                    ->orWhere('published_at', '<=', now());
+            });
     }
 
     public function scopeSearch(Builder $query, ?string $search): Builder
@@ -77,6 +81,30 @@ class NewsPost extends Model
     public function getBodyAttribute(): string
     {
         return (string) ($this->content ?: $this->text);
+    }
+
+    public function isDraft(): bool
+    {
+        return ! $this->is_published;
+    }
+
+    public function isScheduled(): bool
+    {
+        return $this->is_published && $this->published_at?->isFuture() === true;
+    }
+
+    public function isLive(): bool
+    {
+        return $this->is_published && ! $this->isScheduled();
+    }
+
+    public function getPublicationStatusAttribute(): string
+    {
+        return match (true) {
+            $this->isDraft() => 'draft',
+            $this->isScheduled() => 'scheduled',
+            default => 'published',
+        };
     }
 
     public function getImageUrlAttribute(): ?string

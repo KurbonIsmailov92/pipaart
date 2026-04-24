@@ -7,6 +7,7 @@ use App\Models\NewsPost;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class NewsPostController extends Controller
@@ -23,6 +24,11 @@ class NewsPostController extends Controller
         return view('public.news.index', [
             'newsPosts' => $newsPosts,
         ]);
+    }
+
+    public function legacyIndex(string $locale): RedirectResponse
+    {
+        return redirect()->route('news.index', ['locale' => $locale], 301);
     }
 
     public function show(string $locale, NewsPost $newsPost): View|Factory|Application

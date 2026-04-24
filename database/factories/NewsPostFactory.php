@@ -19,12 +19,27 @@ class NewsPostFactory extends Factory
     public function definition(): array
     {
         $title = fake()->unique()->sentence(5);
+        $content = fake()->paragraphs(4, true);
 
         return [
-            'title' => $title,
+            'title' => [
+                'ru' => $title,
+                'tg' => $title,
+                'en' => $title,
+            ],
             'slug' => Str::slug($title),
-            'content' => fake()->paragraphs(4, true),
+            'content' => [
+                'ru' => $content,
+                'tg' => $content,
+                'en' => $content,
+            ],
+            'text' => [
+                'ru' => $content,
+                'tg' => $content,
+                'en' => $content,
+            ],
             'image' => null,
+            'is_published' => true,
             'published_at' => now()->subDay(),
         ];
     }

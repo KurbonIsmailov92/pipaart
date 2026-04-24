@@ -10,6 +10,13 @@
 
     <div class="space-y-4">
         @forelse($newsPosts as $newsPost)
+            @php
+                $statusClasses = match ($newsPost->publication_status) {
+                    'draft' => 'bg-slate-200 text-slate-700',
+                    'scheduled' => 'bg-amber-100 text-amber-800',
+                    default => 'bg-emerald-100 text-emerald-800',
+                };
+            @endphp
             <article class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div class="flex min-w-0 gap-4">
@@ -19,7 +26,12 @@
                         <div class="min-w-0">
                             <h2 class="text-xl font-semibold">{{ $newsPost->title }}</h2>
                             <p class="mt-2 max-w-3xl text-sm text-slate-600">{{ \Illuminate\Support\Str::limit($newsPost->content, 180) }}</p>
-                            <p class="mt-2 text-xs uppercase tracking-[0.3em] text-slate-400">{{ $newsPost->published_at?->format('M d, Y') }}</p>
+                            <div class="mt-3 flex flex-wrap items-center gap-2">
+                                <span class="rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] {{ $statusClasses }}">
+                                    {{ $newsPost->publication_status }}
+                                </span>
+                                <p class="text-xs uppercase tracking-[0.3em] text-slate-400">{{ $newsPost->published_at?->format('M d, Y H:i') ?? 'Immediate' }}</p>
+                            </div>
                         </div>
                     </div>
                     <div class="flex gap-3 text-sm">

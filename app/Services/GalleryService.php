@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Gallery;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
 
 class GalleryService
@@ -61,6 +62,11 @@ class GalleryService
     {
         $this->mediaService->delete($gallery->image_path ?: $gallery->image);
         $gallery->delete();
+    }
+
+    public function paginatePublic(int $perPage = 12): LengthAwarePaginator
+    {
+        return Gallery::query()->ordered()->paginate($perPage);
     }
 
     protected function generateUniqueSlug(string $title, ?Gallery $gallery = null): string

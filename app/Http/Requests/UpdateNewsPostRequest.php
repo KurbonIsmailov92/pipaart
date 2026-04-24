@@ -25,6 +25,7 @@ class UpdateNewsPostRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'is_published' => ['nullable', 'boolean'],
             'published_at' => ['nullable', 'date'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
             ...$this->localizedFieldRules('title', ['string', 'max:255'], true, true),

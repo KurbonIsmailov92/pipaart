@@ -110,6 +110,12 @@ composer run dev
 
 Production deployment should use a real web server or container runtime. Do not use `php artisan serve`.
 
+### Render
+
+- Use `render-build.sh` as the build command.
+- The build script runs `php artisan migrate --force`, `php artisan db:seed --force`, and `php artisan storage:link || true` safely on each deploy before caching config, routes, and views.
+- Runtime containers created from `docker/start.sh` repeat the same commands safely for Docker/Render-style deployments.
+
 ### Railway
 
 This repository is configured for Railway-native Laravel deployment via `railway.json`.
@@ -209,6 +215,13 @@ php artisan test
 ## Assets
 
 - The main public layout uses the existing `public/favicon.ico` as the browser tab icon.
+- Uploaded gallery, news, and course images are served through the Laravel `public` disk and expect `php artisan storage:link` to exist locally and in production.
+
+## Theme
+
+- The public site supports light and dark mode.
+- Theme priority is `localStorage.theme`, then the system `prefers-color-scheme`, then light mode as the fallback.
+- The toggle stores the selected preference under the `theme` key without changing the existing Blade layout structure.
 
 ## Notes
 

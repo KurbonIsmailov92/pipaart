@@ -20,6 +20,9 @@
         @auth
             <div class="flex flex-wrap items-center justify-end gap-3">
                 <span class="rounded-full border border-white/20 bg-white/10 px-3 py-1 backdrop-blur">{{ auth()->user()->name }}</span>
+                <button type="button" class="pill-link theme-toggle" data-theme-toggle aria-label="Toggle color theme">
+                    <span data-theme-label>Light</span>
+                </button>
                 @if(auth()->user()->hasRole(['admin', 'teacher']))
                     <a href="{{ route('admin.dashboard') }}" class="pill-link">{{ __('ui.common.admin_panel') }}</a>
                 @endif
@@ -30,6 +33,9 @@
             </div>
         @else
             <div class="flex flex-wrap items-center justify-end gap-3">
+                <button type="button" class="pill-link theme-toggle" data-theme-toggle aria-label="Toggle color theme">
+                    <span data-theme-label>Light</span>
+                </button>
                 <a href="{{ route('auth.register') }}" class="pill-link">{{ __('ui.common.register') }}</a>
                 <a href="{{ route('auth.login') }}" class="pill-link">{{ __('ui.common.login') }}</a>
             </div>

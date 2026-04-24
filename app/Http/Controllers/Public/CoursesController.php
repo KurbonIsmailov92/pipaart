@@ -7,6 +7,7 @@ use App\Models\Course;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class CoursesController extends Controller
@@ -22,6 +23,11 @@ class CoursesController extends Controller
         return view('public.courses.list', [
             'courses' => $courses,
         ]);
+    }
+
+    public function legacyIndex(string $locale): RedirectResponse
+    {
+        return redirect()->route('courses.index', ['locale' => $locale], 301);
     }
 
     public function show(string $locale, Course $course): View|Factory|Application

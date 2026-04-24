@@ -4,26 +4,17 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\Gallery;
+use App\Services\GalleryService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Throwable;
 
 class GalleryController extends Controller
 {
-    public function index(): View|Factory|Application
+    public function index(GalleryService $galleryService): View|Factory|Application
     {
-        $photos = new LengthAwarePaginator([], 0, 12);
-
-        try {
-            $photos = Gallery::query()->ordered()->paginate(12);
-        } catch (Throwable $exception) {
-            report($exception);
-        }
-
         return view('public.gallery.index', [
-            'photos' => $photos,
+            'photos' => $galleryService->paginatePublic(),
         ]);
     }
 

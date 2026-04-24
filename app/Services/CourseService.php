@@ -7,6 +7,17 @@ use Illuminate\Support\Str;
 
 class CourseService
 {
+    /**
+     * @var list<string>
+     */
+    protected array $reservedSlugs = [
+        'list',
+        'schedule',
+        'reviews',
+        'registration',
+        'training-centers',
+    ];
+
     public function __construct(
         protected MediaService $mediaService,
     ) {
@@ -40,7 +51,10 @@ class CourseService
             'courses',
         );
 
-        if (isset($data['title']) && $this->resolveSlugSource($data['title']) !== $course->getTranslation('title')) {
+        if (
+            isset($data['title'])
+            && $this->resolveSlugSource($data['title']) !== $this->resolveSlugSource($course->getTranslations('title'))
+        ) {
             $data['slug'] = $this->generateUniqueSlug($data['title'], $course);
         }
 
@@ -98,12 +112,7 @@ class CourseService
         $slug = $baseSlug;
         $suffix = 2;
 
-        while (
-            Course::query()
-                ->where('slug', $slug)
-                ->when($course !== null, static fn ($query) => $query->whereKeyNot($course->getKey()))
-                ->exists()
-        ) {
+        while ($this->slugExists($slug, $course)) {
             $slug = $baseSlug.'-'.$suffix;
             $suffix++;
         }
@@ -117,10 +126,39 @@ class CourseService
             return $title;
         }
 
-        return (string) ($title[config('app.fallback_locale', 'ru')]
-            ?? $title['en']
-            ?? $title['tg']
-            ?? reset($title)
-            ?: 'course');
+        $preferredLocales = array_unique([
+            app()->getLocale(),
+            config('app.fallback_locale', 'ru'),
+            'ru',
+            'en',
+            'tj',
+            'tg',
+        ]);
+
+        foreach ($preferredLocales as $locale) {
+            if (filled($title[$locale] ?? null)) {
+                return trim((string) $title[$locale]);
+            }
+        }
+
+        foreach ($title as $translation) {
+            if (filled($translation)) {
+                return trim((string) $translation);
+            }
+        }
+
+        return 'course';
+    }
+
+    protected function slugExists(string $slug, ?Course $course = null): bool
+    {
+        if (in_array($slug, $this->reservedSlugs, true)) {
+            return true;
+        }
+
+        return Course::query()
+            ->where('slug', $slug)
+            ->when($course !== null, static fn ($query) => $query->whereKeyNot($course->getKey()))
+            ->exists();
     }
 }

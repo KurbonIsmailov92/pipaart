@@ -12,13 +12,13 @@ function newsPayload(array $overrides = []): array
 {
     return array_replace_recursive([
         'title' => [
-            'ru' => 'Новая новость',
-            'tg' => 'Хабари нав',
-            'en' => 'Fresh news',
+            'ru' => 'Visible news',
+            'tg' => 'Visible news',
+            'en' => 'Visible news',
         ],
         'content' => [
-            'ru' => 'Контент новости для проверки публикации',
-            'tg' => 'Матни хабар барои санҷиши нашр',
+            'ru' => 'News body for publication checks',
+            'tg' => 'News body for publication checks',
             'en' => 'News body for publication checks',
         ],
         'image' => UploadedFile::fake()->image('news.jpg'),
@@ -34,7 +34,27 @@ it('publishes news immediately when published_at is omitted', function (): void 
 
     $this->get('/ru/news')
         ->assertOk()
-        ->assertSee('Новая новость');
+        ->assertSee('Visible news');
+});
+
+it('keeps drafts hidden from the public page', function (): void {
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)
+        ->post(route('admin.news.store'), newsPayload([
+            'title' => [
+                'ru' => 'Draft news',
+                'tg' => 'Draft news',
+                'en' => 'Draft news',
+            ],
+            'is_published' => '0',
+            'published_at' => '',
+        ]))
+        ->assertRedirect(route('admin.news.index'));
+
+    $this->get('/ru/news')
+        ->assertOk()
+        ->assertDontSee('Draft news');
 });
 
 it('shows news on the public page when published_at is in the past', function (): void {
@@ -48,7 +68,7 @@ it('shows news on the public page when published_at is in the past', function ()
 
     $this->get('/ru/news')
         ->assertOk()
-        ->assertSee('Новая новость');
+        ->assertSee('Visible news');
 });
 
 it('keeps scheduled future news hidden from the public page', function (): void {
@@ -57,8 +77,8 @@ it('keeps scheduled future news hidden from the public page', function (): void 
     $this->actingAs($admin)
         ->post(route('admin.news.store'), newsPayload([
             'title' => [
-                'ru' => 'Будущая новость',
-                'tg' => 'Хабари оянда',
+                'ru' => 'Future news',
+                'tg' => 'Future news',
                 'en' => 'Future news',
             ],
             'published_at' => now()->addDay()->format('Y-m-d\TH:i'),
@@ -67,7 +87,7 @@ it('keeps scheduled future news hidden from the public page', function (): void 
 
     $this->get('/ru/news')
         ->assertOk()
-        ->assertDontSee('Будущая новость');
+        ->assertDontSee('Future news');
 });
 
 it('publishes news immediately when published_at is submitted as an empty string', function (): void {
@@ -76,8 +96,8 @@ it('publishes news immediately when published_at is submitted as an empty string
     $this->actingAs($admin)
         ->post(route('admin.news.store'), newsPayload([
             'title' => [
-                'ru' => 'Публикация сразу',
-                'tg' => 'Нашри фаврӣ',
+                'ru' => 'Publish now',
+                'tg' => 'Publish now',
                 'en' => 'Publish now',
             ],
             'published_at' => '',
@@ -86,5 +106,5 @@ it('publishes news immediately when published_at is submitted as an empty string
 
     $this->get('/ru/news')
         ->assertOk()
-        ->assertSee('Публикация сразу');
+        ->assertSee('Publish now');
 });

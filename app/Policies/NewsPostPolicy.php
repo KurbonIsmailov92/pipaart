@@ -15,7 +15,7 @@ class NewsPostPolicy
 
     public function view(?User $user, NewsPost $newsPost): bool
     {
-        if (($newsPost->published_at === null) || $newsPost->published_at->isPast()) {
+        if ($newsPost->is_published && (($newsPost->published_at === null) || $newsPost->published_at->isPast())) {
             return true;
         }
 
