@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\NewsPost;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class NewsService
@@ -24,7 +25,7 @@ class NewsService
         $data['content'] = $data['content'] ?? $data['text'] ?? '';
         $data['text'] = $data['content'];
         $data['slug'] = $this->generateUniqueSlug($data['title']);
-        $data['published_at'] = $data['published_at'] ?? now();
+        $data['published_at'] = $this->normalizePublishedAtForCreate($data['published_at'] ?? null);
 
         return NewsPost::query()->create($data);
     }
@@ -46,7 +47,12 @@ class NewsService
 
         $data['content'] = $data['content'] ?? $data['text'] ?? $newsPost->content ?? $newsPost->text;
         $data['text'] = $data['content'];
-        $data['published_at'] = $data['published_at'] ?? $newsPost->published_at ?? now();
+
+        if (array_key_exists('published_at', $data)) {
+            $data['published_at'] = $this->normalizePublishedAtForUpdate($data['published_at'], $newsPost);
+        } else {
+            $data['published_at'] = $newsPost->published_at ?? now();
+        }
 
         $newsPost->update($data);
 
@@ -90,5 +96,32 @@ class NewsService
             ?? $title['tg']
             ?? reset($title)
             ?: 'news');
+    }
+
+    protected function normalizePublishedAtForCreate(mixed $publishedAt): Carbon
+    {
+        if (blank($publishedAt)) {
+            return now();
+        }
+
+        return $this->parsePublishedAt($publishedAt);
+    }
+
+    protected function normalizePublishedAtForUpdate(mixed $publishedAt, NewsPost $newsPost): Carbon
+    {
+        if (blank($publishedAt)) {
+            return $newsPost->published_at ?? now();
+        }
+
+        return $this->parsePublishedAt($publishedAt);
+    }
+
+    protected function parsePublishedAt(mixed $publishedAt): Carbon
+    {
+        return match (true) {
+            $publishedAt instanceof Carbon => $publishedAt,
+            $publishedAt instanceof \DateTimeInterface => Carbon::instance($publishedAt),
+            default => Carbon::parse((string) $publishedAt, config('app.timezone', 'UTC')),
+        };
     }
 }
