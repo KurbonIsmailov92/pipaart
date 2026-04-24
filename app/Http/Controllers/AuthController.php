@@ -16,6 +16,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -66,16 +67,22 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('home'));
+        return redirect()->intended($this->localizedHomeUrl($request));
     }
 
     public function logout(): RedirectResponse
     {
+        $locale = request()->hasSession()
+            ? request()->session()->get('locale', config('app.locale', 'ru'))
+            : config('app.locale', 'ru');
+
         auth()->logout();
         request()->session()->invalidate();
         request()->session()->regenerateToken();
 
-        return redirect()->route('home');
+        return redirect()->route('home', [
+            'locale' => $locale,
+        ]);
     }
 
     public function forgotPassword(ForgotPasswordRequest $request): RedirectResponse
@@ -121,6 +128,13 @@ class AuthController extends Controller
         auth()->login($user);
         $request->session()->regenerate();
 
-        return redirect()->intended(route('home'));
+        return redirect()->intended($this->localizedHomeUrl($request));
+    }
+
+    protected function localizedHomeUrl(Request $request): string
+    {
+        return route('home', [
+            'locale' => $request->session()->get('locale', config('app.locale', 'ru')),
+        ]);
     }
 }

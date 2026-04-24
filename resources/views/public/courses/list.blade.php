@@ -4,6 +4,7 @@
 
 @section('content')
     @php
+        $currentLocale = request()->route('locale', app()->getLocale());
         $fallbackImages = [
             \Illuminate\Support\Facades\Vite::asset('resources/images/cipa.jpg'),
             \Illuminate\Support\Facades\Vite::asset('resources/images/cap.jpg'),
@@ -19,7 +20,7 @@
         </x-slot:actions>
     </x-ui.page-header>
 
-    <x-search :action="route('courses.index')" name="search" :placeholder="__('ui.courses.search_placeholder')" :value="request('search')" />
+    <x-search :action="route('courses.index', ['locale' => $currentLocale])" name="search" :placeholder="__('ui.courses.search_placeholder')" :value="request('search')" />
 
     <div class="mt-8 grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
         @forelse($courses as $course)
@@ -39,8 +40,8 @@
                     <h2 class="mt-3 text-2xl font-semibold text-slate-950">{{ $course->title }}</h2>
                     <p class="mt-3 text-sm text-slate-600">{{ \Illuminate\Support\Str::limit($course->description, 160) }}</p>
                     <div class="mt-6 flex flex-wrap gap-3">
-                        <x-ui.button-link :href="route('courses.show', $course)">{{ __('ui.common.open_course') }}</x-ui.button-link>
-                        <x-ui.button-link :href="route('contact')" variant="ghost">{{ __('ui.nav.contact') }}</x-ui.button-link>
+                        <x-ui.button-link :href="route('courses.show', ['locale' => $currentLocale, 'course' => $course])">{{ __('ui.common.open_course') }}</x-ui.button-link>
+                        <x-ui.button-link :href="route('contact', ['locale' => $currentLocale])" variant="ghost">{{ __('ui.nav.contact') }}</x-ui.button-link>
                     </div>
                 </div>
             </x-ui.card>

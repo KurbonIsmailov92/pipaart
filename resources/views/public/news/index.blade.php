@@ -4,6 +4,7 @@
 
 @section('content')
     @php
+        $currentLocale = request()->route('locale', app()->getLocale());
         $fallbackImage = \Illuminate\Support\Facades\Vite::asset('resources/images/news.jpg');
     @endphp
 
@@ -15,7 +16,7 @@
         </x-slot:actions>
     </x-ui.page-header>
 
-    <x-search :action="route('news.index')" name="search" :placeholder="__('ui.news.search_placeholder')" :value="request('search')" />
+    <x-search :action="route('news.index', ['locale' => $currentLocale])" name="search" :placeholder="__('ui.news.search_placeholder')" :value="request('search')" />
 
     <div class="mt-8 grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
         @forelse($newsPosts as $newsPost)
@@ -30,7 +31,7 @@
                     <h2 class="mt-2 text-2xl font-semibold text-slate-950">{{ $newsPost->title }}</h2>
                     <p class="mt-3 text-sm text-slate-600">{{ \Illuminate\Support\Str::limit($newsPost->body, 170) }}</p>
                     <div class="mt-6">
-                        <x-ui.button-link :href="route('news.show', $newsPost)" variant="ghost">{{ __('ui.common.read_more') }}</x-ui.button-link>
+                        <x-ui.button-link :href="route('news.show', ['locale' => $currentLocale, 'newsPost' => $newsPost])" variant="ghost">{{ __('ui.common.read_more') }}</x-ui.button-link>
                     </div>
                 </div>
             </x-ui.card>

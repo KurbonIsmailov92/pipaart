@@ -3,6 +3,7 @@
 @section('title', __('ui.news.search_results_title'))
 
 @section('content')
+    @php($currentLocale = request()->route('locale', app()->getLocale()))
     <x-ui.page-header
         :title="__('ui.news.search_results_title')"
         :description="$query ? __('ui.news.search_results_with_query', ['query' => $query]) : __('ui.news.search_results_description')"
@@ -17,8 +18,8 @@
                     <h2 class="mt-2 text-2xl font-semibold text-slate-950">{{ $newsPost->title }}</h2>
                     <p class="mt-3 text-sm text-slate-600">{{ \Illuminate\Support\Str::limit($newsPost->body, 200) }}</p>
                     <div class="mt-5 flex flex-wrap gap-3">
-                        <x-ui.button-link :href="route('news.show', $newsPost)" variant="secondary">{{ __('ui.common.read_more') }}</x-ui.button-link>
-                        <x-ui.button-link :href="route('home')" variant="ghost">{{ __('ui.common.back_home') }}</x-ui.button-link>
+                        <x-ui.button-link :href="route('news.show', ['locale' => $currentLocale, 'newsPost' => $newsPost])" variant="secondary">{{ __('ui.common.read_more') }}</x-ui.button-link>
+                        <x-ui.button-link :href="route('home', ['locale' => $currentLocale])" variant="ghost">{{ __('ui.common.back_home') }}</x-ui.button-link>
                     </div>
                 </x-ui.card>
             @empty
@@ -36,7 +37,7 @@
                     <div class="rounded-[1.4rem] border border-slate-200/70 p-4">
                         <p class="text-sm font-semibold text-slate-900">{{ $course->title }}</p>
                         <p class="mt-2 text-sm text-slate-600">{{ \Illuminate\Support\Str::limit($course->description, 90) }}</p>
-                        <a href="{{ route('courses.show', $course) }}" class="mt-3 inline-flex text-sm font-semibold text-[#1f5f85]">{{ __('ui.common.open_course') }}</a>
+                        <a href="{{ route('courses.show', ['locale' => $currentLocale, 'course' => $course]) }}" class="mt-3 inline-flex text-sm font-semibold text-[#1f5f85]">{{ __('ui.common.open_course') }}</a>
                     </div>
                 @empty
                     <p class="text-sm text-slate-500">{{ __('ui.courses.empty') }}</p>

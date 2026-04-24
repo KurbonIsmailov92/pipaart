@@ -15,10 +15,13 @@ class SetApplicationLocale
         $supportedLocales = config('app.supported_locales', ['ru', 'tg', 'en']);
         $defaultLocale = config('app.locale', 'ru');
         $routeLocale = $request->route('locale');
+        $sessionLocale = $request->hasSession()
+            ? $request->session()->get('locale')
+            : null;
 
         $locale = is_string($routeLocale) && in_array($routeLocale, $supportedLocales, true)
             ? $routeLocale
-            : $request->session()->get('locale', $defaultLocale);
+            : $sessionLocale;
 
         if (! in_array($locale, $supportedLocales, true)) {
             $locale = $defaultLocale;
@@ -26,10 +29,10 @@ class SetApplicationLocale
 
         app()->setLocale($locale);
         Carbon::setLocale($locale);
-        $request->session()->put('locale', $locale);
+        URL::defaults(['locale' => $locale]);
 
-        if (is_string($request->route('locale'))) {
-            URL::defaults(['locale' => $locale]);
+        if ($request->hasSession()) {
+            $request->session()->put('locale', $locale);
         }
 
         return $next($request);

@@ -9,6 +9,7 @@
         ['label' => __('ui.nav.gallery'), 'route' => 'gallery.index'],
         ['label' => __('ui.nav.contact'), 'route' => 'contact'],
     ];
+    $currentLocale = request()->route('locale', app()->getLocale());
 @endphp
 
 <footer class="mt-16 bg-[#143950] pb-8 pt-14 text-sm text-slate-100">
@@ -21,8 +22,8 @@
                         {{ __('ui.brand.footer_description') }}
                     </p>
                     <div class="mt-6 flex flex-wrap gap-3">
-                        <a href="{{ route('courses.index') }}" class="pill-link">{{ __('ui.home.browse_courses') }}</a>
-                        <a href="{{ route('contact') }}" class="pill-link">{{ __('ui.nav.contact') }}</a>
+                        <a href="{{ route('courses.index', ['locale' => $currentLocale]) }}" class="pill-link">{{ __('ui.home.browse_courses') }}</a>
+                        <a href="{{ route('contact', ['locale' => $currentLocale]) }}" class="pill-link">{{ __('ui.nav.contact') }}</a>
                     </div>
                 </div>
 
@@ -30,7 +31,7 @@
                     <p class="text-xs font-semibold uppercase tracking-[0.35em] text-white/60">{{ __('ui.common.preview') }}</p>
                     <div class="mt-4 grid gap-2">
                         @foreach($navItems as $item)
-                            <a href="{{ route($item['route']) }}" class="text-white/[0.78] hover:text-white">{{ $item['label'] }}</a>
+                            <a href="{{ route($item['route'], ['locale' => $currentLocale]) }}" class="text-white/[0.78] hover:text-white">{{ $item['label'] }}</a>
                         @endforeach
                     </div>
                 </div>

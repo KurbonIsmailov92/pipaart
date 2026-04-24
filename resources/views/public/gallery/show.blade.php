@@ -4,12 +4,13 @@
 
 @section('content')
     @php
+        $currentLocale = request()->route('locale', app()->getLocale());
         $imageUrl = $photo->image_url ? \Illuminate\Support\Facades\Storage::url($photo->image_url) : \Illuminate\Support\Facades\Vite::asset('resources/images/cap.jpg');
     @endphp
 
     <x-ui.page-header :title="$photo->title" :description="$photo->category" :eyebrow="__('ui.nav.gallery')">
         <x-slot:actions>
-            <x-ui.button-link :href="route('gallery.index')" variant="secondary">{{ __('ui.common.back_to_gallery') }}</x-ui.button-link>
+            <x-ui.button-link :href="route('gallery.index', ['locale' => $currentLocale])" variant="secondary">{{ __('ui.common.back_to_gallery') }}</x-ui.button-link>
             @can('update', $photo)
                 <x-ui.button-link :href="route('admin.gallery.edit', $photo)" variant="ghost">{{ __('ui.common.edit_in_cms') }}</x-ui.button-link>
             @endcan
@@ -26,7 +27,7 @@
             <h2 class="mt-2 text-2xl font-semibold text-slate-950">{{ $photo->title }}</h2>
             <p class="mt-4 text-slate-600">{{ $photo->description }}</p>
             <div class="mt-8">
-                <x-ui.button-link :href="route('contact')">{{ __('ui.nav.contact') }}</x-ui.button-link>
+                <x-ui.button-link :href="route('contact', ['locale' => $currentLocale])">{{ __('ui.nav.contact') }}</x-ui.button-link>
             </div>
         </x-ui.card>
     </div>

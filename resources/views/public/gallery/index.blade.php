@@ -3,6 +3,7 @@
 @section('title', __('ui.gallery.title'))
 
 @section('content')
+    @php($currentLocale = request()->route('locale', app()->getLocale()))
     <x-ui.page-header :title="__('ui.gallery.title')" :description="__('ui.gallery.description')" :eyebrow="__('ui.nav.gallery')">
         <x-slot:actions>
             @can('create', \App\Models\Gallery::class)
@@ -17,7 +18,7 @@
                 $imageUrl = $photo->image_url ? \Illuminate\Support\Facades\Storage::url($photo->image_url) : \Illuminate\Support\Facades\Vite::asset('resources/images/cap.jpg');
             @endphp
 
-            <a href="{{ route('gallery.show', $photo) }}" class="group block overflow-hidden rounded-[2rem] bg-white shadow-[0_18px_45px_rgba(24,52,74,0.14)]">
+            <a href="{{ route('gallery.show', ['locale' => $currentLocale, 'gallery' => $photo]) }}" class="group block overflow-hidden rounded-[2rem] bg-white shadow-[0_18px_45px_rgba(24,52,74,0.14)]">
                 <div class="overflow-hidden">
                     <img src="{{ $imageUrl }}" alt="{{ $photo->title }}" class="h-64 w-full object-cover transition duration-500 group-hover:scale-105">
                 </div>

@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+@php($publicLocale = session('locale', config('app.locale', 'ru')))
 <body class="bg-[linear-gradient(180deg,#edf3f4_0%,#f7f4ec_100%)] text-slate-900">
 <div class="min-h-screen lg:grid lg:grid-cols-[290px_1fr]">
     <aside class="bg-[#143950] px-5 py-6 text-slate-100 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">
@@ -17,7 +18,7 @@
                 <a href="{{ route('admin.dashboard') }}" class="text-2xl font-semibold tracking-wide">PIPAA CMS</a>
                 <p class="mt-2 text-sm text-white/60">Admin panel for pages, courses, schedules, news, gallery, settings, and users.</p>
             </div>
-            <a href="{{ route('home') }}" class="pill-link lg:hidden">Site</a>
+            <a href="{{ route('home', ['locale' => $publicLocale]) }}" class="pill-link lg:hidden">Site</a>
         </div>
 
         <nav class="mt-8 flex gap-2 overflow-x-auto pb-2 lg:block lg:space-y-2 lg:overflow-visible">
@@ -39,7 +40,7 @@
             <p class="font-medium">{{ auth()->user()?->name }}</p>
             <p class="mt-1 text-white/60">{{ auth()->user()?->role?->label() ?? auth()->user()?->role?->value }}</p>
             <div class="mt-4 flex flex-wrap gap-3">
-                <a href="{{ route('home') }}" class="pill-link">View Site</a>
+                <a href="{{ route('home', ['locale' => $publicLocale]) }}" class="pill-link">View Site</a>
                 <form action="{{ route('auth.logout') }}" method="POST">
                     @csrf
                     <button type="submit" class="pill-link border-red-200/40 bg-red-500/10 text-red-100 hover:bg-red-500/20">Logout</button>

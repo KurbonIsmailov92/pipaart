@@ -1,5 +1,5 @@
 @props([
-    'action' => route('search'),
+    'action' => route('search', ['locale' => request()->route('locale', app()->getLocale())]),
     'name' => 'q',
     'placeholder' => 'Search...',
     'value' => null,

@@ -4,6 +4,7 @@
 
 @section('content')
     @php
+        $currentLocale = request()->route('locale', app()->getLocale());
         $fallbackImage = \Illuminate\Support\Facades\Vite::asset('resources/images/cipa.jpg');
     @endphp
 
@@ -13,7 +14,7 @@
         :eyebrow="__('ui.nav.courses')"
     >
         <x-slot:actions>
-            <x-ui.button-link :href="route('courses.index')" variant="secondary">{{ __('ui.common.back_to_courses') }}</x-ui.button-link>
+            <x-ui.button-link :href="route('courses.index', ['locale' => $currentLocale])" variant="secondary">{{ __('ui.common.back_to_courses') }}</x-ui.button-link>
             @can('update', $course)
                 <x-ui.button-link :href="route('admin.courses.edit', $course)" variant="ghost">{{ __('ui.common.edit_in_cms') }}</x-ui.button-link>
             @endcan
@@ -40,8 +41,8 @@
             </div>
 
             <div class="mt-8 flex flex-wrap gap-3">
-                <x-ui.button-link :href="route('contacts.message')">{{ __('ui.contact.open_form') }}</x-ui.button-link>
-                <x-ui.button-link :href="route('schedule.index')" variant="secondary">{{ __('ui.home.view_schedule') }}</x-ui.button-link>
+                <x-ui.button-link :href="route('contacts.message', ['locale' => $currentLocale])">{{ __('ui.contact.open_form') }}</x-ui.button-link>
+                <x-ui.button-link :href="route('schedule.index', ['locale' => $currentLocale])" variant="secondary">{{ __('ui.home.view_schedule') }}</x-ui.button-link>
             </div>
         </x-ui.card>
 

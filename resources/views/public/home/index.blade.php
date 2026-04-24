@@ -4,6 +4,7 @@
 
 @section('content')
     @php
+        $currentLocale = request()->route('locale', app()->getLocale());
         $heroImage = \Illuminate\Support\Facades\Vite::asset('resources/images/bg.jpg');
         $programImages = [
             \Illuminate\Support\Facades\Vite::asset('resources/images/cipa.jpg'),
@@ -25,8 +26,8 @@
                 <p class="mt-5 max-w-2xl text-base text-white/[0.78] sm:text-lg">{{ $settings['hero_subtitle'] }}</p>
 
                 <div class="mt-8 flex flex-wrap gap-3">
-                    <x-ui.button-link :href="route('courses.index')">{{ __('ui.home.browse_courses') }}</x-ui.button-link>
-                    <x-ui.button-link :href="route('schedule.index')" variant="secondary">{{ __('ui.home.view_schedule') }}</x-ui.button-link>
+                    <x-ui.button-link :href="route('courses.index', ['locale' => $currentLocale])">{{ __('ui.home.browse_courses') }}</x-ui.button-link>
+                    <x-ui.button-link :href="route('schedule.index', ['locale' => $currentLocale])" variant="secondary">{{ __('ui.home.view_schedule') }}</x-ui.button-link>
                 </div>
 
                 <div class="mt-8 grid gap-4 sm:grid-cols-3">
@@ -68,7 +69,7 @@
                                     </div>
                                 </div>
 
-                                <x-ui.button-link :href="route('courses.show', $featuredCourses->first())" variant="ghost">
+                                <x-ui.button-link :href="route('courses.show', ['locale' => $currentLocale, 'course' => $featuredCourses->first()])" variant="ghost">
                                     {{ __('ui.common.open_course') }}
                                 </x-ui.button-link>
                             </div>
@@ -91,7 +92,7 @@
                     <p>{{ \Illuminate\Support\Str::limit(strip_tags((string) $aboutPage?->content), 520) }}</p>
                 </div>
                 <div class="mt-6">
-                    <x-ui.button-link :href="route('about')" variant="secondary">{{ __('ui.nav.about') }}</x-ui.button-link>
+                    <x-ui.button-link :href="route('about', ['locale' => $currentLocale])" variant="secondary">{{ __('ui.nav.about') }}</x-ui.button-link>
                 </div>
             </x-ui.card>
 
@@ -103,7 +104,7 @@
                         <h3 class="mt-2 text-2xl font-semibold text-slate-950">{{ $certificationsPage?->title ?? __('ui.nav.certifications') }}</h3>
                         <p class="mt-3 text-sm text-slate-600">{{ \Illuminate\Support\Str::limit(strip_tags((string) $certificationsPage?->content), 150) }}</p>
                         <div class="mt-5">
-                            <x-ui.button-link :href="route('certifications')" variant="ghost">{{ __('ui.nav.certifications') }}</x-ui.button-link>
+                            <x-ui.button-link :href="route('certifications', ['locale' => $currentLocale])" variant="ghost">{{ __('ui.nav.certifications') }}</x-ui.button-link>
                         </div>
                     </div>
                 </x-ui.card>
@@ -119,7 +120,7 @@
                         <p>{{ $settings['contact_address'] }}</p>
                     </div>
                     <div class="mt-5">
-                        <x-ui.button-link :href="route('contact')">{{ __('ui.nav.contact') }}</x-ui.button-link>
+                        <x-ui.button-link :href="route('contact', ['locale' => $currentLocale])">{{ __('ui.nav.contact') }}</x-ui.button-link>
                     </div>
                 </x-ui.card>
             </div>
@@ -132,7 +133,7 @@
         :description="__('ui.courses.description')"
     >
         <x-slot:actions>
-            <x-ui.button-link :href="route('courses.index')" variant="secondary">{{ __('ui.home.browse_courses') }}</x-ui.button-link>
+            <x-ui.button-link :href="route('courses.index', ['locale' => $currentLocale])" variant="secondary">{{ __('ui.home.browse_courses') }}</x-ui.button-link>
         </x-slot:actions>
 
         <div class="grid gap-6 lg:grid-cols-3">
@@ -151,7 +152,7 @@
                             <span class="text-sm font-semibold text-[#1f5f85]">
                                 {{ (float) $course->price > 0 ? number_format((float) $course->price, 2) : $course->duration_label }}
                             </span>
-                            <x-ui.button-link :href="route('courses.show', $course)" variant="ghost">{{ __('ui.common.open_course') }}</x-ui.button-link>
+                            <x-ui.button-link :href="route('courses.show', ['locale' => $currentLocale, 'course' => $course])" variant="ghost">{{ __('ui.common.open_course') }}</x-ui.button-link>
                         </div>
                     </div>
                 </x-ui.card>
@@ -169,7 +170,7 @@
         :description="__('ui.home.latest_news_description')"
     >
         <x-slot:actions>
-            <x-ui.button-link :href="route('news.index')" variant="secondary">{{ __('ui.home.all_news') }}</x-ui.button-link>
+            <x-ui.button-link :href="route('news.index', ['locale' => $currentLocale])" variant="secondary">{{ __('ui.home.all_news') }}</x-ui.button-link>
         </x-slot:actions>
 
         <div class="grid gap-6 lg:grid-cols-3">
@@ -185,7 +186,7 @@
                         <h3 class="mt-2 text-2xl font-semibold text-slate-950">{{ $newsPost->title }}</h3>
                         <p class="mt-3 text-sm text-slate-600">{{ \Illuminate\Support\Str::limit($newsPost->body, 150) }}</p>
                         <div class="mt-5">
-                            <x-ui.button-link :href="route('news.show', $newsPost)" variant="ghost">{{ __('ui.common.read_more') }}</x-ui.button-link>
+                            <x-ui.button-link :href="route('news.show', ['locale' => $currentLocale, 'newsPost' => $newsPost])" variant="ghost">{{ __('ui.common.read_more') }}</x-ui.button-link>
                         </div>
                     </div>
                 </x-ui.card>
@@ -214,8 +215,8 @@
                     @endif
                 </div>
                 <div class="mt-8 flex flex-wrap gap-3">
-                    <x-ui.button-link :href="route('contacts.message')" variant="secondary">{{ __('ui.contact.open_form') }}</x-ui.button-link>
-                    <x-ui.button-link :href="route('contact')" variant="ghost" class="bg-white/10 text-white hover:bg-white/20">{{ __('ui.nav.contact') }}</x-ui.button-link>
+                    <x-ui.button-link :href="route('contacts.message', ['locale' => $currentLocale])" variant="secondary">{{ __('ui.contact.open_form') }}</x-ui.button-link>
+                    <x-ui.button-link :href="route('contact', ['locale' => $currentLocale])" variant="ghost" class="bg-white/10 text-white hover:bg-white/20">{{ __('ui.nav.contact') }}</x-ui.button-link>
                 </div>
             </x-ui.card>
 
@@ -230,7 +231,7 @@
                                     <p class="mt-2 text-sm text-slate-600">{{ __('ui.schedule.teacher') }}: {{ $schedule->teacher }}</p>
                                 @endif
                             </div>
-                            <a href="{{ route('schedule.index') }}" class="text-sm font-semibold text-[#1f5f85]">{{ __('ui.home.view_schedule') }}</a>
+                            <a href="{{ route('schedule.index', ['locale' => $currentLocale]) }}" class="text-sm font-semibold text-[#1f5f85]">{{ __('ui.home.view_schedule') }}</a>
                         </div>
                         <p class="mt-4 text-sm text-slate-600">{{ \Illuminate\Support\Str::limit($schedule->schedule_text, 150) }}</p>
                     </x-ui.card>
@@ -248,6 +249,6 @@
         :title="__('ui.home.search_title')"
         :description="__('ui.home.search_description')"
     >
-        <x-search :action="route('search')" name="q" :placeholder="__('ui.home.search_placeholder')" />
+        <x-search :action="route('search', ['locale' => $currentLocale])" name="q" :placeholder="__('ui.home.search_placeholder')" />
     </x-ui.section>
 @endsection

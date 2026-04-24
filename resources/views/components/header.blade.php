@@ -12,20 +12,21 @@
 
     $currentRoute = \Illuminate\Support\Facades\Route::currentRouteName();
     $locales = \App\Support\LocalizedRoute::supportedLocales();
+    $currentLocale = request()->route('locale', app()->getLocale());
 @endphp
 
 <header class="relative z-50 mt-4 w-full text-white">
     <div class="shell-container">
         <div class="surface-card w-full border border-white/10 bg-[#143950]/70 px-4 py-3 text-white shadow-2xl sm:px-6">
             <div class="flex w-full items-center justify-between gap-3 lg:gap-6">
-                <a href="{{ route('home') }}" class="min-w-0 flex-1 lg:max-w-[24rem]">
+                <a href="{{ route('home', ['locale' => $currentLocale]) }}" class="min-w-0 flex-1 lg:max-w-[24rem]">
                     <x-logo />
                 </a>
 
                 <nav class="hidden min-w-0 flex-1 items-center justify-center gap-1 lg:flex">
                     @foreach($navItems as $item)
                         <a
-                            href="{{ route($item['route']) }}"
+                            href="{{ route($item['route'], ['locale' => $currentLocale]) }}"
                             class="{{ $currentRoute === $item['route'] ? 'bg-white/[0.18] text-white' : 'text-white/[0.82] hover:bg-white/10 hover:text-white' }} whitespace-nowrap rounded-full px-3 py-2 text-sm font-semibold transition xl:px-4"
                         >
                             {{ $item['label'] }}
@@ -41,7 +42,7 @@
                         <div class="grid gap-2 text-sm">
                             @foreach($navItems as $item)
                                 <a
-                                    href="{{ route($item['route']) }}"
+                                    href="{{ route($item['route'], ['locale' => $currentLocale]) }}"
                                     class="{{ $currentRoute === $item['route'] ? 'bg-white/[0.18] text-white' : 'hover:bg-white/10' }} rounded-2xl px-4 py-3"
                                 >
                                     {{ $item['label'] }}
