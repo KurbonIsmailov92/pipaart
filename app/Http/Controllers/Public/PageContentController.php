@@ -29,4 +29,14 @@ class PageContentController extends Controller
             'page' => $page,
         ]);
     }
+
+    public function about(): View|Factory|Application
+    {
+        return $this->show('about');
+    }
+
+    public function certifications(): View|Factory|Application
+    {
+        return $this->show('certifications');
+    }
 }

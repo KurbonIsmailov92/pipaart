@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\HasTranslatableAttributes;
+use App\Models\Concerns\ResolvesPublicMediaUrls;
 use App\Support\TranslationQuery;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,7 @@ class Course extends Model
 {
     use HasFactory;
     use HasTranslatableAttributes;
+    use ResolvesPublicMediaUrls;
 
     /**
      * @var list<string>
@@ -70,5 +72,10 @@ class Course extends Model
     public function getDurationLabelAttribute(): string
     {
         return $this->duration ?: (($this->hours ?? 0) > 0 ? $this->hours.' hours' : __('ui.courses.duration_on_request'));
+    }
+
+    public function getImageUrlAttribute(): ?string
+    {
+        return $this->resolvePublicMediaUrl($this->image);
     }
 }

@@ -26,7 +26,7 @@
         @forelse($courses as $course)
             <x-ui.card class="overflow-hidden p-0">
                 <img
-                    src="{{ $course->image ? \Illuminate\Support\Facades\Storage::url($course->image) : $fallbackImages[$loop->index % count($fallbackImages)] }}"
+                    src="{{ $course->image_url ?: $fallbackImages[$loop->index % count($fallbackImages)] }}"
                     alt="{{ $course->title }}"
                     class="h-56 w-full object-cover"
                 >

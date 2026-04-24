@@ -26,6 +26,7 @@ Route::prefix('admin')
             Route::resource('pages', AdminPageController::class)->except(['show']);
             Route::resource('gallery', AdminGalleryController::class)->except(['show']);
             Route::resource('users', AdminUserController::class)->except(['show']);
+
             Route::get('settings', [AdminSettingController::class, 'index'])->name('settings.index');
             Route::put('settings', [AdminSettingController::class, 'update'])->name('settings.update');
         });

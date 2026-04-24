@@ -140,7 +140,7 @@
             @forelse($featuredCourses as $course)
                 <x-ui.card class="overflow-hidden p-0">
                     <img
-                        src="{{ $course->image ? \Illuminate\Support\Facades\Storage::url($course->image) : $programImages[$loop->index % count($programImages)] }}"
+                        src="{{ $course->image_url ?: $programImages[$loop->index % count($programImages)] }}"
                         alt="{{ $course->title }}"
                         class="h-52 w-full object-cover"
                     >
@@ -177,7 +177,7 @@
             @forelse($featuredNews as $newsPost)
                 <x-ui.card class="overflow-hidden p-0">
                     <img
-                        src="{{ $newsPost->image ? \Illuminate\Support\Facades\Storage::url($newsPost->image) : $newsFallback }}"
+                        src="{{ $newsPost->image_url ?: $newsFallback }}"
                         alt="{{ $newsPost->title }}"
                         class="h-52 w-full object-cover"
                     >

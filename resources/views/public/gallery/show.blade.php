@@ -5,7 +5,7 @@
 @section('content')
     @php
         $currentLocale = request()->route('locale', app()->getLocale());
-        $imageUrl = $photo->image_url ? \Illuminate\Support\Facades\Storage::url($photo->image_url) : \Illuminate\Support\Facades\Vite::asset('resources/images/cap.jpg');
+        $imageUrl = $photo->image_url ?: \Illuminate\Support\Facades\Vite::asset('resources/images/cap.jpg');
     @endphp
 
     <x-ui.page-header :title="$photo->title" :description="$photo->category" :eyebrow="__('ui.nav.gallery')">

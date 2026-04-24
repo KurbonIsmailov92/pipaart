@@ -96,7 +96,7 @@
     }
 
     .pill-link {
-        @apply inline-flex items-center justify-center rounded-full border px-4 py-2 text-sm font-medium transition;
+        @apply inline-flex w-auto max-w-full items-center justify-center rounded-full border px-3 py-1.5 text-xs font-medium transition sm:px-4 sm:py-2 sm:text-sm;
         border-color: rgba(255, 255, 255, 0.18);
         background: rgba(255, 255, 255, 0.12);
         color: rgba(255, 251, 245, 0.92);
@@ -267,5 +267,11 @@
 @media (max-width: 640px) {
     .prose {
         overflow-wrap: anywhere;
+    }
+}
+
+@media (max-width: 1023px) {
+    .site-header:has(.mobile-nav[open]) {
+        margin-bottom: 22rem;
     }
 }

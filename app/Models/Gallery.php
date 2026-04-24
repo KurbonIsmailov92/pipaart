@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\ResolvesPublicMediaUrls;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 class Gallery extends Model
 {
     use HasFactory;
+    use ResolvesPublicMediaUrls;
 
     protected $fillable = [
         'title',
@@ -44,6 +46,6 @@ class Gallery extends Model
 
     public function getImageUrlAttribute(): ?string
     {
-        return $this->image_path ?: $this->image;
+        return $this->resolvePublicMediaUrl($this->image_path ?: $this->image);
     }
 }

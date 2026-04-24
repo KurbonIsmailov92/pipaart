@@ -12,6 +12,7 @@ class SetApplicationLocale
 {
     public function handle(Request $request, Closure $next): Response
     {
+        /** @var list<string> $supportedLocales */
         $supportedLocales = config('app.supported_locales', ['ru', 'tg', 'en']);
         $defaultLocale = config('app.locale', 'ru');
         $routeLocale = $request->route('locale');

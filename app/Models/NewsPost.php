@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\HasTranslatableAttributes;
+use App\Models\Concerns\ResolvesPublicMediaUrls;
 use App\Support\TranslationQuery;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,7 @@ class NewsPost extends Model
     /** @use HasFactory<\Database\Factories\NewsPostFactory> */
     use HasFactory;
     use HasTranslatableAttributes;
+    use ResolvesPublicMediaUrls;
 
     /**
      * @var list<string>
@@ -75,5 +77,10 @@ class NewsPost extends Model
     public function getBodyAttribute(): string
     {
         return (string) ($this->content ?: $this->text);
+    }
+
+    public function getImageUrlAttribute(): ?string
+    {
+        return $this->resolvePublicMediaUrl($this->image);
     }
 }
