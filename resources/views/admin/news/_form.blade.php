@@ -8,6 +8,7 @@
     <div>
         <label for="published_at" class="mb-2 block text-sm font-medium text-slate-700">Published At</label>
         <input id="published_at" name="published_at" type="datetime-local" value="{{ old('published_at', $newsPost->published_at?->format('Y-m-d\\TH:i')) }}" class="w-full rounded-xl border border-slate-300 px-4 py-3">
+        <p class="mt-2 text-xs text-slate-500">Leave empty to publish immediately.</p>
         @error('published_at') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
     </div>
 
