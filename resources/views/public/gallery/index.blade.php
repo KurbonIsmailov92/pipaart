@@ -14,7 +14,7 @@
     <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
         @forelse($photos as $photo)
             @php
-                $imageUrl = $photo->image_url ? \Illuminate\Support\Facades\Storage::url($photo->image_url) : \Illuminate\Support\Facades\Vite::asset('resources/images/cap.jpg');
+                $imageUrl = $photo->image_url ?: \Illuminate\Support\Facades\Vite::asset('resources/images/cap.jpg');
             @endphp
 
             <a href="{{ route('gallery.show', $photo) }}" class="group block overflow-hidden rounded-[2rem] bg-white shadow-[0_18px_45px_rgba(24,52,74,0.14)]">

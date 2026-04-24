@@ -12,10 +12,15 @@
         @forelse($newsPosts as $newsPost)
             <article class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                    <div>
-                        <h2 class="text-xl font-semibold">{{ $newsPost->title }}</h2>
-                        <p class="mt-2 max-w-3xl text-sm text-slate-600">{{ \Illuminate\Support\Str::limit($newsPost->content, 180) }}</p>
-                        <p class="mt-2 text-xs uppercase tracking-[0.3em] text-slate-400">{{ $newsPost->published_at?->format('M d, Y') }}</p>
+                    <div class="flex min-w-0 gap-4">
+                        @if($newsPost->image_url)
+                            <img src="{{ $newsPost->image_url }}" alt="{{ $newsPost->title }}" class="h-24 w-24 flex-none rounded-2xl object-cover">
+                        @endif
+                        <div class="min-w-0">
+                            <h2 class="text-xl font-semibold">{{ $newsPost->title }}</h2>
+                            <p class="mt-2 max-w-3xl text-sm text-slate-600">{{ \Illuminate\Support\Str::limit($newsPost->content, 180) }}</p>
+                            <p class="mt-2 text-xs uppercase tracking-[0.3em] text-slate-400">{{ $newsPost->published_at?->format('M d, Y') }}</p>
+                        </div>
                     </div>
                     <div class="flex gap-3 text-sm">
                         <a href="{{ route('admin.news.edit', $newsPost) }}" class="text-blue-600">Edit</a>

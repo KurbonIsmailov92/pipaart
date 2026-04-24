@@ -21,7 +21,7 @@
         @forelse($newsPosts as $newsPost)
             <x-ui.card class="overflow-hidden p-0">
                 <img
-                    src="{{ $newsPost->image ? \Illuminate\Support\Facades\Storage::url($newsPost->image) : $fallbackImage }}"
+                    src="{{ $newsPost->image_url ?: $fallbackImage }}"
                     alt="{{ $newsPost->title }}"
                     class="h-56 w-full object-cover"
                 >
