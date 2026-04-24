@@ -1,17 +1,9 @@
 @csrf
 
 <div class="grid gap-6">
-    <div>
-        <label for="title" class="mb-2 block text-sm font-medium text-slate-700">Title</label>
-        <input id="title" name="title" type="text" value="{{ old('title', $newsPost->title) }}" class="w-full rounded-xl border border-slate-300 px-4 py-3" required>
-        @error('title') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
-    </div>
+    <x-admin.translatable-input field="title" label="Title" :model="$newsPost" />
 
-    <div>
-        <label for="content" class="mb-2 block text-sm font-medium text-slate-700">Content</label>
-        <textarea id="content" name="content" rows="8" class="w-full rounded-xl border border-slate-300 px-4 py-3" required>{{ old('content', $newsPost->content) }}</textarea>
-        @error('content') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
-    </div>
+    <x-admin.translatable-textarea field="content" label="Content" :model="$newsPost" :rows="8" />
 
     <div>
         <label for="published_at" class="mb-2 block text-sm font-medium text-slate-700">Published At</label>

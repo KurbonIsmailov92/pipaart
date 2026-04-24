@@ -16,10 +16,26 @@ it('admin can create a page', function (): void {
     $this->actingAs($admin)
         ->post(route('admin.pages.store'), [
             'slug' => 'new-page',
-            'title' => 'New Page',
-            'content' => 'Page content',
-            'meta_title' => 'Meta',
-            'meta_description' => 'Meta description',
+            'title' => [
+                'ru' => 'New Page',
+                'tg' => 'New Page TG',
+                'en' => 'New Page EN',
+            ],
+            'content' => [
+                'ru' => 'Page content',
+                'tg' => 'Page content TG',
+                'en' => 'Page content EN',
+            ],
+            'meta_title' => [
+                'ru' => 'Meta',
+                'tg' => 'Meta TG',
+                'en' => 'Meta EN',
+            ],
+            'meta_description' => [
+                'ru' => 'Meta description',
+                'tg' => 'Meta description TG',
+                'en' => 'Meta description EN',
+            ],
             'is_published' => 1,
         ])
         ->assertRedirect(route('admin.pages.index'));
@@ -32,13 +48,22 @@ it('admin can create a course', function (): void {
 
     $this->actingAs($admin)
         ->post(route('admin.courses.store'), [
-            'title' => 'CMS Course',
-            'description' => 'Course description',
+            'title' => [
+                'ru' => 'CMS Course',
+                'tg' => 'CMS Course TG',
+                'en' => 'CMS Course EN',
+            ],
+            'description' => [
+                'ru' => 'Course description',
+                'tg' => 'Course description TG',
+                'en' => 'Course description EN',
+            ],
             'duration' => '12 weeks',
+            'hours' => 12,
             'price' => 100,
             'image' => UploadedFile::fake()->image('course.jpg'),
         ])
         ->assertRedirect(route('admin.courses.index'));
 
-    expect(Course::query()->where('title', 'CMS Course')->exists())->toBeTrue();
+    expect(Course::query()->where('slug', 'cms-course')->exists())->toBeTrue();
 });

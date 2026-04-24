@@ -1,17 +1,9 @@
 @csrf
 
 <div class="grid gap-6">
-    <div>
-        <label for="title" class="mb-2 block text-sm font-medium text-slate-700">Title</label>
-        <input id="title" name="title" type="text" value="{{ old('title', $course->title) }}" class="w-full rounded-xl border border-slate-300 px-4 py-3" required>
-        @error('title') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
-    </div>
+    <x-admin.translatable-input field="title" label="Title" :model="$course" />
 
-    <div>
-        <label for="description" class="mb-2 block text-sm font-medium text-slate-700">Description</label>
-        <textarea id="description" name="description" rows="6" class="w-full rounded-xl border border-slate-300 px-4 py-3" required>{{ old('description', $course->description) }}</textarea>
-        @error('description') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
-    </div>
+    <x-admin.translatable-textarea field="description" label="Description" :model="$course" :rows="6" />
 
     <div class="grid gap-6 md:grid-cols-2">
         <div>
@@ -20,10 +12,19 @@
             @error('duration') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
         </div>
         <div>
+            <label for="hours" class="mb-2 block text-sm font-medium text-slate-700">Hours</label>
+            <input id="hours" name="hours" type="number" min="1" max="1000" value="{{ old('hours', $course->hours) }}" class="w-full rounded-xl border border-slate-300 px-4 py-3">
+            @error('hours') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+        </div>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-2">
+        <div>
             <label for="price" class="mb-2 block text-sm font-medium text-slate-700">Price</label>
             <input id="price" name="price" type="number" min="0" step="0.01" value="{{ old('price', $course->price) }}" class="w-full rounded-xl border border-slate-300 px-4 py-3">
             @error('price') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
         </div>
+        <div></div>
     </div>
 
     <div>

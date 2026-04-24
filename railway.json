@@ -6,7 +6,7 @@
   },
   "deploy": {
     "preDeployCommand": "chmod +x ./railway/pre-deploy.sh && sh ./railway/pre-deploy.sh",
-    "healthcheckPath": "/healthz",
+    "healthcheckPath": "/healthz.txt",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   }

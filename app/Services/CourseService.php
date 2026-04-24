@@ -22,6 +22,7 @@ class CourseService
         }
 
         $data['slug'] = $this->generateUniqueSlug($data['title']);
+        $data['hours'] = $this->resolveHours($data);
         $data['duration'] = $data['duration'] ?? $this->resolveDuration($data);
         $data['price'] = $data['price'] ?? 0;
 
@@ -43,6 +44,7 @@ class CourseService
             $data['slug'] = $this->generateUniqueSlug($data['title'], $course);
         }
 
+        $data['hours'] = $data['hours'] ?? $course->hours ?? $this->resolveHours($data);
         $data['duration'] = $data['duration'] ?? $course->duration ?? $this->resolveDuration($data);
         $data['price'] = $data['price'] ?? $course->price ?? 0;
 
@@ -71,6 +73,22 @@ class CourseService
         }
 
         return null;
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    protected function resolveHours(array $data): int
+    {
+        if (! blank($data['hours'] ?? null)) {
+            return max(1, (int) $data['hours']);
+        }
+
+        if (preg_match('/\d+/', (string) ($data['duration'] ?? ''), $matches) === 1) {
+            return max(1, (int) $matches[0]);
+        }
+
+        return 1;
     }
 
     protected function generateUniqueSlug(string|array $title, ?Course $course = null): string
