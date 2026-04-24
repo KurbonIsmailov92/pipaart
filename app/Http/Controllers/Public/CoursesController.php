@@ -24,7 +24,7 @@ class CoursesController extends Controller
         ]);
     }
 
-    public function show(Course $course): View|Factory|Application
+    public function show(string $locale, Course $course): View|Factory|Application
     {
         return view('public.courses.show', [
             'course' => $course,

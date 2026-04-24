@@ -25,7 +25,7 @@ class NewsPostController extends Controller
         ]);
     }
 
-    public function show(NewsPost $newsPost): View|Factory|Application
+    public function show(string $locale, NewsPost $newsPost): View|Factory|Application
     {
         $this->authorize('view', $newsPost);
 

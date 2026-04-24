@@ -3,7 +3,9 @@
 @section('title', __('ui.news.search_results_title'))
 
 @section('content')
-    @php($currentLocale = request()->route('locale', app()->getLocale()))
+    @php
+        $currentLocale = request()->route('locale', app()->getLocale());
+    @endphp
     <x-ui.page-header
         :title="__('ui.news.search_results_title')"
         :description="$query ? __('ui.news.search_results_with_query', ['query' => $query]) : __('ui.news.search_results_description')"

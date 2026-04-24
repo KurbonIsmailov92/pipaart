@@ -3,7 +3,9 @@
 @section('title', __('ui.contact.title'))
 
 @section('content')
-    @php($currentLocale = request()->route('locale', app()->getLocale()))
+    @php
+        $currentLocale = request()->route('locale', app()->getLocale());
+    @endphp
     <x-ui.page-header :title="__('ui.contact.title')" :description="__('ui.contact.description')" :eyebrow="__('ui.nav.contact')">
         <x-slot:actions>
             <x-ui.button-link :href="route('contacts.message', ['locale' => $currentLocale])" variant="secondary">{{ __('ui.contact.open_form') }}</x-ui.button-link>

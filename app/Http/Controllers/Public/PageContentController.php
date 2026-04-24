@@ -15,8 +15,10 @@ class PageContentController extends Controller
     ) {
     }
 
-    public function show(string $slug): View|Factory|Application
+    public function show(): View|Factory|Application
     {
+        $slug = request()->route('slug');
+
         abort_unless(in_array($slug, ['about', 'certifications'], true), 404);
 
         $page = $this->pageService->getPublishedPageBySlug($slug);

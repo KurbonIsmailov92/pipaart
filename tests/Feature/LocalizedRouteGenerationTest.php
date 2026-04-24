@@ -42,9 +42,9 @@ it('renders home links with the current locale prefix', function (): void {
     $response = $this->get('/ru');
 
     $response->assertOk();
-    $response->assertSee('href="/ru/courses"', false);
-    $response->assertSee('href="/ru/schedule"', false);
-    $response->assertSee('href="/ru/news"', false);
-    $response->assertSee('href="/ru/gallery"', false);
-    $response->assertSee('href="/ru/contact"', false);
+    $response->assertSee(route('courses.index', ['locale' => 'ru']), false);
+    $response->assertSee(route('schedule.index', ['locale' => 'ru']), false);
+    $response->assertSee(route('news.index', ['locale' => 'ru']), false);
+    $response->assertSee(route('gallery.index', ['locale' => 'ru']), false);
+    $response->assertSee(route('contact', ['locale' => 'ru']), false);
 });

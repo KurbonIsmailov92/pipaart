@@ -3,7 +3,9 @@
 @section('title', __('ui.schedule.title'))
 
 @section('content')
-    @php($currentLocale = request()->route('locale', app()->getLocale()))
+    @php
+        $currentLocale = request()->route('locale', app()->getLocale());
+    @endphp
     <x-ui.page-header :title="__('ui.schedule.title')" :description="__('ui.schedule.description')" :eyebrow="__('ui.nav.schedule')" />
 
     <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">

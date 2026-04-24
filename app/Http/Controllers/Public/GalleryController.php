@@ -27,7 +27,7 @@ class GalleryController extends Controller
         ]);
     }
 
-    public function show(Gallery $gallery): View|Factory|Application
+    public function show(string $locale, Gallery $gallery): View|Factory|Application
     {
         return view('public.gallery.show', [
             'photo' => $gallery,

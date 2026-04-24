@@ -3,7 +3,9 @@
 @section('title', __('ui.gallery.title'))
 
 @section('content')
-    @php($currentLocale = request()->route('locale', app()->getLocale()))
+    @php
+        $currentLocale = request()->route('locale', app()->getLocale());
+    @endphp
     <x-ui.page-header :title="__('ui.gallery.title')" :description="__('ui.gallery.description')" :eyebrow="__('ui.nav.gallery')">
         <x-slot:actions>
             @can('create', \App\Models\Gallery::class)
