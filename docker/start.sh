@@ -16,14 +16,6 @@ if [ ! -L /var/www/html/public/storage ]; then
   php artisan storage:link || true
 fi
 
-php artisan config:clear || true
-php artisan cache:clear || true
-php artisan view:clear || true
-
-php artisan migrate --force || true
-php artisan config:cache || true
-php artisan route:cache || true
-
 sed -i "s/Listen 80/Listen ${PORT}/" /etc/apache2/ports.conf
 sed -i "s/:80>/:${PORT}>/" /etc/apache2/sites-available/000-default.conf
 

@@ -17,7 +17,6 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->append(SetApplicationLocale::class);
         $middleware->redirectGuestsTo(static fn (): string => route('auth.login'));
         $middleware->alias([
             'locale' => SetApplicationLocale::class,
