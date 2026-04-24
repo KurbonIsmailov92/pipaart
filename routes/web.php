@@ -19,6 +19,12 @@ use Illuminate\Support\Facades\Route;
 
 $supportedLocalesPattern = implode('|', config('app.supported_locales', ['ru', 'tg', 'en']));
 
+Route::get('/up', static function () {
+    return response()->json([
+        'status' => 'ok',
+    ]);
+});
+
 Route::get('/', static function (Request $request) {
     return redirect()->route('home', [
         'locale' => $request->session()->get('locale', config('app.locale', 'ru')),
