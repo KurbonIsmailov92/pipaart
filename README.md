@@ -67,6 +67,7 @@ php artisan key:generate
 
 ```bash
 php artisan migrate
+php artisan db:seed
 php artisan storage:link
 ```
 
@@ -92,6 +93,9 @@ composer run dev
 
 ## Admin Usage
 
+- Default seeded admin:
+  - Email: `admin@admin.com`
+  - Password: `password1234`
 - Login through `/auth/login`
 - Open `/admin`
 - Manage public pages from `/admin/pages`
@@ -111,8 +115,7 @@ Production deployment should use a real web server or container runtime. Do not 
 This repository is configured for Railway-native Laravel deployment via `railway.json`.
 
 - Railway is forced to use `RAILPACK`, so the service runs as a Laravel app with php-fpm and Caddy instead of the repo `Dockerfile`.
-- `railway/pre-deploy.sh` runs `php artisan migrate --force`, `php artisan storage:link`, `php artisan config:cache`, and `php artisan view:cache`.
-- `php artisan route:cache` is intentionally skipped because `routes/web.php` contains closure routes.
+- `railway/pre-deploy.sh` runs `php artisan migrate --force`, `php artisan db:seed --force`, `php artisan storage:link`, `php artisan config:cache`, `php artisan route:cache`, and `php artisan view:cache`.
 - `APP_KEY` must come from Railway Variables. No real `.env` file should be committed or required in Railway.
 - `config/database.php` accepts either `DATABASE_URL` / `DB_URL` or the standard `DB_*` variables.
 - Application defaults are intentionally bootstrap-safe: `SESSION_DRIVER=file`, `CACHE_STORE=file`, `QUEUE_CONNECTION=sync`. Switch them to database-backed values in Railway Variables if you want DB persistence for sessions, cache, or queues.
@@ -183,7 +186,8 @@ Suggested domain setup:
 
 ### Migrations and Workers
 
-- App deploys run migrations in `railway/pre-deploy.sh` before the new deployment starts serving traffic.
+- App deploys run migrations and seeders in `railway/pre-deploy.sh` before the new deployment starts serving traffic.
+- Container startup in `docker/start.sh` also runs `php artisan migrate --force`, `php artisan db:seed --force`, and `php artisan storage:link || true` for Docker/Render-style deployments.
 - If you need queued jobs in production, create a separate Railway worker service later that runs `php artisan queue:work`.
 - If you need scheduled tasks, create a separate Railway cron service later that runs `php artisan schedule:work` or a cron-triggered `php artisan schedule:run`.
 
@@ -201,6 +205,10 @@ Run tests with:
 ```bash
 php artisan test
 ```
+
+## Assets
+
+- The main public layout uses the existing `public/favicon.ico` as the browser tab icon.
 
 ## Notes
 

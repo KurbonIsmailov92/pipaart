@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserRole;
 use App\Models\NewsPost;
 use App\Models\User;
 use App\Policies\NewsPostPolicy;
@@ -7,7 +8,7 @@ use App\Policies\NewsPostPolicy;
 it('allows admin to delete news posts', function (): void {
     $policy = new NewsPostPolicy();
 
-    $admin = new User(['role' => User::ROLE_ADMIN]);
+    $admin = new User(['role' => UserRole::Admin->value]);
     $newsPost = new NewsPost();
 
     expect($policy->delete($admin, $newsPost))->toBeTrue();
@@ -16,7 +17,7 @@ it('allows admin to delete news posts', function (): void {
 it('denies non-admin to delete news posts', function (): void {
     $policy = new NewsPostPolicy();
 
-    $reader = new User(['role' => User::ROLE_READER]);
+    $reader = new User(['role' => UserRole::Reader->value]);
     $newsPost = new NewsPost();
 
     expect($policy->delete($reader, $newsPost))->toBeFalse();

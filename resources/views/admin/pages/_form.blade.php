@@ -2,7 +2,7 @@
 
 <div class="grid gap-6">
     <div class="grid gap-6 md:grid-cols-2">
-        <x-admin.translatable-input field="title" label="Title" :model="$page" />
+        <x-admin.translatable-input field="title" label="Title" :model="$page" :required="false" />
         <div>
             <label for="slug" class="mb-2 block text-sm font-medium text-slate-700">Slug</label>
             <input id="slug" name="slug" type="text" value="{{ old('slug', $page->slug) }}" class="w-full rounded-xl border border-slate-300 px-4 py-3" required>

@@ -46,9 +46,9 @@ ensure_app_key
 
 php artisan optimize:clear || true
 
-if [ ! -L /var/www/html/public/storage ]; then
-  php artisan storage:link || true
-fi
+php artisan storage:link || true
+php artisan migrate --force
+php artisan db:seed --force
 
 sed -ri "s/Listen [0-9]+/Listen ${PORT}/" /etc/apache2/ports.conf
 sed -ri "s/:([0-9]+)>/:${PORT}>/" /etc/apache2/sites-available/000-default.conf

@@ -15,12 +15,18 @@ class PageContentController extends Controller
     ) {
     }
 
-    public function show(): View|Factory|Application
+    public function about(): View|Factory|Application
     {
-        $slug = request()->route('slug');
+        return $this->renderPage('about');
+    }
 
-        abort_unless(in_array($slug, ['about', 'certifications'], true), 404);
+    public function certifications(): View|Factory|Application
+    {
+        return $this->renderPage('certifications');
+    }
 
+    protected function renderPage(string $slug): View|Factory|Application
+    {
         $page = $this->pageService->getPublishedPageBySlug($slug);
 
         abort_if($page === null, 404);
@@ -28,15 +34,5 @@ class PageContentController extends Controller
         return view('public.pages.show', [
             'page' => $page,
         ]);
-    }
-
-    public function about(): View|Factory|Application
-    {
-        return $this->show('about');
-    }
-
-    public function certifications(): View|Factory|Application
-    {
-        return $this->show('certifications');
     }
 }

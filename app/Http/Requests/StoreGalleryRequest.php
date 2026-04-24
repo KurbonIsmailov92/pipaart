@@ -7,6 +7,13 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreGalleryRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        if ($this->hasFile('image') && ! $this->hasFile('image_path')) {
+            $this->files->set('image_path', $this->file('image'));
+        }
+    }
+
     public function authorize(): bool
     {
         return $this->user()?->can('create', Gallery::class) ?? false;
@@ -21,7 +28,8 @@ class StoreGalleryRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'category' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'image_path' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'image_path' => ['required_without:image', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
         ];
     }
 }

@@ -1,7 +1,7 @@
 @csrf
 
 <div class="grid gap-6">
-    <x-admin.translatable-input field="title" label="Title" :model="$newsPost" />
+    <x-admin.translatable-input field="title" label="Title" :model="$newsPost" :required="false" />
 
     <x-admin.translatable-textarea field="content" label="Content" :model="$newsPost" :rows="8" />
 

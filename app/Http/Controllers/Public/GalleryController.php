@@ -18,8 +18,8 @@ class GalleryController extends Controller
 
         try {
             $photos = Gallery::query()->ordered()->paginate(12);
-        } catch (Throwable) {
-            //
+        } catch (Throwable $exception) {
+            report($exception);
         }
 
         return view('public.gallery.index', [

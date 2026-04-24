@@ -23,7 +23,7 @@ class StorePageRequest extends FormRequest
         return [
             'slug' => ['required', 'string', 'max:255', 'alpha_dash', 'unique:pages,slug'],
             'is_published' => ['nullable', 'boolean'],
-            ...$this->localizedFieldRules('title', ['string', 'max:255']),
+            ...$this->localizedFieldRules('title', ['string', 'max:255'], true, true),
             ...$this->localizedFieldRules('content', ['string'], false),
             ...$this->localizedFieldRules('meta_title', ['string', 'max:255'], false),
             ...$this->localizedFieldRules('meta_description', ['string', 'max:255'], false),

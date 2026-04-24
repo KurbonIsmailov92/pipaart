@@ -2,21 +2,34 @@
 
 namespace App\Http\Requests\Concerns;
 
+use App\Rules\HasFilledTranslation;
+
 trait BuildsLocalizedRules
 {
     /**
      * @param  list<string|int>  $rules
-     * @return array<string, array<int, string|int>>
+     * @return array<string, array<int, mixed>>
      */
-    protected function localizedFieldRules(string $field, array $rules, bool $requireFallbackLocale = true): array
+    protected function localizedFieldRules(
+        string $field,
+        array $rules,
+        bool $required = true,
+        bool $requireAtLeastOneTranslation = false
+    ): array
     {
         $resolvedRules = [
-            $field => ['required', 'array'],
+            $field => [$required ? 'required' : 'nullable', 'array'],
         ];
+
+        if ($requireAtLeastOneTranslation) {
+            $resolvedRules[$field][] = new HasFilledTranslation();
+        }
 
         foreach (config('app.supported_locales', ['ru', 'tg', 'en']) as $locale) {
             $resolvedRules[$field.'.'.$locale] = [
-                $locale === config('app.fallback_locale', 'ru') && $requireFallbackLocale ? 'required' : 'nullable',
+                $required && ! $requireAtLeastOneTranslation && $locale === config('app.fallback_locale', 'ru')
+                    ? 'required'
+                    : 'nullable',
                 ...$rules,
             ];
         }

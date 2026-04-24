@@ -23,7 +23,7 @@ class StoreNewsPostRequest extends FormRequest
         return [
             'published_at' => ['nullable', 'date'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
-            ...$this->localizedFieldRules('title', ['string', 'max:255']),
+            ...$this->localizedFieldRules('title', ['string', 'max:255'], true, true),
             ...$this->localizedFieldRules('content', ['string']),
         ];
     }

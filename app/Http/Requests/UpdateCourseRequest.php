@@ -29,7 +29,7 @@ class UpdateCourseRequest extends FormRequest
             'hours' => ['nullable', 'integer', 'min:1', 'max:1000'],
             'price' => ['nullable', 'numeric', 'min:0'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
-            ...$this->localizedFieldRules('title', ['string', 'max:255']),
+            ...$this->localizedFieldRules('title', ['string', 'max:255'], true, true),
             ...$this->localizedFieldRules('description', ['string']),
         ];
     }
