@@ -90,7 +90,7 @@ trait HasTranslatableAttributes
         return $this;
     }
 
-    protected function getAttributeValue($key): mixed
+    public function getAttributeValue($key): mixed
     {
         $value = parent::getAttributeValue($key);
 

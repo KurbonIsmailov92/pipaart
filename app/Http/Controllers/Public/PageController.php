@@ -7,9 +7,11 @@ use App\Models\Course;
 use App\Models\NewsPost;
 use App\Models\Schedule;
 use App\Services\SettingsService;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
+use Throwable;
 
 class PageController extends Controller
 {
@@ -25,13 +27,26 @@ class PageController extends Controller
             'hero_title' => __('ui.home.hero_title'),
             'hero_subtitle' => __('ui.home.hero_subtitle'),
         ];
+        $featuredCourses = new Collection();
+        $featuredNews = new Collection();
+        $archiveNews = new Collection();
+        $upcomingSchedules = new Collection();
+
+        try {
+            $featuredCourses = Course::query()->ordered()->take(3)->get();
+            $featuredNews = NewsPost::query()->published()->ordered()->take(3)->get();
+            $archiveNews = NewsPost::query()->published()->ordered()->skip(3)->take(4)->get();
+            $upcomingSchedules = Schedule::query()->with('course')->upcoming()->take(4)->get();
+        } catch (Throwable) {
+            //
+        }
 
         return view('public.home.index', [
             'settings' => $this->settingsService->getPublicSettings($defaults),
-            'featuredCourses' => Course::query()->ordered()->take(3)->get(),
-            'featuredNews' => NewsPost::query()->published()->ordered()->take(3)->get(),
-            'archiveNews' => NewsPost::query()->published()->ordered()->skip(3)->take(4)->get(),
-            'upcomingSchedules' => Schedule::query()->with('course')->upcoming()->take(4)->get(),
+            'featuredCourses' => $featuredCourses,
+            'featuredNews' => $featuredNews,
+            'archiveNews' => $archiveNews,
+            'upcomingSchedules' => $upcomingSchedules,
         ]);
     }
 }

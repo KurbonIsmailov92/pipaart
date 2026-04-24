@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Setting;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Schema;
+use Throwable;
 
 class SettingsService
 {
@@ -13,11 +14,15 @@ class SettingsService
      */
     public function all(): Collection
     {
-        if (! Schema::hasTable('settings')) {
+        try {
+            if (! Schema::hasTable('settings')) {
+                return new Collection();
+            }
+
+            return Setting::query()->orderBy('key')->get();
+        } catch (Throwable) {
             return new Collection();
         }
-
-        return Setting::query()->orderBy('key')->get();
     }
 
     /**
@@ -26,14 +31,18 @@ class SettingsService
      */
     public function getPublicSettings(array $defaults = []): array
     {
-        if (! Schema::hasTable('settings')) {
+        try {
+            if (! Schema::hasTable('settings')) {
+                return $defaults;
+            }
+
+            return array_replace(
+                $defaults,
+                Setting::query()->pluck('value', 'key')->all(),
+            );
+        } catch (Throwable) {
             return $defaults;
         }
-
-        return array_replace(
-            $defaults,
-            Setting::query()->pluck('value', 'key')->all(),
-        );
     }
 
     /**

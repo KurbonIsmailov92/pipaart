@@ -115,6 +115,7 @@ This repository is configured for Railway-native Laravel deployment via `railway
 - `php artisan route:cache` is intentionally skipped because `routes/web.php` contains closure routes.
 - `APP_KEY` must come from Railway Variables. No real `.env` file should be committed or required in Railway.
 - `config/database.php` accepts either `DATABASE_URL` / `DB_URL` or the standard `DB_*` variables.
+- Application defaults are intentionally bootstrap-safe: `SESSION_DRIVER=file`, `CACHE_STORE=file`, `QUEUE_CONNECTION=sync`. Switch them to database-backed values in Railway Variables if you want DB persistence for sessions, cache, or queues.
 
 Deploy from GitHub:
 

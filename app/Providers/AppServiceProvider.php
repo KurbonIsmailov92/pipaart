@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Throwable;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -55,11 +56,15 @@ class AppServiceProvider extends ServiceProvider
 
             $settings = $defaultSettings;
 
-            if (Schema::hasTable('settings')) {
-                $settings = array_replace(
-                    $defaultSettings,
-                    Setting::query()->pluck('value', 'key')->all(),
-                );
+            try {
+                if (Schema::hasTable('settings')) {
+                    $settings = array_replace(
+                        $defaultSettings,
+                        Setting::query()->pluck('value', 'key')->all(),
+                    );
+                }
+            } catch (Throwable) {
+                $settings = $defaultSettings;
             }
 
             $view->with('siteSettings', $settings);
