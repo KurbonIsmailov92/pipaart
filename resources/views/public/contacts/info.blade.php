@@ -3,9 +3,10 @@
 @section('title', __('ui.contact.title'))
 
 @section('content')
+    @php($currentLocale = request()->route('locale', app()->getLocale()))
     <x-ui.page-header :title="__('ui.contact.title')" :description="__('ui.contact.description')" :eyebrow="__('ui.nav.contact')">
         <x-slot:actions>
-            <x-ui.button-link :href="route('contacts.message')" variant="secondary">{{ __('ui.contact.open_form') }}</x-ui.button-link>
+            <x-ui.button-link :href="route('contacts.message', ['locale' => $currentLocale])" variant="secondary">{{ __('ui.contact.open_form') }}</x-ui.button-link>
         </x-slot:actions>
     </x-ui.page-header>
 
@@ -50,7 +51,7 @@
                     <h2 class="mt-3 text-3xl font-semibold">{{ __('ui.contact.write_to_us') }}</h2>
                     <p class="mt-4 text-sm text-white/[0.78]">{{ __('ui.contact.send_message_description') }}</p>
                     <div class="mt-8">
-                        <x-ui.button-link :href="route('contacts.message')" variant="secondary">{{ __('ui.contact.open_form') }}</x-ui.button-link>
+                        <x-ui.button-link :href="route('contacts.message', ['locale' => $currentLocale])" variant="secondary">{{ __('ui.contact.open_form') }}</x-ui.button-link>
                     </div>
                 </div>
 

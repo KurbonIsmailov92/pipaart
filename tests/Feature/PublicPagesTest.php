@@ -7,6 +7,8 @@ use App\Models\Page;
 use App\Models\Schedule;
 
 it('renders the core public pages', function (): void {
+    $locale = 'ru';
+
     Page::query()->firstOrCreate(
         ['slug' => 'about'],
         [
@@ -46,15 +48,15 @@ it('renders the core public pages', function (): void {
         'schedule_text' => 'Every Monday',
     ]);
 
-    $this->get(route('home'))->assertOk();
-    $this->get(route('about'))->assertOk();
-    $this->get(route('certifications'))->assertOk();
-    $this->get(route('courses.index'))->assertOk();
-    $this->get(route('schedule.index'))->assertOk();
-    $this->get(route('news.index'))->assertOk();
-    $this->get(route('gallery.index'))->assertOk();
-    $this->get(route('contact'))->assertOk();
-    $this->get(route('courses.show', $course))->assertOk();
-    $this->get(route('news.show', $news))->assertOk();
-    $this->get(route('gallery.show', $gallery))->assertOk();
+    $this->get(route('home', ['locale' => $locale]))->assertOk();
+    $this->get(route('about', ['locale' => $locale]))->assertOk();
+    $this->get(route('certifications', ['locale' => $locale]))->assertOk();
+    $this->get(route('courses.index', ['locale' => $locale]))->assertOk();
+    $this->get(route('schedule.index', ['locale' => $locale]))->assertOk();
+    $this->get(route('news.index', ['locale' => $locale]))->assertOk();
+    $this->get(route('gallery.index', ['locale' => $locale]))->assertOk();
+    $this->get(route('contact', ['locale' => $locale]))->assertOk();
+    $this->get(route('courses.show', ['locale' => $locale, 'course' => $course]))->assertOk();
+    $this->get(route('news.show', ['locale' => $locale, 'newsPost' => $news]))->assertOk();
+    $this->get(route('gallery.show', ['locale' => $locale, 'gallery' => $gallery]))->assertOk();
 });

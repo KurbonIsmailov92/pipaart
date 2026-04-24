@@ -5,6 +5,7 @@
 
 @section('content')
     @php
+        $currentLocale = request()->route('locale', app()->getLocale());
         $isAbout = $page->slug === 'about';
         $pageImage = $isAbout
             ? \Illuminate\Support\Facades\Vite::asset('resources/images/cipa.jpg')
@@ -32,8 +33,8 @@
                 <h2 class="mt-2 text-2xl font-semibold text-slate-950">{{ $page->title }}</h2>
                 <p class="mt-3 text-sm text-slate-600">{{ \Illuminate\Support\Str::limit(strip_tags((string) $page->content), 180) }}</p>
                 <div class="mt-6 flex flex-wrap gap-3">
-                    <x-ui.button-link :href="route('courses.index')">{{ __('ui.nav.courses') }}</x-ui.button-link>
-                    <x-ui.button-link :href="route('contact')" variant="secondary">{{ __('ui.nav.contact') }}</x-ui.button-link>
+                    <x-ui.button-link :href="route('courses.index', ['locale' => $currentLocale])">{{ __('ui.nav.courses') }}</x-ui.button-link>
+                    <x-ui.button-link :href="route('contact', ['locale' => $currentLocale])" variant="secondary">{{ __('ui.nav.contact') }}</x-ui.button-link>
                 </div>
             </x-ui.card>
         </div>

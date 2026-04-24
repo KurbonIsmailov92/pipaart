@@ -3,6 +3,7 @@
 @section('title', __('ui.contact.message_title'))
 
 @section('content')
+    @php($currentLocale = request()->route('locale', app()->getLocale()))
     <x-ui.page-header :title="__('ui.contact.message_title')" :description="__('ui.contact.message_description')" :eyebrow="__('ui.nav.contact')" />
 
     <div class="grid gap-6 lg:grid-cols-[0.88fr_1.12fr]">
@@ -28,7 +29,7 @@
         </x-ui.card>
 
         <x-ui.card>
-            <form method="POST" action="{{ route('contacts.message.store') }}" class="space-y-5">
+            <form method="POST" action="{{ route('contacts.message.store', ['locale' => $currentLocale]) }}" class="space-y-5">
                 @csrf
 
                 <div>

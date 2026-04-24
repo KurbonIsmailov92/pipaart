@@ -3,6 +3,7 @@
 @section('title', __('ui.schedule.title'))
 
 @section('content')
+    @php($currentLocale = request()->route('locale', app()->getLocale()))
     <x-ui.page-header :title="__('ui.schedule.title')" :description="__('ui.schedule.description')" :eyebrow="__('ui.nav.schedule')" />
 
     <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -15,7 +16,7 @@
                 @endif
                 <p class="mt-4 text-sm text-slate-600">{{ $schedule->schedule_text }}</p>
                 <div class="mt-6">
-                    <x-ui.button-link :href="route('contact')" variant="ghost">{{ __('ui.nav.contact') }}</x-ui.button-link>
+                    <x-ui.button-link :href="route('contact', ['locale' => $currentLocale])" variant="ghost">{{ __('ui.nav.contact') }}</x-ui.button-link>
                 </div>
             </x-ui.card>
         @empty
