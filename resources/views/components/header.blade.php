@@ -14,11 +14,11 @@
     $locales = \App\Support\LocalizedRoute::supportedLocales();
 @endphp
 
-<header class="relative z-50 mt-4 w-full text-white">
-    <div class="shell-container">
-        <div class="surface-card w-full border border-white/10 bg-[#143950]/70 px-4 py-3 text-white shadow-2xl sm:px-6">
-            <div class="flex w-full items-center justify-between gap-3 lg:gap-6">
-                <a href="{{ route('home') }}" class="min-w-0 flex-1 lg:max-w-[24rem]">
+<header class="site-header relative z-50 mt-4 w-full max-w-full overflow-x-hidden text-white">
+    <div class="shell-container w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="surface-card w-full max-w-full border border-white/10 bg-[#143950]/70 px-4 py-3 text-white shadow-2xl sm:px-6">
+            <div class="flex w-full min-w-0 max-w-full items-center justify-between gap-3 lg:gap-6">
+                <a href="{{ route('home') }}" class="min-w-0 max-w-full flex-1 lg:max-w-[24rem]">
                     <x-logo />
                 </a>
 
@@ -33,16 +33,16 @@
                     @endforeach
                 </nav>
 
-                <details class="group relative flex-none lg:hidden">
-                    <summary class="list-none rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium backdrop-blur marker:hidden">
+                <details class="mobile-nav group static max-w-full flex-none lg:hidden">
+                    <summary class="inline-flex list-none w-auto max-w-full items-center justify-center rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-medium backdrop-blur marker:hidden sm:px-4 sm:py-2 sm:text-sm">
                         {{ __('ui.common.menu') }}
                     </summary>
-                    <div class="absolute right-0 top-full mt-3 w-72 max-w-full overflow-hidden rounded-[2rem] border border-white/15 bg-[#143950]/95 p-4 shadow-2xl sm:w-80">
-                        <div class="grid gap-2 text-sm">
+                    <div class="absolute left-4 right-4 top-full z-50 mt-3 w-auto max-w-none overflow-hidden rounded-[2rem] border border-white/15 bg-[#143950]/95 p-3 shadow-2xl sm:left-6 sm:right-6 sm:p-4">
+                        <div class="grid max-w-full gap-2 text-sm">
                             @foreach($navItems as $item)
                                 <a
                                     href="{{ route($item['route']) }}"
-                                    class="{{ $currentRoute === $item['route'] ? 'bg-white/[0.18] text-white' : 'hover:bg-white/10' }} rounded-2xl px-4 py-3"
+                                    class="{{ $currentRoute === $item['route'] ? 'bg-white/[0.18] text-white' : 'hover:bg-white/10' }} block max-w-full rounded-2xl px-4 py-3"
                                 >
                                     {{ $item['label'] }}
                                 </a>

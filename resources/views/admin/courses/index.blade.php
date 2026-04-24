@@ -22,7 +22,14 @@
             <tbody class="divide-y divide-slate-100">
             @forelse($courses as $course)
                 <tr>
-                    <td class="px-4 py-3 font-medium">{{ $course->title }}</td>
+                    <td class="px-4 py-3">
+                        <div class="flex items-center gap-3">
+                            @if($course->image_url)
+                                <img src="{{ $course->image_url }}" alt="{{ $course->title }}" class="h-12 w-12 flex-none rounded-xl object-cover">
+                            @endif
+                            <span class="font-medium">{{ $course->title }}</span>
+                        </div>
+                    </td>
                     <td class="px-4 py-3">{{ $course->duration }}</td>
                     <td class="px-4 py-3">{{ number_format((float) $course->price, 2) }}</td>
                     <td class="px-4 py-3">{{ $course->updated_at?->diffForHumans() }}</td>

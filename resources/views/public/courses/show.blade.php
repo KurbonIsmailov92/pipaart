@@ -47,7 +47,7 @@
 
         <x-ui.card class="overflow-hidden p-0">
             <img
-                src="{{ $course->image ? \Illuminate\Support\Facades\Storage::url($course->image) : $fallbackImage }}"
+                src="{{ $course->image_url ?: $fallbackImage }}"
                 alt="{{ $course->title }}"
                 class="h-full min-h-[22rem] w-full object-cover"
             >

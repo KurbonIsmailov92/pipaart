@@ -30,8 +30,8 @@
     <div>
         <label for="image" class="mb-2 block text-sm font-medium text-slate-700">Image</label>
         <input id="image" name="image" type="file" accept=".jpg,.jpeg,.png,.webp" class="w-full rounded-xl border border-dashed border-slate-300 px-4 py-3">
-        @if($course->image)
-            <img src="{{ Storage::url($course->image) }}" alt="{{ $course->title }}" class="mt-3 h-28 rounded-xl object-cover">
+        @if($course->image_url)
+            <img src="{{ $course->image_url }}" alt="{{ $course->title }}" class="mt-3 h-28 rounded-xl object-cover">
         @endif
         @error('image') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
     </div>
