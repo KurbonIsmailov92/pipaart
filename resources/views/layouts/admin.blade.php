@@ -6,16 +6,16 @@
     <title>@yield('title', 'Admin Panel')</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-slate-100 text-slate-900">
+<body class="bg-[linear-gradient(180deg,#edf3f4_0%,#f7f4ec_100%)] text-slate-900">
 <div class="min-h-screen lg:grid lg:grid-cols-[290px_1fr]">
-    <aside class="bg-slate-950 px-5 py-6 text-slate-100 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">
+    <aside class="bg-[#143950] px-5 py-6 text-slate-100 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">
         <div class="flex items-start justify-between gap-4">
             <div>
                 <a href="{{ route('admin.dashboard') }}" class="text-2xl font-semibold tracking-wide">PIPAA CMS</a>
-                <p class="mt-2 text-sm text-slate-400">Admin panel for pages, courses, schedules, news, gallery, settings, and users.</p>
+                <p class="mt-2 text-sm text-white/60">Admin panel for pages, courses, schedules, news, gallery, settings, and users.</p>
             </div>
             <a href="{{ route('home') }}" class="pill-link lg:hidden">Site</a>
         </div>
@@ -35,9 +35,9 @@
             @endif
         </nav>
 
-        <div class="mt-8 rounded-3xl border border-slate-800 bg-slate-900 p-4 text-sm">
+        <div class="mt-8 rounded-3xl border border-white/10 bg-white/10 p-4 text-sm backdrop-blur">
             <p class="font-medium">{{ auth()->user()?->name }}</p>
-            <p class="mt-1 text-slate-400">{{ auth()->user()?->role?->label() ?? auth()->user()?->role?->value }}</p>
+            <p class="mt-1 text-white/60">{{ auth()->user()?->role?->label() ?? auth()->user()?->role?->value }}</p>
             <div class="mt-4 flex flex-wrap gap-3">
                 <a href="{{ route('home') }}" class="pill-link">View Site</a>
                 <form action="{{ route('auth.logout') }}" method="POST">

@@ -1,14 +1,10 @@
-<div class="flex flex-col sm:flex-row sm:items-center border-b sm:border-b-0 sm:border-r border-white/30 sm:pr-4">
-    <a href="/" class="mb-2 sm:mb-0 sm:mr-3 flex flex-col">
-        <img class="h-16 sm:h-20 w-auto"
-             src="{{ \Illuminate\Support\Facades\Vite::asset('resources/images/logo.svg') }}" alt="Logo">
-    </a>
+<div {{ $attributes->merge(['class' => 'flex min-w-0 items-center gap-3 sm:gap-4']) }}>
+    <span class="flex h-12 w-auto flex-none items-center justify-center sm:h-14 lg:h-16">
+        <img
+            class="h-full w-auto max-w-none object-contain"
+            src="{{ \Illuminate\Support\Facades\Vite::asset('resources/images/logo.svg') }}"
+            alt="{{ $siteSettings['site_name'] ?? 'PIPAA' }}"
+        >
+   
 
-    <div class="text-left sm:text-left">
-        <p class="hidden sm:block text-sm sm:text-base font-bold leading-tight">
-            ОБЩЕСТВЕННЫЙ ИНСТИТУТ <br>
-            ПРОФЕССИОНАЛЬНЫХ БУХГАЛТЕРОВ <br>
-            И АУДИТОРОВ РЕСПУБЛИКИ ТАДЖИКИСТАН
-        </p>
-    </div>
 </div>

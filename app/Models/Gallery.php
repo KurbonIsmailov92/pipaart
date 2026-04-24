@@ -19,6 +19,19 @@ class Gallery extends Model
         'image_path',
     ];
 
+    protected static function booted(): void
+    {
+        static::saving(static function (Gallery $gallery): void {
+            if (blank($gallery->image) && filled($gallery->image_path)) {
+                $gallery->image = $gallery->image_path;
+            }
+
+            if (blank($gallery->image_path) && filled($gallery->image)) {
+                $gallery->image_path = $gallery->image;
+            }
+        });
+    }
+
     public function getRouteKeyName(): string
     {
         return 'slug';

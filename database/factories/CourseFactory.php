@@ -24,6 +24,7 @@ class CourseFactory extends Factory
             'title' => $title,
             'slug' => Str::slug($title),
             'description' => fake()->paragraphs(3, true),
+            'hours' => fake()->numberBetween(12, 120),
             'duration' => fake()->numberBetween(12, 120).' hours',
             'price' => fake()->randomFloat(2, 0, 500),
             'image' => null,

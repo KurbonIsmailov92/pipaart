@@ -89,7 +89,7 @@ return [
         'image_placeholder' => 'News image',
         'search_results_title' => 'Search Results',
         'search_results_description' => 'News articles matching your query.',
-        'search_results_with_query' => 'News articles matching “:query”.',
+        'search_results_with_query' => 'News articles matching ":query".',
     ],
     'gallery' => [
         'title' => 'Gallery',

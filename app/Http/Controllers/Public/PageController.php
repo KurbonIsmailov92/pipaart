@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\NewsPost;
+use App\Models\Page;
 use App\Models\Schedule;
 use App\Services\SettingsService;
 use Illuminate\Database\Eloquent\Collection;
@@ -31,12 +32,16 @@ class PageController extends Controller
         $featuredNews = new Collection();
         $archiveNews = new Collection();
         $upcomingSchedules = new Collection();
+        $aboutPage = null;
+        $certificationsPage = null;
 
         try {
             $featuredCourses = Course::query()->ordered()->take(3)->get();
             $featuredNews = NewsPost::query()->published()->ordered()->take(3)->get();
             $archiveNews = NewsPost::query()->published()->ordered()->skip(3)->take(4)->get();
             $upcomingSchedules = Schedule::query()->with('course')->upcoming()->take(4)->get();
+            $aboutPage = Page::query()->published()->where('slug', 'about')->first();
+            $certificationsPage = Page::query()->published()->where('slug', 'certifications')->first();
         } catch (Throwable) {
             //
         }
@@ -47,6 +52,8 @@ class PageController extends Controller
             'featuredNews' => $featuredNews,
             'archiveNews' => $archiveNews,
             'upcomingSchedules' => $upcomingSchedules,
+            'aboutPage' => $aboutPage,
+            'certificationsPage' => $certificationsPage,
         ]);
     }
 }

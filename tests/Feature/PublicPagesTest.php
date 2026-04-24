@@ -9,12 +9,24 @@ use App\Models\Schedule;
 it('renders the core public pages', function (): void {
     Page::query()->firstOrCreate(
         ['slug' => 'about'],
-        ['title' => 'About', 'content' => 'About content', 'is_published' => true]
+        [
+            'title' => ['ru' => 'About'],
+            'content' => ['ru' => 'About content'],
+            'meta_title' => ['ru' => 'About'],
+            'meta_description' => ['ru' => 'About content'],
+            'is_published' => true,
+        ]
     );
 
     Page::query()->firstOrCreate(
         ['slug' => 'certifications'],
-        ['title' => 'Certifications', 'content' => 'Certification content', 'is_published' => true]
+        [
+            'title' => ['ru' => 'Certifications'],
+            'content' => ['ru' => 'Certification content'],
+            'meta_title' => ['ru' => 'Certifications'],
+            'meta_description' => ['ru' => 'Certification content'],
+            'is_published' => true,
+        ]
     );
 
     $course = Course::factory()->create();
@@ -24,6 +36,7 @@ it('renders the core public pages', function (): void {
         'slug' => 'gallery-item',
         'category' => 'general',
         'description' => 'Item',
+        'image' => 'gallery/demo.jpg',
         'image_path' => 'gallery/demo.jpg',
     ]);
     Schedule::query()->create([

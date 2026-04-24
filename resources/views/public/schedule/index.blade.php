@@ -1,22 +1,29 @@
 @extends('layouts.app')
 
-@section('title', 'Schedule')
+@section('title', __('ui.schedule.title'))
 
 @section('content')
-    <x-ui.page-header title="Schedule" description="Upcoming training and certification sessions managed from the CMS."></x-ui.page-header>
+    <x-ui.page-header :title="__('ui.schedule.title')" :description="__('ui.schedule.description')" :eyebrow="__('ui.nav.schedule')" />
 
     <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         @forelse($schedules as $schedule)
-            <x-ui.card>
-                <p class="text-xs uppercase tracking-[0.3em] text-slate-400">{{ $schedule->start_date?->format('M d, Y') }}</p>
-                <h2 class="mt-3 text-xl font-semibold text-slate-950">{{ $schedule->course?->title }}</h2>
-                <p class="mt-2 text-sm text-slate-500">Teacher: {{ $schedule->teacher }}</p>
-                <p class="mt-4 text-slate-600">{{ $schedule->schedule_text }}</p>
+            <x-ui.card class="bg-white/[0.92]">
+                <p class="ui-kicker">{{ $schedule->start_date?->format('M d, Y') }}</p>
+                <h2 class="mt-2 text-xl font-semibold text-slate-950">{{ $schedule->course?->title }}</h2>
+                @if($schedule->teacher)
+                    <p class="mt-3 text-sm font-medium text-[#1f5f85]">{{ __('ui.schedule.teacher') }}: {{ $schedule->teacher }}</p>
+                @endif
+                <p class="mt-4 text-sm text-slate-600">{{ $schedule->schedule_text }}</p>
+                <div class="mt-6">
+                    <x-ui.button-link :href="route('contact')" variant="ghost">{{ __('ui.nav.contact') }}</x-ui.button-link>
+                </div>
             </x-ui.card>
         @empty
             <x-ui.card class="md:col-span-2 xl:col-span-3">
-                <p class="text-slate-500">No schedule entries available yet.</p>
+                <p class="text-slate-500">{{ __('ui.schedule.empty') }}</p>
             </x-ui.card>
         @endforelse
     </div>
+
+    <div class="mt-8">{{ $schedules->links() }}</div>
 @endsection

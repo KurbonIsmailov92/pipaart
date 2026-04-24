@@ -4,8 +4,8 @@
 
 @php
     $classes = match ($variant) {
-        'danger' => 'rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-red-700',
-        default => 'rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-700',
+        'danger' => 'rounded-[1.6rem] border border-rose-200 bg-rose-50/90 px-4 py-3 text-rose-700',
+        default => 'rounded-[1.6rem] border border-emerald-200 bg-emerald-50/90 px-4 py-3 text-emerald-700',
     };
 @endphp
 
