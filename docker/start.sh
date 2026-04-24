@@ -3,6 +3,13 @@ set -e
 
 cd /var/www/html
 
+mkdir -p \
+  storage/framework/views \
+  storage/framework/cache \
+  storage/framework/cache/data \
+  storage/framework/sessions \
+  bootstrap/cache
+
 a2dismod mpm_event || true
 a2dismod mpm_worker || true
 a2enmod mpm_prefork || true
