@@ -21,8 +21,7 @@ class SendContactMessageJob implements ShouldQueue
 
     public function __construct(
         public int $contactMessageId,
-    ) {
-    }
+    ) {}
 
     public function handle(SmsService $smsService): void
     {

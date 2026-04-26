@@ -60,3 +60,13 @@ it('renders the core public pages', function (): void {
     $this->get(route('news.show', ['locale' => $locale, 'newsPost' => $news]))->assertOk();
     $this->get(route('gallery.show', ['locale' => $locale, 'gallery' => $gallery]))->assertOk();
 });
+
+it('keeps the localized home page available when public content tables are empty', function (): void {
+    \App\Models\Schedule::query()->delete();
+    \App\Models\NewsPost::query()->delete();
+    \App\Models\Course::query()->delete();
+    \App\Models\Page::query()->delete();
+
+    $this->get('/ru')
+        ->assertOk();
+});

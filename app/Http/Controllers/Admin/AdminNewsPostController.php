@@ -16,8 +16,7 @@ class AdminNewsPostController extends Controller
 {
     public function __construct(
         protected NewsService $newsService,
-    ) {
-    }
+    ) {}
 
     public function index(): View|Factory|Application
     {
@@ -33,7 +32,7 @@ class AdminNewsPostController extends Controller
         $this->authorize('create', NewsPost::class);
 
         return view('admin.news.create', [
-            'newsPost' => new NewsPost(),
+            'newsPost' => new NewsPost,
         ]);
     }
 

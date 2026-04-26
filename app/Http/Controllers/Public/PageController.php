@@ -8,9 +8,9 @@ use App\Models\NewsPost;
 use App\Models\Page;
 use App\Models\Schedule;
 use App\Services\SettingsService;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Application;
 use Throwable;
 
@@ -18,8 +18,7 @@ class PageController extends Controller
 {
     public function __construct(
         protected SettingsService $settingsService,
-    ) {
-    }
+    ) {}
 
     public function index(): View|Factory|Application
     {
@@ -28,10 +27,10 @@ class PageController extends Controller
             'hero_title' => __('ui.home.hero_title'),
             'hero_subtitle' => __('ui.home.hero_subtitle'),
         ];
-        $featuredCourses = new Collection();
-        $featuredNews = new Collection();
-        $archiveNews = new Collection();
-        $upcomingSchedules = new Collection();
+        $featuredCourses = new Collection;
+        $featuredNews = new Collection;
+        $archiveNews = new Collection;
+        $upcomingSchedules = new Collection;
         $aboutPage = null;
         $certificationsPage = null;
 
@@ -42,8 +41,8 @@ class PageController extends Controller
             $upcomingSchedules = Schedule::query()->with('course')->upcoming()->take(4)->get();
             $aboutPage = Page::query()->published()->where('slug', 'about')->first();
             $certificationsPage = Page::query()->published()->where('slug', 'certifications')->first();
-        } catch (Throwable) {
-            //
+        } catch (Throwable $e) {
+            report($e);
         }
 
         return view('public.home.index', [

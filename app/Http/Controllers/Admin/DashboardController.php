@@ -9,9 +9,9 @@ use App\Models\NewsPost;
 use App\Models\Page;
 use App\Models\Schedule;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Application;
 use Throwable;
 
@@ -27,9 +27,9 @@ class DashboardController extends Controller
             'gallery' => 0,
             'users' => 0,
         ];
-        $latestCourses = new Collection();
-        $latestNews = new Collection();
-        $latestSchedules = new Collection();
+        $latestCourses = new Collection;
+        $latestNews = new Collection;
+        $latestSchedules = new Collection;
 
         try {
             $stats = [

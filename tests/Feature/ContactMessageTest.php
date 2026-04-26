@@ -6,8 +6,9 @@ use Illuminate\Support\Facades\Queue;
 
 it('queues contact message delivery and stores the message', function (): void {
     Queue::fake();
+    $locale = 'ru';
 
-    $response = $this->post(route('contacts.message.store'), [
+    $response = $this->post(route('contacts.message.store', ['locale' => $locale]), [
         'name' => 'Test User',
         'email' => 'user@example.com',
         'phone' => '+992111111111',
@@ -22,7 +23,7 @@ it('queues contact message delivery and stores the message', function (): void {
 });
 
 it('validates required fields for contact message', function (): void {
-    $response = $this->post(route('contacts.message.store'), []);
+    $response = $this->post(route('contacts.message.store', ['locale' => 'ru']), []);
 
     $response->assertSessionHasErrors(['name', 'email', 'message']);
 });

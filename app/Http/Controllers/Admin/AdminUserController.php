@@ -17,8 +17,7 @@ class AdminUserController extends Controller
 {
     public function __construct(
         protected UserService $userService,
-    ) {
-    }
+    ) {}
 
     public function index(): View|Factory|Application
     {
@@ -34,7 +33,7 @@ class AdminUserController extends Controller
         $this->authorize('create', User::class);
 
         return view('admin.users.create', [
-            'userModel' => new User(),
+            'userModel' => new User,
             'roles' => $this->assignableRoles(),
         ]);
     }
