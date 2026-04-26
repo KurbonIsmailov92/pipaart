@@ -59,7 +59,7 @@ Route::prefix('{locale}')
         Route::get('/contact', [PublicContactController::class, 'info'])->name('contact');
 
         Route::prefix('courses')->name('courses.')->group(function (): void {
-            Route::get('/list', [PublicCoursesController::class, 'legacyIndex'])->name('list');
+            Route::get('/list', [PublicCoursesController::class, 'index'])->name('list');
             Route::get('/schedule', [PublicScheduleController::class, 'index'])->name('schedule');
             Route::view('/reviews', 'courses.reviews')->name('reviews');
             Route::view('/registration', 'courses.registration')->name('registration');
@@ -111,7 +111,7 @@ Route::prefix('{locale}')
         });
 
         Route::prefix('news')->name('news.')->group(function (): void {
-            Route::get('/list', [PublicNewsPostController::class, 'legacyIndex'])->name('list');
+            Route::get('/list', [PublicNewsPostController::class, 'index'])->name('list');
             Route::get('/{newsPost}', [PublicNewsPostController::class, 'show'])->name('show');
         });
 

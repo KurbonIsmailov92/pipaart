@@ -4,10 +4,10 @@
         ['label' => __('ui.nav.about'), 'route' => 'about'],
         ['label' => __('ui.nav.certifications'), 'route' => 'certifications'],
         ['label' => __('ui.nav.courses'), 'route' => 'courses.index'],
-        ['label' => __('ui.nav.schedule'), 'route' => 'schedule.index'],
-        ['label' => __('ui.nav.news'), 'route' => 'news.index'],
+        ['label' => __('ui.nav.schedule'), 'route' => 'courses.schedule'],
+        ['label' => __('ui.nav.news'), 'route' => 'news.list'],
         ['label' => __('ui.nav.gallery'), 'route' => 'gallery.index'],
-        ['label' => __('ui.nav.contact'), 'route' => 'contact'],
+        ['label' => __('ui.nav.contact'), 'route' => 'contacts.index'],
     ];
 
     $currentRoute = \Illuminate\Support\Facades\Route::currentRouteName();

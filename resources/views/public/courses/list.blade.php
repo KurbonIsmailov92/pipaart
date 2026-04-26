@@ -28,6 +28,8 @@
                 <img
                     src="{{ $course->image_url ?: $fallbackImages[$loop->index % count($fallbackImages)] }}"
                     alt="{{ $course->title }}"
+                    loading="lazy"
+                    decoding="async"
                     class="h-56 w-full object-cover"
                 >
                 <div class="p-6">
@@ -41,7 +43,7 @@
                     <p class="mt-3 text-sm text-slate-600">{{ \Illuminate\Support\Str::limit($course->description, 160) }}</p>
                     <div class="mt-6 flex flex-wrap gap-3">
                         <x-ui.button-link :href="route('courses.show', ['locale' => $currentLocale, 'course' => $course])">{{ __('ui.common.open_course') }}</x-ui.button-link>
-                        <x-ui.button-link :href="route('contact', ['locale' => $currentLocale])" variant="ghost">{{ __('ui.nav.contact') }}</x-ui.button-link>
+                        <x-ui.button-link :href="route('contacts.index', ['locale' => $currentLocale])" variant="ghost">{{ __('ui.nav.contact') }}</x-ui.button-link>
                     </div>
                 </div>
             </x-ui.card>

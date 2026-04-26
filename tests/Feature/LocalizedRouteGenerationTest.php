@@ -34,8 +34,11 @@ it('renders localized public pages without missing locale errors', function (): 
     $this->get('/tg')->assertOk();
     $this->get('/en')->assertOk();
     $this->get('/ru/courses')->assertOk();
+    $this->get('/ru/courses/schedule')->assertOk();
     $this->get('/ru/news')->assertOk();
+    $this->get('/ru/news/list')->assertOk();
     $this->get('/ru/gallery')->assertOk();
+    $this->get('/ru/contacts')->assertOk();
 });
 
 it('renders home links with the current locale prefix', function (): void {
@@ -45,22 +48,22 @@ it('renders home links with the current locale prefix', function (): void {
 
     $ruResponse->assertOk();
     $ruResponse->assertSee(route('courses.index', ['locale' => 'ru']), false);
-    $ruResponse->assertSee(route('schedule.index', ['locale' => 'ru']), false);
-    $ruResponse->assertSee(route('news.index', ['locale' => 'ru']), false);
+    $ruResponse->assertSee(route('courses.schedule', ['locale' => 'ru']), false);
+    $ruResponse->assertSee(route('news.list', ['locale' => 'ru']), false);
     $ruResponse->assertSee(route('gallery.index', ['locale' => 'ru']), false);
-    $ruResponse->assertSee(route('contact', ['locale' => 'ru']), false);
+    $ruResponse->assertSee(route('contacts.index', ['locale' => 'ru']), false);
 
     $tgResponse->assertOk();
     $tgResponse->assertSee(route('courses.index', ['locale' => 'tg']), false);
-    $tgResponse->assertSee(route('schedule.index', ['locale' => 'tg']), false);
-    $tgResponse->assertSee(route('news.index', ['locale' => 'tg']), false);
+    $tgResponse->assertSee(route('courses.schedule', ['locale' => 'tg']), false);
+    $tgResponse->assertSee(route('news.list', ['locale' => 'tg']), false);
     $tgResponse->assertSee(route('gallery.index', ['locale' => 'tg']), false);
-    $tgResponse->assertSee(route('contact', ['locale' => 'tg']), false);
+    $tgResponse->assertSee(route('contacts.index', ['locale' => 'tg']), false);
 
     $enResponse->assertOk();
     $enResponse->assertSee(route('courses.index', ['locale' => 'en']), false);
-    $enResponse->assertSee(route('schedule.index', ['locale' => 'en']), false);
-    $enResponse->assertSee(route('news.index', ['locale' => 'en']), false);
+    $enResponse->assertSee(route('courses.schedule', ['locale' => 'en']), false);
+    $enResponse->assertSee(route('news.list', ['locale' => 'en']), false);
     $enResponse->assertSee(route('gallery.index', ['locale' => 'en']), false);
-    $enResponse->assertSee(route('contact', ['locale' => 'en']), false);
+    $enResponse->assertSee(route('contacts.index', ['locale' => 'en']), false);
 });

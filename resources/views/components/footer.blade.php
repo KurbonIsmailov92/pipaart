@@ -4,10 +4,10 @@
         ['label' => __('ui.nav.about'), 'route' => 'about'],
         ['label' => __('ui.nav.certifications'), 'route' => 'certifications'],
         ['label' => __('ui.nav.courses'), 'route' => 'courses.index'],
-        ['label' => __('ui.nav.schedule'), 'route' => 'schedule.index'],
-        ['label' => __('ui.nav.news'), 'route' => 'news.index'],
+        ['label' => __('ui.nav.schedule'), 'route' => 'courses.schedule'],
+        ['label' => __('ui.nav.news'), 'route' => 'news.list'],
         ['label' => __('ui.nav.gallery'), 'route' => 'gallery.index'],
-        ['label' => __('ui.nav.contact'), 'route' => 'contact'],
+        ['label' => __('ui.nav.contact'), 'route' => 'contacts.index'],
     ];
     $currentLocale = request()->route('locale', app()->getLocale());
 @endphp
@@ -23,7 +23,7 @@
                     </p>
                     <div class="mt-6 flex flex-wrap gap-3">
                         <a href="{{ route('courses.index', ['locale' => $currentLocale]) }}" class="pill-link">{{ __('ui.home.browse_courses') }}</a>
-                        <a href="{{ route('contact', ['locale' => $currentLocale]) }}" class="pill-link">{{ __('ui.nav.contact') }}</a>
+                        <a href="{{ route('contacts.index', ['locale' => $currentLocale]) }}" class="pill-link">{{ __('ui.nav.contact') }}</a>
                     </div>
                 </div>
 

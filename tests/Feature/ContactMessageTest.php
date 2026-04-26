@@ -5,6 +5,7 @@ use App\Models\ContactMessage;
 use Illuminate\Support\Facades\Queue;
 
 it('queues contact message delivery and stores the message', function (): void {
+    $locale = 'ru';
     Queue::fake();
     $locale = 'ru';
 

@@ -27,18 +27,18 @@ it('renders the localized oipba gallery page', function (): void {
     $this->get('/ru/oipba/gallery')->assertOk();
 });
 
-it('redirects the legacy localized news list page to the canonical news index', function (): void {
-    $this->get('/ru/news/list')
-        ->assertRedirect('/ru/news');
-});
-
-it('redirects the legacy localized courses list page to the canonical courses index', function (): void {
-    $this->get('/ru/courses/list')
-        ->assertRedirect('/ru/courses');
+it('renders the localized legacy list pages used by the public navigation', function (): void {
+    $this->get('/ru/news/list')->assertOk();
+    $this->get('/ru/courses/list')->assertOk();
 });
 
 it('renders the auth login page', function (): void {
     $this->get('/auth/login')->assertOk();
+});
+
+it('keeps the logout route alias used by the views', function (): void {
+    expect(route('auth.logout', absolute: false))->toBe('/auth/logout');
+    expect(route('logout', absolute: false))->toBe('/logout');
 });
 
 it('logs in with the seeded admin account', function (): void {
