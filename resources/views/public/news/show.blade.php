@@ -14,7 +14,7 @@
         :eyebrow="__('ui.nav.news')"
     >
         <x-slot:actions>
-            <x-ui.button-link :href="route('news.index', ['locale' => $currentLocale])" variant="secondary">{{ __('ui.common.back_to_news') }}</x-ui.button-link>
+            <x-ui.button-link :href="route('news.list', ['locale' => $currentLocale])" variant="secondary">{{ __('ui.common.back_to_news') }}</x-ui.button-link>
             @can('update', $newsPost)
                 <x-ui.button-link :href="route('admin.news.edit', $newsPost)" variant="ghost">{{ __('ui.common.edit_in_cms') }}</x-ui.button-link>
             @endcan
@@ -40,7 +40,7 @@
                 <p class="mt-2 text-sm font-semibold text-slate-800">{{ $newsPost->published_at?->format('F d, Y') }}</p>
                 <p class="mt-3 text-sm text-slate-600">{{ \Illuminate\Support\Str::limit($newsPost->body, 180) }}</p>
                 <div class="mt-6">
-                    <x-ui.button-link :href="route('contact', ['locale' => $currentLocale])">{{ __('ui.nav.contact') }}</x-ui.button-link>
+                    <x-ui.button-link :href="route('contacts.index', ['locale' => $currentLocale])">{{ __('ui.nav.contact') }}</x-ui.button-link>
                 </div>
             </x-ui.card>
         </div>

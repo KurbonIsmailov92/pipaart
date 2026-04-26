@@ -16,7 +16,7 @@
         </x-slot:actions>
     </x-ui.page-header>
 
-    <x-search :action="route('news.index', ['locale' => $currentLocale])" name="search" :placeholder="__('ui.news.search_placeholder')" :value="request('search')" />
+    <x-search :action="route('news.list', ['locale' => $currentLocale])" name="search" :placeholder="__('ui.news.search_placeholder')" :value="request('search')" />
 
     <div class="mt-8 grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
         @forelse($newsPosts as $newsPost)

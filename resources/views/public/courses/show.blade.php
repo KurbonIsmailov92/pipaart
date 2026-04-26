@@ -42,7 +42,7 @@
 
             <div class="mt-8 flex flex-wrap gap-3">
                 <x-ui.button-link :href="route('contacts.message', ['locale' => $currentLocale])">{{ __('ui.contact.open_form') }}</x-ui.button-link>
-                <x-ui.button-link :href="route('schedule.index', ['locale' => $currentLocale])" variant="secondary">{{ __('ui.home.view_schedule') }}</x-ui.button-link>
+                <x-ui.button-link :href="route('courses.schedule', ['locale' => $currentLocale])" variant="secondary">{{ __('ui.home.view_schedule') }}</x-ui.button-link>
             </div>
         </x-ui.card>
 

@@ -15,14 +15,12 @@ it('renders the localized courses page', function (): void {
     $this->get('/ru/courses')->assertOk();
 });
 
-it('redirects the legacy localized news list page to the canonical news index', function (): void {
-    $this->get('/ru/news/list')
-        ->assertRedirect('/ru/news');
+it('renders the localized courses list page', function (): void {
+    $this->get('/ru/courses/list')->assertOk();
 });
 
-it('redirects the legacy localized courses list page to the canonical courses index', function (): void {
-    $this->get('/ru/courses/list')
-        ->assertRedirect('/ru/courses');
+it('renders the localized news list page', function (): void {
+    $this->get('/ru/news/list')->assertOk();
 });
 
 it('renders the auth login page', function (): void {

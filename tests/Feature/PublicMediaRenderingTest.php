@@ -13,6 +13,7 @@ beforeEach(function (): void {
 });
 
 it('renders uploaded gallery images on admin and public pages', function (): void {
+    $locale = 'ru';
     $admin = User::factory()->admin()->create();
 
     $this->actingAs($admin)
@@ -42,16 +43,17 @@ it('renders uploaded gallery images on admin and public pages', function (): voi
         ->assertOk()
         ->assertSee($photo->image_url, false);
 
-    $this->get(route('gallery.index'))
+    $this->get(route('gallery.index', ['locale' => $locale]))
         ->assertOk()
         ->assertSee($photo->image_url, false);
 
-    $this->get(route('gallery.show', $photo))
+    $this->get(route('gallery.show', ['locale' => $locale, 'gallery' => $photo]))
         ->assertOk()
         ->assertSee($photo->image_url, false);
 });
 
 it('renders uploaded news images on admin and public pages', function (): void {
+    $locale = 'ru';
     $admin = User::factory()->admin()->create();
 
     $this->actingAs($admin)
@@ -89,16 +91,17 @@ it('renders uploaded news images on admin and public pages', function (): void {
         ->assertOk()
         ->assertSee($newsPost->image_url, false);
 
-    $this->get(route('news.index'))
+    $this->get(route('news.list', ['locale' => $locale]))
         ->assertOk()
         ->assertSee($newsPost->image_url, false);
 
-    $this->get(route('news.show', $newsPost))
+    $this->get(route('news.show', ['locale' => $locale, 'newsPost' => $newsPost]))
         ->assertOk()
         ->assertSee($newsPost->image_url, false);
 });
 
 it('renders uploaded course images on admin and public pages', function (): void {
+    $locale = 'ru';
     $admin = User::factory()->admin()->create();
 
     $this->actingAs($admin)
@@ -138,16 +141,17 @@ it('renders uploaded course images on admin and public pages', function (): void
         ->assertOk()
         ->assertSee($course->image_url, false);
 
-    $this->get(route('courses.index'))
+    $this->get(route('courses.index', ['locale' => $locale]))
         ->assertOk()
         ->assertSee($course->image_url, false);
 
-    $this->get(route('courses.show', $course))
+    $this->get(route('courses.show', ['locale' => $locale, 'course' => $course]))
         ->assertOk()
         ->assertSee($course->image_url, false);
 });
 
 it('renders fallback images when uploaded media is missing', function (): void {
+    $locale = 'ru';
     $gallery = Gallery::query()->create([
         'title' => 'Gallery fallback',
         'slug' => 'gallery-fallback',
@@ -169,15 +173,15 @@ it('renders fallback images when uploaded media is missing', function (): void {
     $newsFallback = Vite::asset('resources/images/news.jpg');
     $courseFallback = Vite::asset('resources/images/cipa.jpg');
 
-    $this->get(route('gallery.show', $gallery))
+    $this->get(route('gallery.show', ['locale' => $locale, 'gallery' => $gallery]))
         ->assertOk()
         ->assertSee($galleryFallback, false);
 
-    $this->get(route('news.show', $newsPost))
+    $this->get(route('news.show', ['locale' => $locale, 'newsPost' => $newsPost]))
         ->assertOk()
         ->assertSee($newsFallback, false);
 
-    $this->get(route('courses.show', $course))
+    $this->get(route('courses.show', ['locale' => $locale, 'course' => $course]))
         ->assertOk()
         ->assertSee($courseFallback, false);
 });

@@ -18,7 +18,7 @@
                 @endif
                 <p class="mt-4 text-sm text-slate-600">{{ $schedule->schedule_text }}</p>
                 <div class="mt-6">
-                    <x-ui.button-link :href="route('contact', ['locale' => $currentLocale])" variant="ghost">{{ __('ui.nav.contact') }}</x-ui.button-link>
+                    <x-ui.button-link :href="route('contacts.index', ['locale' => $currentLocale])" variant="ghost">{{ __('ui.nav.contact') }}</x-ui.button-link>
                 </div>
             </x-ui.card>
         @empty
