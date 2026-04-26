@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Gallery;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
 
@@ -10,8 +11,7 @@ class GalleryService
 {
     public function __construct(
         protected MediaService $mediaService,
-    ) {
-    }
+    ) {}
 
     /**
      * @param  array<string, mixed>  $data
@@ -67,6 +67,14 @@ class GalleryService
     public function paginatePublic(int $perPage = 12): LengthAwarePaginator
     {
         return Gallery::query()->ordered()->paginate($perPage);
+    }
+
+    public function latestPublic(int $limit = 6): Collection
+    {
+        return Gallery::query()
+            ->ordered()
+            ->limit($limit)
+            ->get();
     }
 
     protected function generateUniqueSlug(string $title, ?Gallery $gallery = null): string

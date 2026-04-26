@@ -22,7 +22,13 @@
 
             <a href="{{ route('gallery.show', ['locale' => $currentLocale, 'gallery' => $photo]) }}" class="group block overflow-hidden rounded-[2rem] bg-white shadow-[0_18px_45px_rgba(24,52,74,0.14)]">
                 <div class="overflow-hidden">
-                    <img src="{{ $imageUrl }}" alt="{{ $photo->title }}" class="h-64 w-full object-cover transition duration-500 group-hover:scale-105">
+                    <img
+                        src="{{ $imageUrl }}"
+                        alt="{{ $photo->title }}"
+                        loading="lazy"
+                        decoding="async"
+                        class="h-64 w-full object-cover transition duration-500 group-hover:scale-105"
+                    >
                 </div>
                 <div class="p-5">
                     <p class="ui-kicker">{{ $photo->category }}</p>

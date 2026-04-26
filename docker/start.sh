@@ -17,7 +17,7 @@ a2enmod mpm_prefork || true
 apache2ctl -M | grep mpm || true
 
 ensure_app_key() {
-  if [ -n "$APP_KEY" ]; then
+  if [ -n "${APP_KEY:-}" ]; then
     echo "APP_KEY loaded from environment"
     return 0
   fi
@@ -27,25 +27,19 @@ ensure_app_key() {
     return 0
   fi
 
-  if [ ! -f .env ] && [ -f .env.example ]; then
-    cp .env.example .env
+  echo "ERROR: APP_KEY is missing." >&2
+  echo "Set APP_KEY in the environment or in .env before starting the container." >&2
+
+  if [ "${APP_ENV:-production}" = "production" ]; then
+    echo "Production startup aborted to avoid generating a new runtime application key." >&2
   fi
 
-  GENERATED_APP_KEY="$(php -r 'echo "base64:".base64_encode(random_bytes(32));')"
-
-  if [ -f .env ] && grep -q '^APP_KEY=' .env; then
-    sed -i "s|^APP_KEY=.*|APP_KEY=${GENERATED_APP_KEY}|" .env
-  else
-    printf '\nAPP_KEY=%s\n' "$GENERATED_APP_KEY" >> .env
-  fi
-
-  echo "WARNING: APP_KEY was missing. Generated a runtime APP_KEY; set a persistent APP_KEY in Railway Variables."
+  exit 1
 }
 
 ensure_app_key
 
 php artisan optimize:clear || true
-
 php artisan storage:link || true
 php artisan migrate --force
 php artisan db:seed --force

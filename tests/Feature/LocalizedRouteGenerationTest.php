@@ -34,8 +34,10 @@ it('renders localized public pages without missing locale errors', function (): 
     $this->get('/tg')->assertOk();
     $this->get('/en')->assertOk();
     $this->get('/ru/courses')->assertOk();
-    $this->get('/ru/news')->assertOk();
+    $this->get('/ru/courses/schedule')->assertOk();
+    $this->get('/ru/news/list')->assertOk();
     $this->get('/ru/gallery')->assertOk();
+    $this->get('/ru/contacts')->assertOk();
 });
 
 it('renders home links with the current locale prefix', function (): void {
@@ -43,8 +45,8 @@ it('renders home links with the current locale prefix', function (): void {
 
     $response->assertOk();
     $response->assertSee(route('courses.index', ['locale' => 'ru']), false);
-    $response->assertSee(route('schedule.index', ['locale' => 'ru']), false);
-    $response->assertSee(route('news.index', ['locale' => 'ru']), false);
+    $response->assertSee(route('courses.schedule', ['locale' => 'ru']), false);
+    $response->assertSee(route('news.list', ['locale' => 'ru']), false);
     $response->assertSee(route('gallery.index', ['locale' => 'ru']), false);
-    $response->assertSee(route('contact', ['locale' => 'ru']), false);
+    $response->assertSee(route('contacts.index', ['locale' => 'ru']), false);
 });

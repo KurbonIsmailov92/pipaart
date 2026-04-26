@@ -16,13 +16,15 @@ return Application::configure(basePath: dirname(__DIR__))
             Route::middleware('web')->group(base_path('routes/admin.php'));
         },
     )
-    ->withMiddleware(function (Middleware $middleware) {
+    ->withMiddleware(function (Middleware $middleware): void {
         $middleware->redirectGuestsTo(static fn (): string => route('auth.login'));
+
         $middleware->alias([
             'locale' => SetApplicationLocale::class,
             'role' => EnsureUserHasRole::class,
         ]);
     })
-    ->withExceptions(function (Exceptions $exceptions) {
+    ->withExceptions(function (Exceptions $exceptions): void {
         //
-    })->create();
+    })
+    ->create();

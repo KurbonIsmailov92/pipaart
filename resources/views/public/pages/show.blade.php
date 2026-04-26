@@ -34,7 +34,7 @@
                 <p class="mt-3 text-sm text-slate-600">{{ \Illuminate\Support\Str::limit(strip_tags((string) $page->content), 180) }}</p>
                 <div class="mt-6 flex flex-wrap gap-3">
                     <x-ui.button-link :href="route('courses.index', ['locale' => $currentLocale])">{{ __('ui.nav.courses') }}</x-ui.button-link>
-                    <x-ui.button-link :href="route('contact', ['locale' => $currentLocale])" variant="secondary">{{ __('ui.nav.contact') }}</x-ui.button-link>
+                    <x-ui.button-link :href="route('contacts.index', ['locale' => $currentLocale])" variant="secondary">{{ __('ui.nav.contact') }}</x-ui.button-link>
                 </div>
             </x-ui.card>
         </div>

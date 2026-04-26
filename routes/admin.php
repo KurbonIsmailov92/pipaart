@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')
     ->name('admin.')
-    ->middleware(['auth', 'role:admin,teacher'])
+    ->middleware(['web', 'auth', 'role:admin,teacher'])
     ->group(function (): void {
         Route::get('/', DashboardController::class)->name('dashboard');
 

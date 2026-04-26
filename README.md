@@ -1,229 +1,196 @@
 # PIPAA CMS
 
-PIPAA CMS is a Laravel 11 content management system for the Public Institute of Professional Accountants and Auditors. It rebuilds the legacy `pipaa.tj` structure into a modern admin-managed website with public pages, certifications, courses, schedule, news, gallery, contact information, and user management.
+Laravel 11 CMS for the Public Institute of Professional Accountants and Auditors. The existing Blade-based public site and admin CMS are preserved, while routing, localization, media handling, migrations, tests, and deployment are hardened for production.
 
-## Tech Stack
+## Stack
 
-- Laravel 11
 - PHP 8.2+
+- Laravel 11
 - Blade + Vite
-- PostgreSQL or MySQL
-- Laravel queues for contact delivery
-- Tailwind/utility-based UI with reusable Blade components
+- Tailwind CSS
+- SQLite for tests, PostgreSQL/MySQL in production
 
-## Main Features
-
-- Public website sections:
-  - Home
-  - About
-  - Certifications
-  - Courses
-  - Schedule
-  - News
-  - Gallery
-  - Contact
-- Admin CMS for:
-  - Pages
-  - Courses
-  - Schedule
-  - News
-  - Gallery
-  - Users
-  - Settings
-- Role-based access control:
-  - `admin`
-  - `teacher`
-  - `student`
-  - `guest`
-- Queued contact workflow with stored messages
-- Media uploads through Laravel Storage
-
-## Roles
-
-- `admin`: full CMS access, users, settings, gallery
-- `teacher`: access to dashboard, pages, courses, schedule, news
-- `student`: read-only public access
-- `guest`: unauthenticated public access
-
-## Setup
+## Local Setup
 
 1. Install dependencies:
 
 ```bash
 composer install
-npm install
+npm ci
 ```
 
-2. Create environment file for local development:
+2. Create the environment file and application key:
 
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
-3. Configure database, mail, queue, and storage values in `.env`.
+3. Configure your database and production-style basics in `.env`:
 
-4. Run migrations and create the storage symlink:
+- `APP_URL`
+- `APP_KEY`
+- `DB_CONNECTION`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`
+- `FILESYSTEM_DISK=public`
+- `LOG_CHANNEL=stderr` for container platforms
+
+4. Run the app setup:
 
 ```bash
-php artisan migrate
-php artisan db:seed
+php artisan migrate --seed
 php artisan storage:link
 ```
 
-5. Start local development:
+5. Start development:
 
 ```bash
 composer run dev
 ```
 
-## Important Environment Variables
+## Admin Access
 
-- `APP_URL`
-- `APP_KEY`
-- `DB_CONNECTION`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`
-- `DATABASE_URL` as an optional Railway-friendly alternative to the individual `DB_*` values
-- `QUEUE_CONNECTION`
-- `FILESYSTEM_DISK=public`
-- `MAIL_MAILER`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`
-- `CONTACT_RECIPIENT_EMAIL`
-- `CONTACT_BACKUP_EMAIL`
-- `CONTACT_PHONE`
-- `CMS_SITE_NAME`
+- Login URL: `/auth/login`
+- Seeded admin email: `admin@admin.com`
+- Seeded admin password: `password1234`
 
-## Admin Usage
+Production seeding is intentionally limited: `DatabaseSeeder` only upserts the admin user in production, while sample courses/news seed only outside production.
 
-- Default seeded admin:
-  - Email: `admin@admin.com`
-  - Password: `password1234`
-- Login through `/auth/login`
-- Open `/admin`
-- Manage public pages from `/admin/pages`
-- Manage courses from `/admin/courses`
-- Manage schedule from `/admin/schedules`
-- Manage news from `/admin/news`
-- Manage gallery from `/admin/gallery`
-- Manage users from `/admin/users`
-- Manage site settings from `/admin/settings`
+## Routing and Localization
+
+- `/` redirects to `/ru`
+- Public pages are localized under `/{locale}`
+- Supported locales: `ru`, `tg`, `en`
+- Auth routes stay outside the locale prefix under `/auth`
+- Admin CMS lives under `/admin`
+
+When generating public URLs in Blade or controllers, always pass the locale:
+
+```php
+route('courses.index', ['locale' => app()->getLocale()])
+```
+
+## Media Uploads
+
+- Uploaded course, news, and gallery images use the `public` filesystem disk
+- Public access expects `php artisan storage:link`
+- Models expose a normalized `image_url` accessor that avoids duplicate `/storage/storage/...` paths
+- Blade templates should use `$model->image_url` directly instead of wrapping it in `Storage::url()`
+
+## Validation and Quality Checks
+
+Run the full baseline locally:
+
+```bash
+composer validate
+vendor/bin/pint --test
+php artisan route:clear
+php artisan route:cache
+php artisan migrate:fresh --seed
+php artisan test
+npm run build
+```
 
 ## Deployment
 
-Production deployment should use a real web server or container runtime. Do not use `php artisan serve`.
+### Required Production Variables
 
-### Render
-
-- Use `render-build.sh` as the build command.
-- The build script runs `php artisan migrate --force`, `php artisan db:seed --force`, and `php artisan storage:link || true` safely on each deploy before caching config, routes, and views.
-- Runtime containers created from `docker/start.sh` repeat the same commands safely for Docker/Render-style deployments.
-
-### Railway
-
-This repository is configured for Railway-native Laravel deployment via `railway.json`.
-
-- Railway is forced to use `RAILPACK`, so the service runs as a Laravel app with php-fpm and Caddy instead of the repo `Dockerfile`.
-- `railway/pre-deploy.sh` runs `php artisan migrate --force`, `php artisan db:seed --force`, `php artisan storage:link`, `php artisan config:cache`, `php artisan route:cache`, and `php artisan view:cache`.
-- `APP_KEY` must come from Railway Variables. No real `.env` file should be committed or required in Railway.
-- `config/database.php` accepts either `DATABASE_URL` / `DB_URL` or the standard `DB_*` variables.
-- Application defaults are intentionally bootstrap-safe: `SESSION_DRIVER=file`, `CACHE_STORE=file`, `QUEUE_CONNECTION=sync`. Switch them to database-backed values in Railway Variables if you want DB persistence for sessions, cache, or queues.
-
-Deploy from GitHub:
-
-1. Create a new Railway project.
-2. Choose `Deploy from GitHub repo` and select this repository.
-3. Add the required Railway Variables before the first real deploy.
-4. Add a Postgres service in the same Railway project if you want Railway-managed Postgres.
-5. Redeploy after variables are saved.
-6. In `Settings -> Networking`, click `Generate Domain` to get the public `*.up.railway.app` URL.
-
-Recommended Railway Variables:
-
-- `APP_NAME=PIPAA`
 - `APP_ENV=production`
 - `APP_DEBUG=false`
 - `APP_KEY=base64:...`
-- `APP_URL=https://your-domain.com` or your Railway public domain until the custom domain is ready
+- `APP_URL=https://your-domain.example`
 - `LOG_CHANNEL=stderr`
-- `LOG_LEVEL=info`
-- `QUEUE_CONNECTION=database`
-- `SESSION_DRIVER=database`
-- `CACHE_STORE=database`
 - `FILESYSTEM_DISK=public`
-- `DB_CONNECTION=pgsql`
-- `DATABASE_URL=${{Postgres.DATABASE_URL}}` or set `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` manually
-- `DB_SCHEMA=public`
-- `DB_SSLMODE=prefer`
 
-App-specific variables you likely also want in Railway:
+### Render
 
-- `CMS_SITE_NAME`
-- `CONTACT_RECIPIENT_EMAIL`
-- `CONTACT_BACKUP_EMAIL`
-- `CONTACT_PHONE`
-- `CONTACT_ADDRESS`
-- `MAIL_MAILER`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM_ADDRESS`
-- `SMS_ENABLED`, `SMS_API_URL`, `SMS_API_TOKEN`, `SMS_TO`, `SMS_SENDER` if SMS is used
+- Build command: `./render-build.sh`
+- Start command: your container/web runtime start command
+- `render-build.sh` only installs dependencies, builds assets, and caches config/routes/views
+- Database migrations and seeding should happen in a release/start phase, not in the build phase
 
-Generate an application key locally and paste it into Railway Variables:
+### Railway
 
-```bash
-php artisan key:generate --show
-```
+- `railway/pre-deploy.sh` is the release-phase hook
+- It runs:
+  - `php artisan migrate --force`
+  - `php artisan db:seed --force`
+  - `php artisan storage:link || true`
+  - `php artisan config:cache`
+  - `php artisan route:cache`
+  - `php artisan view:cache`
 
-What not to do on Railway:
+### Docker / Container Startup
 
-- Do not commit a production `.env`.
-- Do not run `php artisan key:generate` during build or startup.
-- Do not use `php artisan serve`.
-- Do not run migrations from the web start command.
+- `docker/start.sh` will:
+  - fail immediately if `APP_KEY` is missing
+  - run `storage:link || true`
+  - run `php artisan migrate --force`
+  - run `php artisan db:seed --force`
+  - start Apache
 
-### Custom Domain
+Do not rely on runtime APP key generation. Production containers must receive `APP_KEY` from environment variables or a mounted `.env`.
 
-1. Open the app service in Railway.
-2. Go to `Settings -> Networking -> + Custom Domain`.
-3. Add your apex domain (for example `example.com`) and/or `www.example.com`.
-4. Railway will show the exact DNS records required for that domain. Add exactly those records at your registrar or DNS provider.
-5. Wait for Railway to verify the records and provision SSL automatically.
+## CI
 
-Suggested domain setup:
+GitHub Actions runs:
 
-- Use the apex domain as the canonical `APP_URL`, for example `https://example.com`.
-- Add `www.example.com` as a second custom domain if you want it.
-- Redirect either `www` to apex or apex to `www` at your DNS/CDN layer so there is one canonical hostname.
+- `composer install`
+- `npm ci`
+- `.env` bootstrap + `php artisan key:generate`
+- `php artisan migrate:fresh --seed`
+- `vendor/bin/pint --test`
+- `php artisan test`
+- `npm run build`
 
-### Migrations and Workers
+## Troubleshooting
 
-- App deploys run migrations and seeders in `railway/pre-deploy.sh` before the new deployment starts serving traffic.
-- Container startup in `docker/start.sh` also runs `php artisan migrate --force`, `php artisan db:seed --force`, and `php artisan storage:link || true` for Docker/Render-style deployments.
-- If you need queued jobs in production, create a separate Railway worker service later that runs `php artisan queue:work`.
-- If you need scheduled tasks, create a separate Railway cron service later that runs `php artisan schedule:work` or a cron-triggered `php artisan schedule:run`.
+### `/ru` returns `500`
 
-## Testing
-
-Feature coverage includes:
-
-- admin access control
-- page and course CMS operations
-- public page rendering
-- contact form queuing and validation
-
-Run tests with:
+- Clear stale caches:
 
 ```bash
-php artisan test
+php artisan optimize:clear
+php artisan route:clear
 ```
 
-## Assets
+- Confirm `APP_KEY` is set
+- Confirm the database is migrated
 
-- The main public layout uses the existing `public/favicon.ico` as the browser tab icon.
-- Uploaded gallery, news, and course images are served through the Laravel `public` disk and expect `php artisan storage:link` to exist locally and in production.
+### SQLite migration fails on `courses_title_index`
 
-## Theme
+- The translation migration is now SQLite-safe and non-destructive
+- Re-run:
 
-- The public site supports light and dark mode.
-- Theme priority is `localStorage.theme`, then the system `prefers-color-scheme`, then light mode as the fallback.
-- The toggle stores the selected preference under the `theme` key without changing the existing Blade layout structure.
+```bash
+php artisan migrate:fresh --seed
+```
 
-## Notes
+If this still fails, verify you are on the latest code and not using an older cached migration file.
 
-- This project preserves the legacy information architecture while moving content into a maintainable CMS.
-- Some legacy static sections may still exist in the repository for historical compatibility, but the main public site now centers on CMS-managed content.
+### Images are not showing
+
+- Confirm `FILESYSTEM_DISK=public`
+- Confirm `php artisan storage:link` has been run
+- Check that the uploaded path exists under `storage/app/public`
+- Use `$model->image_url` in Blade instead of `Storage::url($model->image_url)`
+
+### News appears in admin but not publicly
+
+Public news only shows posts where:
+
+- `is_published = true`
+- `published_at` is `null` or not in the future
+
+Leaving `published_at` empty in the admin form publishes immediately.
+
+### Missing required parameter: locale
+
+- Public route generation must include `locale`
+- Example:
+
+```php
+route('news.show', [
+    'locale' => app()->getLocale(),
+    'newsPost' => $newsPost,
+])
+```

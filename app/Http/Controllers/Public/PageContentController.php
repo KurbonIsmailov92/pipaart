@@ -12,8 +12,7 @@ class PageContentController extends Controller
 {
     public function __construct(
         protected PageService $pageService,
-    ) {
-    }
+    ) {}
 
     public function about(): View|Factory|Application
     {

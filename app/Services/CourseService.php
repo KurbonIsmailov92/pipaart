@@ -20,8 +20,7 @@ class CourseService
 
     public function __construct(
         protected MediaService $mediaService,
-    ) {
-    }
+    ) {}
 
     /**
      * @param  array<string, mixed>  $data

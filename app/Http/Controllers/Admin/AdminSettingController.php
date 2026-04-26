@@ -15,8 +15,7 @@ class AdminSettingController extends Controller
 {
     public function __construct(
         protected SettingsService $settingsService,
-    ) {
-    }
+    ) {}
 
     public function index(): View|Factory|Application
     {

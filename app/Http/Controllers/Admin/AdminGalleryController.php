@@ -16,8 +16,7 @@ class AdminGalleryController extends Controller
 {
     public function __construct(
         protected GalleryService $galleryService,
-    ) {
-    }
+    ) {}
 
     public function index(): View|Factory|Application
     {
@@ -33,7 +32,7 @@ class AdminGalleryController extends Controller
         $this->authorize('create', Gallery::class);
 
         return view('admin.gallery.create', [
-            'photo' => new Gallery(),
+            'photo' => new Gallery,
         ]);
     }
 

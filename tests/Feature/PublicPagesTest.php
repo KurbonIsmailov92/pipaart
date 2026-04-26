@@ -52,10 +52,12 @@ it('renders the core public pages', function (): void {
     $this->get(route('about', ['locale' => $locale]))->assertOk();
     $this->get(route('certifications', ['locale' => $locale]))->assertOk();
     $this->get(route('courses.index', ['locale' => $locale]))->assertOk();
-    $this->get(route('schedule.index', ['locale' => $locale]))->assertOk();
-    $this->get(route('news.index', ['locale' => $locale]))->assertOk();
+    $this->get(route('courses.list', ['locale' => $locale]))->assertOk();
+    $this->get(route('courses.schedule', ['locale' => $locale]))->assertOk();
+    $this->get(route('news.list', ['locale' => $locale]))->assertOk();
     $this->get(route('gallery.index', ['locale' => $locale]))->assertOk();
-    $this->get(route('contact', ['locale' => $locale]))->assertOk();
+    $this->get(route('contacts.index', ['locale' => $locale]))->assertOk();
+    $this->get(route('contacts.message', ['locale' => $locale]))->assertOk();
     $this->get(route('courses.show', ['locale' => $locale, 'course' => $course]))->assertOk();
     $this->get(route('news.show', ['locale' => $locale, 'newsPost' => $news]))->assertOk();
     $this->get(route('gallery.show', ['locale' => $locale, 'gallery' => $gallery]))->assertOk();

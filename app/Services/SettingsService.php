@@ -16,12 +16,12 @@ class SettingsService
     {
         try {
             if (! Schema::hasTable('settings')) {
-                return new Collection();
+                return new Collection;
             }
 
             return Setting::query()->orderBy('key')->get();
         } catch (Throwable) {
-            return new Collection();
+            return new Collection;
         }
     }
 

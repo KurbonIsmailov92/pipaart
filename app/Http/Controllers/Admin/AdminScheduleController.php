@@ -17,8 +17,7 @@ class AdminScheduleController extends Controller
 {
     public function __construct(
         protected ScheduleService $scheduleService,
-    ) {
-    }
+    ) {}
 
     public function index(): View|Factory|Application
     {
@@ -34,7 +33,7 @@ class AdminScheduleController extends Controller
         $this->authorize('create', Schedule::class);
 
         return view('admin.schedules.create', [
-            'schedule' => new Schedule(),
+            'schedule' => new Schedule,
             'courses' => Course::query()->ordered()->get(),
         ]);
     }

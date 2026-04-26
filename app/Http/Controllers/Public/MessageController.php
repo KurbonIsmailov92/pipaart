@@ -16,8 +16,7 @@ class MessageController extends Controller
     public function __construct(
         protected ContactMessageService $contactMessageService,
         protected SettingsService $settingsService,
-    ) {
-    }
+    ) {}
 
     public function create(): View|Factory|Application
     {

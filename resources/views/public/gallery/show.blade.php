@@ -27,7 +27,7 @@
             <h2 class="mt-2 text-2xl font-semibold text-slate-950">{{ $photo->title }}</h2>
             <p class="mt-4 text-slate-600">{{ $photo->description }}</p>
             <div class="mt-8">
-                <x-ui.button-link :href="route('contact', ['locale' => $currentLocale])">{{ __('ui.nav.contact') }}</x-ui.button-link>
+                <x-ui.button-link :href="route('contacts.index', ['locale' => $currentLocale])">{{ __('ui.nav.contact') }}</x-ui.button-link>
             </div>
         </x-ui.card>
     </div>

@@ -15,14 +15,13 @@ trait BuildsLocalizedRules
         array $rules,
         bool $required = true,
         bool $requireAtLeastOneTranslation = false
-    ): array
-    {
+    ): array {
         $resolvedRules = [
             $field => [$required ? 'required' : 'nullable', 'array'],
         ];
 
         if ($requireAtLeastOneTranslation) {
-            $resolvedRules[$field][] = new HasFilledTranslation();
+            $resolvedRules[$field][] = new HasFilledTranslation;
         }
 
         foreach (config('app.supported_locales', ['ru', 'tg', 'en']) as $locale) {

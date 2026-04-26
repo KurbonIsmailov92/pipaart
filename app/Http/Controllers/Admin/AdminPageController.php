@@ -16,8 +16,7 @@ class AdminPageController extends Controller
 {
     public function __construct(
         protected PageService $pageService,
-    ) {
-    }
+    ) {}
 
     public function index(): View|Factory|Application
     {
@@ -33,7 +32,7 @@ class AdminPageController extends Controller
         $this->authorize('create', Page::class);
 
         return view('admin.pages.create', [
-            'page' => new Page(),
+            'page' => new Page,
         ]);
     }
 
