@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
-use Illuminate\Http\Request;
 
 class CipaController extends Controller
 {
-    public function index(): View|Factory|Application {
+    public function index(): View|Factory|Application
+    {
         return view('cipa.index');
     }
 
@@ -30,7 +30,7 @@ class CipaController extends Controller
 
     public function rules(): View|Factory|Application
     {
-     return view('cipa.rules');
+        return view('cipa.rules');
     }
 
     public function id(): View|Factory|Application
@@ -47,5 +47,4 @@ class CipaController extends Controller
     {
         return view('cipa.certificates');
     }
-
 }

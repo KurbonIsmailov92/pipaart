@@ -24,6 +24,8 @@
                 <img
                     src="{{ $newsPost->image_url ?: $fallbackImage }}"
                     alt="{{ $newsPost->title }}"
+                    loading="lazy"
+                    decoding="async"
                     class="h-56 w-full object-cover"
                 >
                 <div class="p-6">

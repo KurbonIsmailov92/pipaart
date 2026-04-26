@@ -5,14 +5,15 @@ namespace App\Models;
 use App\Models\Concerns\HasTranslatableAttributes;
 use App\Models\Concerns\ResolvesPublicMediaUrls;
 use App\Support\TranslationQuery;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 
 class NewsPost extends Model
 {
     /** @use HasFactory<\Database\Factories\NewsPostFactory> */
     use HasFactory;
+
     use HasTranslatableAttributes;
     use ResolvesPublicMediaUrls;
 

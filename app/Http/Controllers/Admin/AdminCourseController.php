@@ -16,8 +16,7 @@ class AdminCourseController extends Controller
 {
     public function __construct(
         protected CourseService $courseService,
-    ) {
-    }
+    ) {}
 
     public function index(): View|Factory|Application
     {
@@ -33,7 +32,7 @@ class AdminCourseController extends Controller
         $this->authorize('create', Course::class);
 
         return view('admin.courses.create', [
-            'course' => new Course(),
+            'course' => new Course,
         ]);
     }
 

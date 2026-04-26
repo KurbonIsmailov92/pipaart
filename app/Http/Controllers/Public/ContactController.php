@@ -12,8 +12,7 @@ class ContactController extends Controller
 {
     public function __construct(
         protected SettingsService $settingsService,
-    ) {
-    }
+    ) {}
 
     public function info(): View|Factory|Application
     {

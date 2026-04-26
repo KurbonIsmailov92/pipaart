@@ -28,6 +28,8 @@
                 <img
                     src="{{ $course->image_url ?: $fallbackImages[$loop->index % count($fallbackImages)] }}"
                     alt="{{ $course->title }}"
+                    loading="lazy"
+                    decoding="async"
                     class="h-56 w-full object-cover"
                 >
                 <div class="p-6">

@@ -25,7 +25,7 @@ return new class extends Migration
         });
 
         DB::table('courses')->whereNull('duration')->update([
-            'duration' => DB::raw("CAST(hours as varchar(255))"),
+            'duration' => DB::raw('CAST(hours as varchar(255))'),
             'price' => 0,
         ]);
 

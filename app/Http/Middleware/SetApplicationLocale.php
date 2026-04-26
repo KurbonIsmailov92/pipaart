@@ -21,8 +21,8 @@ class SetApplicationLocale
         app()->setLocale($locale);
         Carbon::setLocale($locale);
 
-        if (is_string($routeLocale) && in_array($routeLocale, $supportedLocales, true)) {
-            URL::defaults(['locale' => $routeLocale]);
+        if ($request->route()?->hasParameter('locale')) {
+            URL::defaults(['locale' => $locale]);
         }
 
         if ($request->hasSession()) {

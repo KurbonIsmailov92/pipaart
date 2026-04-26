@@ -5,12 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
-use Illuminate\Http\Request;
-
 
 class GarpController extends Controller
 {
-    public function index(): View|Factory|Application {
+    public function index(): View|Factory|Application
+    {
         return view('garp.index');
     }
 
@@ -33,5 +32,4 @@ class GarpController extends Controller
     {
         return view('garp.topic');
     }
-
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\GalleryService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -38,8 +39,10 @@ class AboutPipaaController extends Controller
         return view('oipba.collective');
     }
 
-    public function gallery(): View|Factory|Application
+    public function gallery(GalleryService $galleryService): View|Factory|Application
     {
-        return view('oipba.gallery');
+        return view('oipba.gallery', [
+            'photos' => $galleryService->latestPublic(),
+        ]);
     }
 }

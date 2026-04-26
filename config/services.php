@@ -28,7 +28,6 @@ return [
         'key' => env('RESEND_KEY'),
     ],
 
-
     'contact' => [
         'recipient' => env('CONTACT_RECIPIENT_EMAIL', 'info@pipaa.tj'),
     ],

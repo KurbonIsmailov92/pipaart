@@ -27,7 +27,7 @@ class SignUpRequest extends FormRequest
             'email' => str(request('email'))
                 ->squish()
                 ->lower()
-                ->value()
+                ->value(),
         ]);
     }
 }
