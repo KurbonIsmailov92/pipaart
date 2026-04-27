@@ -14,8 +14,15 @@ class SignInRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'email:dns'],
+            'email' => ['required', 'email:rfc'],
             'password' => ['required'],
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'email' => str(request('email'))->squish()->lower()->value(),
+        ]);
     }
 }

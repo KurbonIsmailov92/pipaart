@@ -29,4 +29,29 @@ class StoreCourseRequest extends FormRequest
             ...$this->localizedFieldRules('description', ['string']),
         ];
     }
+
+    protected function prepareForValidation(): void
+    {
+        $this->normalizeLegacyLocalizedField('title');
+        $this->normalizeLegacyLocalizedField('description');
+    }
+
+    private function normalizeLegacyLocalizedField(string $field): void
+    {
+        $value = $this->input($field);
+
+        if (is_array($value)) {
+            return;
+        }
+
+        if (! is_string($value) || trim($value) === '') {
+            return;
+        }
+
+        $this->merge([
+            $field => [
+                config('app.fallback_locale', 'ru') => trim($value),
+            ],
+        ]);
+    }
 }

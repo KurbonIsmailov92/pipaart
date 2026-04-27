@@ -128,13 +128,31 @@ class AuthController extends Controller
         auth()->login($user);
         $request->session()->regenerate();
 
-        return redirect()->intended($this->localizedHomeUrl($request));
+        return redirect()->intended($this->localizedCabinetUrl($request));
     }
 
     protected function localizedHomeUrl(Request $request): string
     {
         return route('home', [
-            'locale' => $request->session()->get('locale', config('app.locale', 'ru')),
+            'locale' => $this->resolveLocale($request),
         ]);
+    }
+
+    protected function localizedCabinetUrl(Request $request): string
+    {
+        return route('cabinet.index', [
+            'locale' => $this->resolveLocale($request),
+        ]);
+    }
+
+    protected function resolveLocale(Request $request): string
+    {
+        $locale = $request->hasSession()
+            ? $request->session()->get('locale', config('app.locale', 'ru'))
+            : config('app.locale', 'ru');
+
+        return in_array($locale, config('app.supported_locales', ['ru', 'tg', 'en']), true)
+            ? $locale
+            : config('app.locale', 'ru');
     }
 }

@@ -67,3 +67,22 @@ it('admin can create a course', function (): void {
 
     expect(Course::query()->where('slug', 'cms-course')->exists())->toBeTrue();
 });
+
+it('admin can create a course from legacy flat course fields', function (): void {
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)
+        ->post(route('admin.courses.store'), [
+            'title' => 'Legacy Flat Course',
+            'description' => 'Legacy flat course description',
+            'duration' => '8 weeks',
+            'hours' => 24,
+            'price' => 50,
+        ])
+        ->assertRedirect(route('admin.courses.index'));
+
+    $course = Course::query()->where('slug', 'legacy-flat-course')->firstOrFail();
+
+    expect($course->getTranslation('title', 'ru'))->toBe('Legacy Flat Course')
+        ->and($course->getTranslation('description', 'ru'))->toBe('Legacy flat course description');
+});
