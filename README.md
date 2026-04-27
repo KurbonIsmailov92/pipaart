@@ -109,14 +109,17 @@ npm run build
 - `ADMIN_NAME="PIPAA Admin"`
 - `LOG_CHANNEL=stderr`
 - `FILESYSTEM_DISK=public`
+- `DB_CONNECTION=pgsql`
+- `DATABASE_URL` from Render PostgreSQL, or `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`
 
 ### Render
 
 - Use `./render-build.sh` as the build command
-- `render-build.sh` installs dependencies, builds assets, clears stale optimize caches, and caches config/routes/views
+- `render-build.sh` installs dependencies and builds assets only
 - It does not start a server
 - It does not run migrations or seeders in the build phase
 - Use `bash ./render-release.sh` as the release/pre-deploy command so every deploy runs migrations and seeders
+- Production startup/release fails clearly if `DB_CONNECTION=sqlite` or PostgreSQL is not configured
 
 ### Railway
 
@@ -133,14 +136,16 @@ npm run build
 
 - `docker/start.sh` will:
   - fail immediately if `APP_KEY` is missing
+  - fail immediately if production is configured to use SQLite
   - run `php artisan storage:link || true`
   - run `php artisan migrate --force`
   - run `php artisan db:seed --force`
+  - cache config/routes/views after migrations and seeders
   - start Apache
 
 Production startup never generates a new runtime `APP_KEY`. Provide it through environment variables or a mounted `.env`.
 
-`DatabaseSeeder` is safe to run repeatedly during deploys. It upserts the required admin user and skips sample content in production.
+`DatabaseSeeder` is safe to run repeatedly during deploys. It upserts the required admin user, creates required settings/homepage hero defaults, and skips sample content in production.
 
 ## CI
 
@@ -163,6 +168,13 @@ Clear stale caches and confirm the app key and database are ready:
 ```bash
 php artisan optimize:clear
 php artisan route:clear
+```
+
+On Render, confirm production is using PostgreSQL, not SQLite:
+
+```bash
+DB_CONNECTION=pgsql
+DATABASE_URL=postgres://...
 ```
 
 ### SQLite migration fails around indexed translated columns

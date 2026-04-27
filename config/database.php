@@ -4,13 +4,14 @@ use Illuminate\Support\Str;
 
 $databaseUrl = env('DATABASE_URL', env('DB_URL'));
 $databaseScheme = $databaseUrl ? parse_url($databaseUrl, PHP_URL_SCHEME) : null;
+$isProduction = env('APP_ENV') === 'production';
 $defaultConnection = match ($databaseScheme) {
     'pgsql', 'postgres', 'postgresql' => 'pgsql',
     'mysql' => 'mysql',
     'mariadb' => 'mariadb',
     'sqlite' => 'sqlite',
     'sqlsrv' => 'sqlsrv',
-    default => 'sqlite',
+    default => $isProduction ? 'pgsql' : 'sqlite',
 };
 
 return [

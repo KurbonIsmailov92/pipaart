@@ -2,7 +2,9 @@
 
 use App\Enums\UserRole;
 use App\Models\Course;
+use App\Models\HomeHero;
 use App\Models\NewsPost;
+use App\Models\Setting;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Support\Facades\Hash;
@@ -61,5 +63,17 @@ it('does not seed sample content in production', function (): void {
 
     expect(User::query()->where('email', 'admin@pipaa.tj')->count())->toBe(1)
         ->and(Course::query()->count())->toBe(0)
-        ->and(NewsPost::query()->count())->toBe(0);
+        ->and(NewsPost::query()->count())->toBe(0)
+        ->and(Setting::query()->where('key', 'site_name')->exists())->toBeTrue()
+        ->and(HomeHero::query()->whereIn('locale', ['ru', 'tg', 'en'])->count())->toBe(3);
+});
+
+it('keeps required settings and homepage heroes idempotent', function (): void {
+    $this->seed(DatabaseSeeder::class);
+    $this->seed(DatabaseSeeder::class);
+
+    expect(Setting::query()->where('key', 'site_name')->count())->toBe(1)
+        ->and(HomeHero::query()->where('locale', 'ru')->count())->toBe(1)
+        ->and(HomeHero::query()->where('locale', 'tg')->count())->toBe(1)
+        ->and(HomeHero::query()->where('locale', 'en')->count())->toBe(1);
 });

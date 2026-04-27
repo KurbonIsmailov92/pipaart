@@ -5,7 +5,7 @@
     <div class="flex items-center justify-center min-h-screen">
         <div class="px-8 py-6 mt-4 text-left shadow-lg rounded-lg max-w-md w-full">
             <h3 class="text-2xl font-bold text-center">{{ __('Создать аккаунт') }}</h3>
-            <x-form.form method="POST" action="{{ route('auth.register') }}">
+            <x-form.form method="POST" action="{{ route('auth.register.store') }}">
                 <div class="mt-4 space-y-4">
                     <div>
                         <x-form.input name="name" type="text" label="Имя" placeholder="Имя" />

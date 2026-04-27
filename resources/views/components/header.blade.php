@@ -15,7 +15,7 @@
     $currentLocale = request()->route('locale', app()->getLocale());
 @endphp
 
-<header class="site-header relative z-50 mt-4 w-full max-w-full overflow-x-hidden text-white">
+<header class="site-header relative z-50 mt-4 w-full max-w-full text-white">
     <div class="shell-container w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="surface-card w-full max-w-full border border-white/10 bg-[#143950]/70 px-4 py-3 text-white shadow-2xl sm:px-6">
             <div class="flex w-full min-w-0 max-w-full items-center justify-between gap-3 lg:gap-6">
@@ -34,11 +34,16 @@
                     @endforeach
                 </nav>
 
-                <details class="mobile-nav group static max-w-full flex-none lg:hidden">
-                    <summary class="inline-flex list-none w-auto max-w-full items-center justify-center rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-medium backdrop-blur marker:hidden sm:px-4 sm:py-2 sm:text-sm">
-                        {{ __('ui.common.menu') }}
+                <details class="mobile-nav group static max-w-full flex-none lg:hidden" data-mobile-nav>
+                    <summary class="inline-flex list-none w-auto max-w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-medium backdrop-blur marker:hidden sm:px-4 sm:py-2 sm:text-sm" aria-label="{{ __('ui.common.menu') }}" data-mobile-nav-toggle>
+                        <span aria-hidden="true" class="grid h-4 w-4 content-center gap-1">
+                            <span class="block h-0.5 rounded-full bg-current"></span>
+                            <span class="block h-0.5 rounded-full bg-current"></span>
+                            <span class="block h-0.5 rounded-full bg-current"></span>
+                        </span>
+                        <span>{{ __('ui.common.menu') }}</span>
                     </summary>
-                    <div class="absolute left-4 right-4 top-full z-50 mt-3 w-auto max-w-none overflow-hidden rounded-[2rem] border border-white/15 bg-[#143950]/95 p-3 shadow-2xl sm:left-6 sm:right-6 sm:p-4">
+                    <div class="absolute left-4 right-4 top-full z-[80] mt-3 w-auto max-w-none overflow-hidden rounded-[2rem] border border-white/15 bg-[#143950]/95 p-3 shadow-2xl sm:left-6 sm:right-6 sm:p-4">
                         <div class="grid max-w-full gap-2 text-sm">
                             @foreach($navItems as $item)
                                 <a

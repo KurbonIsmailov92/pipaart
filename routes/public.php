@@ -28,6 +28,10 @@ $supportedLocalesPattern = implode('|', array_map(
 
 Route::get('/', RootRedirectController::class);
 
+Route::redirect('/tj', '/tg');
+Route::redirect('/tj/{path}', '/tg/{path}')
+    ->where('path', '.*');
+
 Route::get('/media/public/{path}', MediaController::class)
     ->where('path', '.*')
     ->name('media.public');

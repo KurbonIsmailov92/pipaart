@@ -3,12 +3,23 @@
 namespace App\Http\Requests;
 
 use App\Http\Requests\Concerns\BuildsLocalizedRules;
+use App\Http\Requests\Concerns\NormalizesLocalizedInput;
 use App\Models\NewsPost;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreNewsPostRequest extends FormRequest
 {
     use BuildsLocalizedRules;
+    use NormalizesLocalizedInput;
+
+    protected function prepareForValidation(): void
+    {
+        if (! $this->has('content') && $this->has('text')) {
+            $this->merge(['content' => $this->input('text')]);
+        }
+
+        $this->normalizeLocalizedFields(['title', 'content']);
+    }
 
     public function authorize(): bool
     {

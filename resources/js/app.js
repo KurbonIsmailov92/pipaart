@@ -141,3 +141,35 @@ document.addEventListener('submit', (event) => {
 }, true);
 
 window.addEventListener('pageshow', resetSubmitButtons);
+
+document.querySelectorAll('[data-mobile-nav]').forEach((menu) => {
+    if (!(menu instanceof HTMLDetailsElement)) {
+        return;
+    }
+
+    menu.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => {
+            menu.open = false;
+        });
+    });
+});
+
+document.addEventListener('click', (event) => {
+    document.querySelectorAll('[data-mobile-nav][open]').forEach((menu) => {
+        if (menu instanceof HTMLDetailsElement && !menu.contains(event.target)) {
+            menu.open = false;
+        }
+    });
+});
+
+document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') {
+        return;
+    }
+
+    document.querySelectorAll('[data-mobile-nav][open]').forEach((menu) => {
+        if (menu instanceof HTMLDetailsElement) {
+            menu.open = false;
+        }
+    });
+});

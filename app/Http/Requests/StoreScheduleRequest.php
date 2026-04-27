@@ -7,6 +7,27 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreScheduleRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        $payload = [];
+
+        if (! $this->has('start_date') && $this->has('starts_at')) {
+            $payload['start_date'] = $this->input('starts_at');
+        }
+
+        if (! $this->has('teacher') && $this->has('instructor')) {
+            $payload['teacher'] = $this->input('instructor');
+        }
+
+        if (! $this->has('schedule_text')) {
+            $payload['schedule_text'] = $this->input('description', $this->input('title'));
+        }
+
+        if ($payload !== []) {
+            $this->merge($payload);
+        }
+    }
+
     public function authorize(): bool
     {
         return $this->user()?->can('create', Schedule::class) ?? false;

@@ -11,6 +11,11 @@ it('renders the localized home page', function (): void {
     $this->get('/ru')->assertOk();
 });
 
+it('redirects legacy tj locale links to the canonical tg locale', function (): void {
+    $this->get('/tj')->assertRedirect('/tg');
+    $this->get('/tj/courses')->assertRedirect('/tg/courses');
+});
+
 it('renders the localized courses page', function (): void {
     $this->get('/ru/courses')->assertOk();
 });

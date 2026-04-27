@@ -12,6 +12,14 @@ class UpdateGalleryRequest extends FormRequest
         if ($this->hasFile('image') && ! $this->hasFile('image_path')) {
             $this->files->set('image_path', $this->file('image'));
         }
+
+        if ($this->hasFile('photo') && ! $this->hasFile('image_path')) {
+            $this->files->set('image_path', $this->file('photo'));
+        }
+
+        if (! $this->filled('category')) {
+            $this->merge(['category' => 'general']);
+        }
     }
 
     public function authorize(): bool
@@ -33,6 +41,7 @@ class UpdateGalleryRequest extends FormRequest
             'category' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
             'image_path' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
         ];
     }

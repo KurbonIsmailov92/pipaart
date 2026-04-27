@@ -8,7 +8,11 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $this->call(AdminUserSeeder::class);
+        $this->call([
+            AdminUserSeeder::class,
+            SettingsSeeder::class,
+            HomeHeroSeeder::class,
+        ]);
 
         if (! app()->environment('production')) {
             $this->call([
