@@ -42,11 +42,17 @@ it('keeps the logout route alias used by the views', function (): void {
 });
 
 it('logs in with the seeded admin account', function (): void {
+    config([
+        'admin.email' => 'admin@pipaa.tj',
+        'admin.name' => 'PIPAA Admin',
+        'admin.password' => 'Mirzoal!ev123',
+    ]);
+
     $this->seed(\Database\Seeders\AdminUserSeeder::class);
 
     $this->post(route('auth.login.store'), [
-        'email' => 'admin@admin.com',
-        'password' => 'password1234',
+        'email' => 'admin@pipaa.tj',
+        'password' => 'Mirzoal!ev123',
     ])->assertRedirect(route('home', ['locale' => 'ru']));
 });
 

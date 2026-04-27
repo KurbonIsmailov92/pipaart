@@ -18,6 +18,7 @@ use App\Policies\SettingPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Throwable;
@@ -31,6 +32,10 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        if ($this->app->environment('production')) {
+            URL::forceScheme('https');
+        }
+
         Gate::policy(Course::class, CoursePolicy::class);
         Gate::policy(NewsPost::class, NewsPostPolicy::class);
         Gate::policy(Gallery::class, GalleryPolicy::class);

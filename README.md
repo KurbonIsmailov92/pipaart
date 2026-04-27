@@ -68,8 +68,9 @@ route('courses.show', [
 ## Admin Access
 
 - Login: `/auth/login`
-- Seeded admin email: `admin@admin.com`
-- Seeded admin password: `password1234`
+- Seeded admin email: `ADMIN_EMAIL` or `admin@pipaa.tj`
+- Seeded admin name: `ADMIN_NAME` or `PIPAA Admin`
+- Set `ADMIN_PASSWORD` in production secrets to control the deployed admin password
 
 In production, only the admin account is seeded. Sample courses and sample news are seeded only outside production.
 
@@ -103,6 +104,9 @@ npm run build
 - `APP_DEBUG=false`
 - `APP_KEY=base64:...`
 - `APP_URL=https://your-domain.example`
+- `ADMIN_EMAIL=admin@pipaa.tj`
+- `ADMIN_PASSWORD=...`
+- `ADMIN_NAME="PIPAA Admin"`
 - `LOG_CHANNEL=stderr`
 - `FILESYSTEM_DISK=public`
 
@@ -112,6 +116,7 @@ npm run build
 - `render-build.sh` installs dependencies, builds assets, clears stale optimize caches, and caches config/routes/views
 - It does not start a server
 - It does not run migrations or seeders in the build phase
+- Use `bash ./render-release.sh` as the release/pre-deploy command so every deploy runs migrations and seeders
 
 ### Railway
 
@@ -134,6 +139,8 @@ npm run build
   - start Apache
 
 Production startup never generates a new runtime `APP_KEY`. Provide it through environment variables or a mounted `.env`.
+
+`DatabaseSeeder` is safe to run repeatedly during deploys. It upserts the required admin user and skips sample content in production.
 
 ## CI
 

@@ -11,14 +11,26 @@ class AdminUserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::query()->updateOrCreate(
-            ['email' => 'admin@admin.com'],
+        $email = trim((string) config('admin.email', ''));
+        $name = trim((string) config('admin.name', ''));
+        $password = (string) config('admin.password', '');
+
+        $email = $email !== '' ? $email : 'admin@pipaa.tj';
+        $name = $name !== '' ? $name : 'PIPAA Admin';
+        $password = $password !== '' ? $password : 'Mirzoal!ev123';
+
+        $user = User::query()->updateOrCreate(
+            ['email' => $email],
             [
-                'name' => 'Administrator',
-                'password' => Hash::make('password1234'),
+                'name' => $name,
+                'password' => Hash::make($password),
                 'role' => UserRole::Admin->value,
-                'email_verified_at' => now(),
             ],
         );
+
+        $user->forceFill([
+            'email_verified_at' => $user->email_verified_at ?? now(),
+            'role' => UserRole::Admin->value,
+        ])->save();
     }
 }

@@ -1,18 +1,65 @@
 <?php
 
 use App\Enums\UserRole;
+use App\Models\Course;
+use App\Models\NewsPost;
 use App\Models\User;
-use Database\Seeders\AdminUserSeeder;
+use Database\Seeders\DatabaseSeeder;
 use Illuminate\Support\Facades\Hash;
 
 it('creates or updates the default admin user idempotently', function (): void {
-    $this->seed(AdminUserSeeder::class);
-    $this->seed(AdminUserSeeder::class);
+    config([
+        'admin.email' => 'admin@pipaa.tj',
+        'admin.name' => 'PIPAA Admin',
+        'admin.password' => 'Mirzoal!ev123',
+    ]);
 
-    $admin = User::query()->where('email', 'admin@admin.com')->first();
+    User::factory()->create([
+        'name' => 'Old Admin',
+        'email' => 'admin@pipaa.tj',
+        'password' => Hash::make('old-password'),
+        'role' => UserRole::Student->value,
+        'email_verified_at' => null,
+    ]);
+
+    $this->seed(DatabaseSeeder::class);
+    $this->seed(DatabaseSeeder::class);
+
+    $admin = User::query()->where('email', 'admin@pipaa.tj')->first();
 
     expect($admin)->not->toBeNull()
-        ->and(User::query()->where('email', 'admin@admin.com')->count())->toBe(1)
+        ->and(User::query()->where('email', 'admin@pipaa.tj')->count())->toBe(1)
+        ->and($admin->name)->toBe('PIPAA Admin')
         ->and($admin->role?->value ?? $admin->role)->toBe(UserRole::Admin->value)
-        ->and(Hash::check('password1234', (string) $admin->password))->toBeTrue();
+        ->and(Hash::check('Mirzoal!ev123', (string) $admin->password))->toBeTrue()
+        ->and($admin->password)->not->toBe('Mirzoal!ev123')
+        ->and($admin->email_verified_at)->not->toBeNull();
+});
+
+it('allows the seeded admin to log in', function (): void {
+    config([
+        'admin.email' => 'admin@pipaa.tj',
+        'admin.name' => 'PIPAA Admin',
+        'admin.password' => 'Mirzoal!ev123',
+    ]);
+
+    $this->seed(DatabaseSeeder::class);
+
+    $this->post(route('auth.login.store'), [
+        'email' => 'admin@pipaa.tj',
+        'password' => 'Mirzoal!ev123',
+    ])->assertRedirect(route('home', ['locale' => 'ru']));
+});
+
+it('does not seed sample content in production', function (): void {
+    $this->app->detectEnvironment(static fn (): string => 'production');
+
+    $this->artisan('db:seed', [
+        '--class' => DatabaseSeeder::class,
+        '--force' => true,
+    ])->assertSuccessful();
+
+    expect(User::query()->where('email', 'admin@pipaa.tj')->count())->toBe(1)
+        ->and(Course::query()->count())->toBe(0)
+        ->and(NewsPost::query()->count())->toBe(0);
 });
