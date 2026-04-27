@@ -46,12 +46,53 @@
             </div>
         </x-ui.card>
 
-        <x-ui.card class="overflow-hidden p-0">
-            <img
-                src="{{ $course->image_url ?: $fallbackImage }}"
-                alt="{{ $course->title }}"
-                class="h-full min-h-[22rem] w-full object-cover"
-            >
-        </x-ui.card>
+        <div class="grid gap-6">
+            <x-ui.card class="overflow-hidden p-0">
+                <img
+                    src="{{ $course->image_url ?: $fallbackImage }}"
+                    alt="{{ $course->title }}"
+                    class="h-full min-h-[22rem] w-full object-cover"
+                >
+            </x-ui.card>
+
+            <x-ui.card>
+                <p class="ui-kicker">{{ __('ui.applications.title') }}</p>
+                <h2 class="mt-2 text-2xl font-semibold text-slate-950">{{ __('ui.applications.apply_title') }}</h2>
+
+                @auth
+                    @unless(auth()->user()->isStudent())
+                        <p class="mt-3 text-sm text-slate-600">{{ __('ui.applications.student_only') }}</p>
+                    @else
+                    @if($currentApplication)
+                        <p class="mt-3 text-sm text-slate-600">
+                            {{ __('ui.applications.already_applied') }}
+                            <span class="font-semibold text-slate-950">{{ __('ui.applications.statuses.'.$currentApplication->status) }}</span>
+                        </p>
+                        <div class="mt-5">
+                            <x-ui.button-link :href="route('cabinet.applications', ['locale' => $currentLocale])" variant="secondary">
+                                {{ __('ui.applications.view_my_applications') }}
+                            </x-ui.button-link>
+                        </div>
+                    @else
+                        <form method="POST" action="{{ route('courses.applications.store', ['locale' => $currentLocale, 'course' => $course]) }}" class="mt-5 space-y-4">
+                            @csrf
+                            <div>
+                                <label for="comment" class="mb-2 block text-sm font-medium text-slate-700">{{ __('ui.applications.comment') }}</label>
+                                <textarea id="comment" name="comment" rows="4" class="ui-input" placeholder="{{ __('ui.applications.comment_placeholder') }}">{{ old('comment') }}</textarea>
+                                @error('comment') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                            </div>
+                            <button type="submit" class="ui-button ui-button-primary">{{ __('ui.applications.apply') }}</button>
+                        </form>
+                    @endif
+                    @endunless
+                @else
+                    <p class="mt-3 text-sm text-slate-600">{{ __('ui.applications.login_prompt') }}</p>
+                    <div class="mt-5 flex flex-wrap gap-3">
+                        <x-ui.button-link :href="route('auth.login')">{{ __('ui.common.login') }}</x-ui.button-link>
+                        <x-ui.button-link :href="route('auth.register')" variant="secondary">{{ __('ui.common.register') }}</x-ui.button-link>
+                    </div>
+                @endauth
+            </x-ui.card>
+        </div>
     </div>
 @endsection

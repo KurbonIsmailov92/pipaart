@@ -54,6 +54,31 @@ class Course extends Model
         return $this->hasMany(Schedule::class);
     }
 
+    public function enrollments(): HasMany
+    {
+        return $this->hasMany(CourseEnrollment::class);
+    }
+
+    public function applications(): HasMany
+    {
+        return $this->hasMany(CourseApplication::class);
+    }
+
+    public function courseSchedules(): HasMany
+    {
+        return $this->hasMany(CourseSchedule::class);
+    }
+
+    public function certificates(): HasMany
+    {
+        return $this->hasMany(Certificate::class);
+    }
+
+    public function examDates(): HasMany
+    {
+        return $this->hasMany(ExamDate::class);
+    }
+
     public function scopeOrdered(Builder $query): Builder
     {
         return TranslationQuery::orderByTranslated($query, 'title');

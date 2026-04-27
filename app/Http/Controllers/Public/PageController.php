@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\NewsPost;
 use App\Models\Page;
 use App\Models\Schedule;
+use App\Services\HomeHeroService;
 use App\Services\SettingsService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -18,6 +19,7 @@ class PageController extends Controller
 {
     public function __construct(
         protected SettingsService $settingsService,
+        protected HomeHeroService $homeHeroService,
     ) {}
 
     public function index(): View|Factory|Application
@@ -26,6 +28,13 @@ class PageController extends Controller
             'site_name' => 'PIPAA CMS',
             'hero_title' => __('ui.home.hero_title'),
             'hero_subtitle' => __('ui.home.hero_subtitle'),
+        ];
+        $locale = app()->getLocale();
+        $heroDefaults = [
+            'title' => __('ui.home.hero_title'),
+            'subtitle' => __('ui.home.hero_subtitle'),
+            'cta_text' => __('ui.home.browse_courses'),
+            'cta_url' => route('courses.index', ['locale' => $locale]),
         ];
         $featuredCourses = new Collection;
         $featuredNews = new Collection;
@@ -47,6 +56,7 @@ class PageController extends Controller
 
         return view('public.home.index', [
             'settings' => $this->settingsService->getPublicSettings($defaults),
+            'hero' => $this->homeHeroService->forLocale($locale, $heroDefaults),
             'featuredCourses' => $featuredCourses,
             'featuredNews' => $featuredNews,
             'archiveNews' => $archiveNews,

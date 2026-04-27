@@ -53,6 +53,12 @@
                 </div>
 
                 <div>
+                    <label for="subject" class="mb-2 block text-sm font-medium text-slate-700">{{ __('ui.forms.subject') }}</label>
+                    <input id="subject" name="subject" type="text" value="{{ old('subject') }}" class="ui-input">
+                    @error('subject')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror
+                </div>
+
+                <div>
                     <label for="message" class="mb-2 block text-sm font-medium text-slate-700">{{ __('ui.forms.message') }}</label>
                     <textarea id="message" name="message" rows="7" required class="ui-input">{{ old('message') }}</textarea>
                     @error('message')<p class="mt-2 text-sm text-rose-600">{{ $message }}</p>@enderror

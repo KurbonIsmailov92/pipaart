@@ -22,28 +22,14 @@
         <div class="relative grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div class="max-w-3xl text-white">
                 <p class="text-xs font-semibold uppercase tracking-[0.42em] text-white/70">{{ __('ui.brand.institute_full') }}</p>
-                <h1 class="mt-5 text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">{{ $settings['hero_title'] }}</h1>
-                <p class="mt-5 max-w-2xl text-base text-white/[0.78] sm:text-lg">{{ $settings['hero_subtitle'] }}</p>
+                <h1 class="mt-5 text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">{{ $hero['title'] }}</h1>
+                <p class="mt-5 max-w-2xl text-base text-white/[0.78] sm:text-lg">{{ $hero['subtitle'] }}</p>
 
                 <div class="mt-8 flex flex-wrap gap-3">
-                    <x-ui.button-link :href="route('courses.index', ['locale' => $currentLocale])">{{ __('ui.home.browse_courses') }}</x-ui.button-link>
+                    <x-ui.button-link :href="$hero['cta_url']">{{ $hero['cta_text'] }}</x-ui.button-link>
                     <x-ui.button-link :href="route('courses.schedule', ['locale' => $currentLocale])" variant="secondary">{{ __('ui.home.view_schedule') }}</x-ui.button-link>
                 </div>
 
-                <div class="mt-8 grid gap-4 sm:grid-cols-3">
-                    <div class="ui-stat">
-                        <p class="text-3xl font-semibold text-white">{{ $featuredCourses->count() }}</p>
-                        <p class="mt-1 text-sm text-white/72">{{ __('ui.nav.courses') }}</p>
-                    </div>
-                    <div class="ui-stat">
-                        <p class="text-3xl font-semibold text-white">{{ $featuredNews->count() + $archiveNews->count() }}</p>
-                        <p class="mt-1 text-sm text-white/72">{{ __('ui.nav.news') }}</p>
-                    </div>
-                    <div class="ui-stat">
-                        <p class="text-3xl font-semibold text-white">{{ $upcomingSchedules->count() }}</p>
-                        <p class="mt-1 text-sm text-white/72">{{ __('ui.nav.schedule') }}</p>
-                    </div>
-                </div>
             </div>
 
             <div class="hero-visual-shell">

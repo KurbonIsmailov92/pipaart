@@ -76,3 +76,68 @@ if (typeof darkMediaQuery.addEventListener === 'function') {
 } else if (typeof darkMediaQuery.addListener === 'function') {
     darkMediaQuery.addListener(handleSystemThemeChange);
 }
+
+const submitLockSelector = 'form[data-submit-lock]:not([data-submit-lock="false"]), form[method]:not([method="GET"]):not([method="get"]):not([data-submit-lock="false"])';
+
+const lockSubmitButtons = (form) => {
+    const loadingText = form.dataset.loadingText
+        || document.body?.dataset.loadingText
+        || 'Processing...';
+
+    form.dataset.submitting = 'true';
+
+    form.querySelectorAll('button[type="submit"], input[type="submit"]').forEach((button) => {
+        button.dataset.originalDisabled = button.disabled ? 'true' : 'false';
+
+        if (button instanceof HTMLButtonElement) {
+            button.dataset.originalHtml = button.innerHTML;
+            button.innerHTML = `<span aria-hidden="true" class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-r-transparent align-[-0.125em]"></span><span class="ml-2">${loadingText}</span>`;
+        } else if (button instanceof HTMLInputElement) {
+            button.dataset.originalValue = button.value;
+            button.value = loadingText;
+        }
+
+        button.disabled = true;
+        button.setAttribute('aria-disabled', 'true');
+        button.classList.add('cursor-not-allowed', 'opacity-70');
+    });
+};
+
+const resetSubmitButtons = () => {
+    document.querySelectorAll(`${submitLockSelector}[data-submitting="true"]`).forEach((form) => {
+        form.dataset.submitting = 'false';
+
+        form.querySelectorAll('button[type="submit"], input[type="submit"]').forEach((button) => {
+            if (button.dataset.originalDisabled !== 'true') {
+                button.disabled = false;
+                button.removeAttribute('aria-disabled');
+            }
+
+            if (button instanceof HTMLButtonElement && button.dataset.originalHtml) {
+                button.innerHTML = button.dataset.originalHtml;
+            } else if (button instanceof HTMLInputElement && button.dataset.originalValue) {
+                button.value = button.dataset.originalValue;
+            }
+
+            button.classList.remove('cursor-not-allowed', 'opacity-70');
+        });
+    });
+};
+
+document.addEventListener('submit', (event) => {
+    const form = event.target;
+
+    if (!(form instanceof HTMLFormElement) || !form.matches(submitLockSelector)) {
+        return;
+    }
+
+    if (form.dataset.submitting === 'true') {
+        event.preventDefault();
+
+        return;
+    }
+
+    lockSubmitButtons(form);
+}, true);
+
+window.addEventListener('pageshow', resetSubmitButtons);

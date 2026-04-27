@@ -11,6 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class SendContactMessageJob implements ShouldQueue
 {
@@ -33,13 +34,21 @@ class SendContactMessageJob implements ShouldQueue
 
         $recipient = (string) config('services.contact.recipient', 'info@pipaa.tj');
 
-        Mail::to($recipient)->send(new ContactMessageMail($contactMessage));
+        try {
+            Mail::to($recipient)->send(new ContactMessageMail($contactMessage));
+        } catch (Throwable $exception) {
+            report($exception);
+        }
 
-        $smsService->send(sprintf(
-            'PIPAA contact: %s (%s) submitted a message.',
-            $contactMessage->name,
-            $contactMessage->phone ?: $contactMessage->email,
-        ));
+        try {
+            $smsService->send(sprintf(
+                'PIPAA contact: %s (%s) submitted a message.',
+                $contactMessage->name,
+                $contactMessage->phone ?: $contactMessage->email,
+            ));
+        } catch (Throwable $exception) {
+            report($exception);
+        }
 
         $contactMessage->forceFill([
             'processed_at' => now(),

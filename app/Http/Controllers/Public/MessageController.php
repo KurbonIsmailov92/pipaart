@@ -34,7 +34,12 @@ class MessageController extends Controller
 
     public function store(ContactMessageRequest $request): RedirectResponse
     {
-        $this->contactMessageService->createAndQueue($request->validated());
+        $this->contactMessageService->createAndQueue([
+            ...$request->validated(),
+            'locale' => $request->route('locale'),
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
 
         return back()->with('success', __('ui.flash.contact_message_queued'));
     }

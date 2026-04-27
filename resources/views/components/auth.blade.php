@@ -26,6 +26,7 @@
                 @if(auth()->user()->hasRole(['admin', 'teacher']))
                     <a href="{{ route('admin.dashboard') }}" class="pill-link">{{ __('ui.common.admin_panel') }}</a>
                 @endif
+                <a href="{{ route('cabinet.index', ['locale' => app()->getLocale()]) }}" class="pill-link">{{ __('ui.cabinet.title') }}</a>
                 <form action="{{ route('auth.logout') }}" method="POST">
                     @csrf
                     <button type="submit" class="pill-link">{{ __('ui.common.logout') }}</button>

@@ -4,7 +4,9 @@ use App\Http\Controllers\AboutPipaaController;
 use App\Http\Controllers\CipaController;
 use App\Http\Controllers\GarpController;
 use App\Http\Controllers\LibraryController;
+use App\Http\Controllers\Public\CabinetController;
 use App\Http\Controllers\Public\ContactController as PublicContactController;
+use App\Http\Controllers\Public\CourseApplicationController;
 use App\Http\Controllers\Public\CoursesController as PublicCoursesController;
 use App\Http\Controllers\Public\GalleryController as PublicGalleryController;
 use App\Http\Controllers\Public\MediaController;
@@ -58,12 +60,29 @@ Route::prefix('{locale}')
         Route::get('/gallery', [PublicGalleryController::class, 'index'])->name('gallery.index');
         Route::get('/contact', [PublicContactController::class, 'info'])->name('contact');
 
+        Route::prefix('cabinet')
+            ->name('cabinet.')
+            ->middleware('auth')
+            ->controller(CabinetController::class)
+            ->group(function (): void {
+                Route::get('/', 'index')->name('index');
+                Route::get('/courses', 'courses')->name('courses');
+                Route::get('/schedule', 'schedule')->name('schedule');
+                Route::get('/certificates', 'certificates')->name('certificates');
+                Route::get('/certificates/{certificate}/download', 'downloadCertificate')->name('certificates.download');
+                Route::get('/exams', 'exams')->name('exams');
+                Route::get('/applications', 'applications')->name('applications');
+            });
+
         Route::prefix('courses')->name('courses.')->group(function (): void {
             Route::get('/list', [PublicCoursesController::class, 'index'])->name('list');
             Route::get('/schedule', [PublicScheduleController::class, 'index'])->name('schedule');
             Route::view('/reviews', 'courses.reviews')->name('reviews');
             Route::view('/registration', 'courses.registration')->name('registration');
             Route::view('/training-centers', 'courses.training-centers')->name('training-centers');
+            Route::post('/{course}/applications', [CourseApplicationController::class, 'store'])
+                ->middleware('auth')
+                ->name('applications.store');
             Route::get('/{course}', [PublicCoursesController::class, 'show'])->name('show');
         });
 

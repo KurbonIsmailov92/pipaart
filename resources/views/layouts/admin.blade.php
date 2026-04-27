@@ -13,7 +13,7 @@
 @php
     $publicLocale = session('locale', config('app.locale', 'ru'));
 @endphp
-<body class="bg-[linear-gradient(180deg,#edf3f4_0%,#f7f4ec_100%)] text-slate-900">
+<body class="bg-[linear-gradient(180deg,#edf3f4_0%,#f7f4ec_100%)] text-slate-900" data-loading-text="{{ __('ui.common.processing') }}">
 <div class="min-h-screen lg:grid lg:grid-cols-[290px_1fr]">
     <aside class="bg-[#143950] px-5 py-6 text-slate-100 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">
         <div class="flex items-start justify-between gap-4">
@@ -32,9 +32,16 @@
             <a href="{{ route('admin.courses.index') }}" class="admin-nav-link whitespace-nowrap">Courses</a>
             <a href="{{ route('admin.schedules.index') }}" class="admin-nav-link whitespace-nowrap">Schedule</a>
             <a href="{{ route('admin.news.index') }}" class="admin-nav-link whitespace-nowrap">News</a>
+            <a href="{{ route('admin.course-applications.index') }}" class="admin-nav-link whitespace-nowrap">{{ __('ui.admin.course_applications') }}</a>
             @if(auth()->user()?->isAdmin())
+                <a href="{{ route('admin.home-heroes.index') }}" class="admin-nav-link whitespace-nowrap">{{ __('ui.admin.home_heroes') }}</a>
                 <a href="{{ route('admin.gallery.index') }}" class="admin-nav-link whitespace-nowrap">Gallery</a>
                 <a href="{{ route('admin.users.index') }}" class="admin-nav-link whitespace-nowrap">Users</a>
+                <a href="{{ route('admin.course-enrollments.index') }}" class="admin-nav-link whitespace-nowrap">{{ __('ui.admin.enrollments') }}</a>
+                <a href="{{ route('admin.course-schedules.index') }}" class="admin-nav-link whitespace-nowrap">{{ __('ui.admin.course_schedules') }}</a>
+                <a href="{{ route('admin.certificates.index') }}" class="admin-nav-link whitespace-nowrap">{{ __('ui.admin.certificates') }}</a>
+                <a href="{{ route('admin.exam-dates.index') }}" class="admin-nav-link whitespace-nowrap">{{ __('ui.admin.exam_dates') }}</a>
+                <a href="{{ route('admin.contact-messages.index') }}" class="admin-nav-link whitespace-nowrap">{{ __('ui.admin.contact_messages') }}</a>
                 <a href="{{ route('admin.settings.index') }}" class="admin-nav-link whitespace-nowrap">Settings</a>
             @endif
         </nav>

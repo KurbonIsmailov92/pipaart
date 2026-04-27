@@ -15,7 +15,7 @@
     @stack('head')
 </head>
 
-<body class="theme-body min-h-screen overflow-x-hidden text-slate-900">
+<body class="theme-body min-h-screen overflow-x-hidden text-slate-900" data-loading-text="{{ __('ui.common.processing') }}">
     <div class="site-grid flex min-h-screen w-full flex-col overflow-x-hidden">
         <div class="theme-backdrop pointer-events-none absolute inset-x-0 top-0 -z-10 h-[38rem] overflow-hidden">
             <div class="theme-backdrop-gradient absolute inset-0 bg-[linear-gradient(160deg,rgba(20,57,80,0.96)_0%,rgba(45,112,151,0.78)_48%,rgba(215,187,119,0.38)_100%)]"></div>

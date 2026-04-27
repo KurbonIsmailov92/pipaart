@@ -13,13 +13,19 @@ class ContactMessage extends Model
         'name',
         'email',
         'phone',
+        'subject',
         'message',
+        'locale',
+        'ip_address',
+        'user_agent',
+        'is_read',
         'processed_at',
     ];
 
     protected function casts(): array
     {
         return [
+            'is_read' => 'boolean',
             'processed_at' => 'datetime',
         ];
     }
